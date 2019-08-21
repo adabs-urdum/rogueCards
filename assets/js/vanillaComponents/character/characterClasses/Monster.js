@@ -5,6 +5,11 @@ class Monster extends Character{
     super();
   }
 
+  getNextAttack(){
+    console.log(this);
+    this.nextAttack = this.attacks.getRandomValue();
+  }
+
 
 }
 

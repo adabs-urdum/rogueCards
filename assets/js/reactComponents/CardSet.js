@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import Card from './Card.js';
 import DrawPile from './DrawPile.js';
 import DiscardPile from './DiscardPile.js';
+import Button from '../reactComponents/uiElements/Button.js';
 
 const cardSet = (props) => {
 
@@ -15,6 +16,8 @@ const cardSet = (props) => {
   const cardWidth = props.cardWidth;
   const handWidth = props.handWidth;
   const BS = props.BS;
+  const endTurn = props.endTurn;
+  const endedTurn = props.endedTurn;
 
   const hoveredCard = props.hoveredCard;
   const hoveredCardIndex = hand.indexOf(hoveredCard);
@@ -64,6 +67,12 @@ const cardSet = (props) => {
 
   return(
     <section className="deck">
+      <Button
+        classes="button--endTurn deck__endTurn"
+        text="end turn"
+        onclick={ endTurn }
+        disabled={ endedTurn }
+      />
       <div key="drawPile" className="deck__drawPile">
         <DrawPile
           count={ drawPile.length }

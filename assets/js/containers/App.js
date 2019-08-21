@@ -17,6 +17,7 @@ class App extends Component {
       'cardWidth': 300,
       'BS': 100 / 2560,
       'handWidth': 1600,
+      'endedTurn': false,
     }
 
   }
@@ -51,33 +52,71 @@ class App extends Component {
   // handle click on card, now play card
   handleClickCard = (e, id) => {
     const card = e.currentTarget;
-    const deck = this.state.hero.deck;
+    const hero = this.state.hero;
+    const monster = this.state.monster;
+    const deck = hero.deck;
     const hand = deck.hand;
     const discardPile = deck.discardPile;
 
-    const target = hand.find(handCard => {
+    const cardObject = hand.find(handCard => {
       return handCard.id == card.dataset.key;
     });
 
-    const clickedCardIndex = hand.indexOf(target);
+    const clickedCardIndex = hand.indexOf(cardObject);
 
     // add card to playedCards and get coordinates
     const playedCard = deck.hand[clickedCardIndex];
-    // console.log('----start');
-    // console.log(card);
-    // console.log(playedCard);
-    var cardRect = card.getBoundingClientRect();
-    // console.log(cardRect.top, cardRect.left);
-    // console.log('----end');
     deck.playedCards.push(playedCard);
 
     // remove played card
     deck.hand = deck.hand.filter(card => {
-      return card.id != target.id;
+      return card.id != cardObject.id;
     });
+
+    // play actual card stats
+    cardObject.playCard(hero, monster);
 
     this.setState({
       'deck': deck,
+    });
+  }
+
+  endTurn = () => {
+    const hero = this.state.hero;
+    const deck = hero.deck;
+    const playedCards = deck.playedCards;
+    const hand = deck.hand;
+    const monster = this.state.monster;
+
+    // disable button
+    this.setState({
+      'endedTurn': true,
+    });
+
+    deck.discardPile = deck.discardPile.concat(hand, playedCards);
+    deck.hand = [];
+    deck.playedCards = [];
+
+    // TODO: reset cards / shuffle / draw / etc.
+
+    this.setState({
+      hero: hero,
+    }, this.monsterAttack(monster, hero, monster.nextAttack));
+  }
+
+  monsterAttack = () => {
+    const monster = this.state.monster;
+    const currentAttack = monster.nextAttack;
+    let hero = this.state.hero;
+
+    hero.health = monster.dealDamage(hero, currentAttack.attack);
+    monster.gainBlock(currentAttack.block);
+
+    monster.getNextAttack();
+
+    this.setState({
+      hero: hero,
+      monster: monster,
     });
   }
 
@@ -94,6 +133,7 @@ class App extends Component {
     const playedCards = deck.playedCards;
     const hand = deck.hand;
     const discardPile = deck.discardPile;
+    const endedTurn = this.state.endedTurn;
 
     return (
       <Fragment>
@@ -129,6 +169,8 @@ class App extends Component {
           handleMouseEnterCard={ this.handleMouseEnterCard }
           handleMouseLeaveCard={ this.handleMouseLeaveCard }
           hoveredCard={ hoveredCard }
+          endTurn={ this.endTurn }
+          endedTurn={ endedTurn }
         />
 
       </Fragment>

@@ -7,6 +7,13 @@
   display: flex;
   justify-content: space-between;
 
+  &__endTurn{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -150%);
+  }
+
   &__hand{
     position: relative;
     width: $BS * 1600;

@@ -470,6 +470,7 @@ html {
   color: #000000;
   width: auto;
   height: 100%;
+  cursor: default;
 }
 
 body {
@@ -489,6 +490,7 @@ body {
   background: #FFFFFF;
   width: 100vw;
   height: 56.25vw;
+  max-height: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -544,6 +546,34 @@ a:active {
   transform: scale(0.96);
 }
 
+.button {
+  padding: 0.54688vw 1.64062vw 0.625vw;
+  border: none;
+  outline: none;
+  background: #C4C4C4;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: calc(1rem + 0.03906vw * 24 - 16 * 1px);
+  border-radius: 0.39062vw;
+  box-sizing: border-box;
+  border: solid transparent 1px;
+  transition: border 0.3s ease-out, background 0.3s ease-out, color 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.button:hover {
+  border: solid #000000 1px;
+}
+
+.button:active {
+  background: #333;
+  color: #C4C4C4;
+}
+
+.button:disabled {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 img, canvas {
   display: block;
 }
@@ -594,7 +624,7 @@ img, canvas {
 
 @keyframes layDown {
   0% {
-    transform: scale(0.9) translate(20%, 20%) rotate(15deg);
+    transform: scale(0.8) translate(10%, 40%) rotate(5deg);
   }
   100% {
     transform: scale(0.615) translate(0, 0) rotate(0);
@@ -609,6 +639,13 @@ img, canvas {
   width: 100%;
   display: flex;
   justify-content: space-between;
+}
+
+.deck__endTurn {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -150%);
 }
 
 .deck__hand {
@@ -750,7 +787,8 @@ img, canvas {
 
 .card__stats_wrapper {
   padding: 0.3125vw;
-  text-align: right;
+  padding-top: 2.42188vw;
+  padding-left: 0.46875vw;
   font-weight: 700;
   font-size: calc(1rem + 0.03906vw * 30 - 16 * 1px);
 }

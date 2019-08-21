@@ -55,7 +55,8 @@
 
   &__stats_wrapper{
     padding: $BS * 8;
-    text-align: right;
+    padding-top: $BS * 62;
+    padding-left: $BS * 12;
     font-weight: 700;
     @include bs-font-size(30);
   }

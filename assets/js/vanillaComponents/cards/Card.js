@@ -9,6 +9,23 @@ class Card{
     };
     return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
   }
+
+  playCard = (doer, target) => {
+    const attack = this.attack;
+    const block = this.block;
+
+    if(attack){
+      target.health = doer.dealDamage(target, attack);
+    }
+
+    if(block){
+      doer.gainBlock(block);
+    }
+
+    return [doer, target];
+
+  }
+
 }
 
 export default Card;

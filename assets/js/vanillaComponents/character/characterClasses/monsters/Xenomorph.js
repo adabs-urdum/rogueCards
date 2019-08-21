@@ -7,7 +7,7 @@ class Xenomorph extends Monster{
     this.description = '';
     this.health = 125;
     this.strength = 0;
-    this.block = 0;
+    this.block = 10;
     this.attacks = [
       {
         attack: 11,

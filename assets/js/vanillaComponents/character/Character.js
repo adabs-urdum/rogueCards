@@ -13,8 +13,26 @@ class Character{
     return new Deck(cards, handsize, decksize);
   }
 
-  attack = () => {
-    console.log('attack');
+  gainBlock = (block) => {
+    this.block += block;
+  }
+
+  dealDamage = (defender, attack) => {
+
+    if(attack){
+
+      if(defender.block - attack > 0){
+        defender.block -= attack;
+      }
+      else{
+        defender.health = defender.health + defender.block - attack;
+        defender.block = 0;
+      }
+
+    }
+
+    return defender.health;
+
   }
 
 }
