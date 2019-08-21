@@ -1,0 +1,13 @@
+.characters{
+  position: absolute;
+  top: $BS * 228;
+  left: 0;
+  width: 100%;
+  height: $BS * 662;
+  display: flex;
+  justify-content: space-between;
+
+  &__character{
+    width: $BS * 380;
+  }
+}

@@ -1,0 +1,28 @@
+.arena{
+  position: absolute;
+  top: $BS * 128;
+  left: $BS * 880;
+  width: $BS * 800;
+  height: $BS * 277.5;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  .card{
+    transform: scale(0.615);
+    transform-origin: center top;
+    cursor: default;
+    animation: layDown 0.5s ease-out;
+    margin: 0 $BS*-90 $BS*-350;
+
+    @keyframes layDown {
+      0%{
+        transform: scale(0.9) translate(20%, 20%) rotate(15deg);
+      }
+      100%{
+        transform: scale(0.615) translate(0, 0) rotate(0);
+      }
+    }
+  }
+
+}

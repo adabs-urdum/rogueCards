@@ -1,0 +1,51 @@
+{
+  "name": "ReactSetup",
+  "version": "2.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adabs-urdum/vanilla_setup"
+  },
+  "main": "",
+  "scripts": {
+    "build:setup": "mkdir -p dist/css && mkdir -p dist/js && mkdir -p assets/styles && mkdir -p assets/js && touch assets/styles/variables.scss && touch assets/styles/main.scss && touch assets/js/main.js",
+    "build:cssdev": "node-sass assets/styles/main.scss --output-style expanded --source-map dist/css/styles.min.css.map --error-bell dist/css/styles.min.css",
+    "build:cssprod": "node-sass assets/styles/main.scss --output-style compressed dist/css/styles.min.css",
+    "build:jsprod": "webpack --mode production ./assets/js/main.js --presets --output ./dist/js/functions.min.js --module-bind js=babel-loader",
+    "build:jsdev": "webpack --mode development ./assets/js/main.js --presets --output ./dist/js/functions.min.js --module-bind js=babel-loader",
+    "watch:cssdev": "onchange 'assets/styles/**/*.scss' -- npm run build:cssdev",
+    "watch:cssprod": "onchange 'assets/styles/**/*.scss' -- npm run build:cssprod",
+    "watch:jsdev": "onchange 'assets/js/**/*.js' -- npm run build:jsdev",
+    "watch:jsprod": "onchange 'assets/js/**/*.js' -- npm run build:jsprod",
+    "watch:dev": "parallelshell 'npm run watch:cssdev' 'npm run watch:jsdev' 'npm run serve'",
+    "build": "npm run build:cssprod && npm run build:jsprod",
+    "serve": "browser-sync start --https ${https} --proxy ${url} --files 'dist/**/*.css, dist/**/*.js' -w",
+    "postinstall": "npm run build:setup",
+    "eject": "react-scripts eject"
+  },
+  "author": "Cyrill Lehmann",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "latest",
+    "@babel/plugin-proposal-class-properties": "latest",
+    "babel-polyfill": "latest",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1",
+    "parallelshell": "3.0.1",
+    "autoprefixer-stylus": "latest",
+    "browser-sync": "latest",
+    "package": "^1.0.1",
+    "package.json": "latest",
+    "onchange": "latest",
+    "prop-types": "^15.7.2",
+    "radium": "^0.25.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^2.1.8",
+    "node-sass": "latest",
+    "phaser": "latest"
+  }
+}

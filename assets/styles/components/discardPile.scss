@@ -1,0 +1,23 @@
+.discardPile{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 700;
+
+  &__number{
+    width: $BS * 80;
+    height: $BS * 80;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: $Grey;
+    margin-bottom: $BS * 10;
+    @include bs-font-size(35);
+  }
+
+}

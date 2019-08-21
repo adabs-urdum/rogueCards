@@ -1,0 +1,75 @@
+.card{
+  position: relative;
+  width: $BS * 300;
+  height: $BS * 450;
+  background: $Grey;
+  border-radius: $BS * 5;
+  padding: $BS * 8;
+  box-sizing: border-box;
+  z-index: 1;
+  border: solid 1px #333;
+  cursor: pointer;
+
+  &__img_wrapper{
+    position: relative;
+    width: $BS * 284;
+    height: $BS * 250;
+    background: $White;
+    border-radius: $BS * 5;
+    margin-bottom: $BS * 36;
+  }
+
+  &__name{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    font-weight: 700;
+    background: $Grey;
+    padding: $BS*10 $BS*20;
+    border-radius: $BS*5;
+  }
+
+  &__description{
+    @include bs-font-size(18);
+    text-align: center;
+  }
+
+  &__cost{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $BS * 60;
+    height: $BS * 60;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: $Grey;
+    font-weight: 700;
+    span{
+      transform: translateY(5%);
+      @include bs-font-size(35);
+    }
+  }
+
+  &__stats_wrapper{
+    padding: $BS * 8;
+    text-align: right;
+    font-weight: 700;
+    @include bs-font-size(30);
+  }
+
+  &__stats{
+    margin-bottom: $BS * 5;
+    &:last-child{
+    }
+  }
+
+  &__unit{
+    @include bs-font-size(16);
+    font-weight: 400;
+    margin-right: $BS * 8;
+  }
+
+}
