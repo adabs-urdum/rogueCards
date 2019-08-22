@@ -307,7 +307,11 @@ class App extends Component {
   }
 
   restartGame = () => {
+    window.setTimeout(()=>{
+      this.flashMessage('Round ' + this.state.turn, 700);
+    }, 500);
     this.setState({
+      'turn': 1,
       'hero': new RichardB(),
       'monster': new Xenomorph(),
       'gameOver': false,
@@ -367,12 +371,6 @@ class App extends Component {
     const gameLoop = (
       <section className="gameloop">
 
-        <Button
-          classes="button--fullscreen"
-          onclick={ this.toggleFullscreen }
-          text="Fullscreen"
-        />
-
         <Message
           duration={ messageDuration }
           message={ message }
@@ -424,6 +422,11 @@ class App extends Component {
       <Fragment>
 
         <section className="header">
+          <Button
+            classes="button--fullscreen"
+            onclick={ this.toggleFullscreen }
+            text="Fullscreen"
+          />
         </section>
 
         { gameOver ? <Fragment>
@@ -432,7 +435,7 @@ class App extends Component {
             <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://cyrill-lehmann.ch">www.cyrill-lehmann.ch</a>
             <Button
               onclick={ this.restartGame }
-              text="restart"
+              text="again"
               disabled={ !gameOver }
             />
           </div>
