@@ -25,4 +25,17 @@
     }
   }
 
+  &--ended{
+    .card{
+      transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+      transform: translate(250%, 230%) scale(0.1);
+      opacity: 0;
+      @for $i from 1 through 4{
+        &:nth-child(#{$i}){
+          transition-delay: #{$i * .1}s;
+        }
+      }
+    }
+  }
+
 }

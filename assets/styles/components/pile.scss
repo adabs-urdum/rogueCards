@@ -1,0 +1,42 @@
+.pile{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__number{
+    width: $BS * 120;
+    height: $BS * 120;
+    background: $Grey;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include bs-font-size(35);
+    font-weight: 700;
+  }
+
+  &__title{
+    width: 100%;
+    @include bs-font-size(24);
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+    background: $Grey;
+    border-radius: $BS * 5;
+    min-width: 100%;
+    padding: $BS*20 $BS*20 $BS*15;
+    box-sizing: border-box;
+    margin-top: $BS * -15;
+  }
+
+  &--ap{
+    .pile{
+      &__number, &__title{
+        background: $Anthracite;
+        color: $YellowAp;
+      }
+    }
+  }
+
+}

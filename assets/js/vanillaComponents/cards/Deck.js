@@ -4,23 +4,41 @@ class Cardset{
     this.handsize = handsize;
     this.allCards = allCards;
     this.decksize = decksize;
-    this.deck = this.getNewDeck(allCards, decksize);
+    this.deck = this.getNewDeck(decksize);
     this.drawPile = [...this.deck];
-    this.hand = this.drawCards(this.drawPile, handsize);
+    this.hand = this.drawCards(handsize);
     this.discardPile = [];
+    this.banishPile = [];
     this.playedCards = [];
   }
 
-  drawCards = (deck, handsize) => {
-    return deck.splice(0, handsize);
+  drawCards = (amount) => {
+    let cards = [];
+    if(amount > this.drawPile.length){
+      const leftOvers = amount - this.drawPile.length;
+      cards = cards.concat(this.drawPile.splice(0, this.drawPile.length));
+      this.shuffleDiscardIntoDraw();
+      cards = cards.concat(this.drawCards(leftOvers));
+    }
+    else{
+      cards = cards.concat(this.drawPile.splice(0, amount));
+    }
+    return cards;
   }
 
-  getNewDeck = (allCards, decksize) => {
+  shuffleDiscardIntoDraw = () => {
+    const discard = this.discardPile;
+    this.drawPile = discard.shuffle();
+    this.discardPile = [];
+    return;
+  }
+
+  getNewDeck = (decksize) => {
     const returnList = [];
     let cardCount = 0;
 
     while(cardCount < decksize){
-      const Card = allCards.getRandomValue();
+      const Card = this.allCards.getRandomValue();
       returnList.push(new Card());
       cardCount += 1;
     }

@@ -22,6 +22,8 @@ class Card{
       doer.gainBlock(block);
     }
 
+    doer.ap -= this.cost;
+
     return [doer, target];
 
   }

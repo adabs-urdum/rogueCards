@@ -5,7 +5,8 @@ class Xenomorph extends Monster{
     super();
     this.name = 'Xenomorph';
     this.description = '';
-    this.health = 125;
+    this.maxHealth = 20;
+    this.health = this.maxHealth;
     this.strength = 0;
     this.block = 10;
     this.attacks = [

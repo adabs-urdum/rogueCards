@@ -44,9 +44,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
-    background: $Grey;
+    border-radius: 0% 50% 50% 50%;
+    background: $Anthracite;
     font-weight: 700;
+    color: $YellowAp;
     span{
       transform: translateY(5%);
       @include bs-font-size(35);

@@ -5,6 +5,7 @@ const arena = props => {
 
   const deck = props.deck;
   const playedCards = deck.playedCards;
+  const endedTurn = props.endedTurn;
 
   const playedCardsJsx = playedCards.map(card => {
     return(
@@ -16,7 +17,7 @@ const arena = props => {
   });
 
   return(
-    <section id="arena" className="arena">
+    <section id="arena" className={ endedTurn ? 'arena arena--ended' : 'arena' }>
       { playedCardsJsx }
     </section>
   );

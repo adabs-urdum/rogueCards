@@ -1,8 +1,11 @@
 import React, { Fragment } from 'react';
-import Card from './Card.js';
+import Card from '../Card.js';
 import DrawPile from './DrawPile.js';
+import Ap from './AP.js';
+import BanishPile from './BanishPile.js';
 import DiscardPile from './DiscardPile.js';
-import Button from '../reactComponents/uiElements/Button.js';
+import Pile from './Pile.js';
+import Button from '../uiElements/Button.js';
 
 const cardSet = (props) => {
 
@@ -10,6 +13,7 @@ const cardSet = (props) => {
   const hand = props.hand;
   const playedCards = props.playedCards;
   const discardPile = props.discardPile;
+  const banishPile = props.banishPile;
   const handleClickCard = props.handleClickCard;
   const handleMouseEnterCard = props.handleMouseEnterCard;
   const handleMouseLeaveCard = props.handleMouseLeaveCard;
@@ -18,6 +22,8 @@ const cardSet = (props) => {
   const BS = props.BS;
   const endTurn = props.endTurn;
   const endedTurn = props.endedTurn;
+  const ap = props.ap;
+  const maxAp = props.maxAp;
 
   const hoveredCard = props.hoveredCard;
   const hoveredCardIndex = hand.indexOf(hoveredCard);
@@ -74,16 +80,30 @@ const cardSet = (props) => {
         disabled={ endedTurn }
       />
       <div key="drawPile" className="deck__drawPile">
-        <DrawPile
-          count={ drawPile.length }
+        <Pile
+          text={ ap + '/' + maxAp }
+          type="ap"
+          title="ap"
+        />
+        <Pile
+          text={ drawPile.length }
+          type="draw"
+          title="draw"
         />
       </div>
-      <div key="hand" className="deck__hand">
+      <div key="hand" className={ endedTurn ? 'deck__hand deck__hand--ended' : 'deck__hand' }>
         { handJsx }
       </div>
       <div key="discardPile" className="deck__discardPile">
-        <DiscardPile
-          count={ discardPile.length }
+        <Pile
+          text={ banishPile.length }
+          type="banish"
+          title="banish"
+        />
+        <Pile
+          text={ discardPile.length }
+          type="discard"
+          title="discard"
         />
       </div>
     </section>

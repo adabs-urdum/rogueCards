@@ -36,11 +36,26 @@
         z-index: 3;
       }
     }
+
+    &--ended{
+      .card{
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        transform: translate(250%, -20%) scale(0.1);
+        opacity: 0;
+        @for $i from 1 through 4{
+          &:nth-child(#{$i}){
+            transition-delay: #{$i * .1}s;
+          }
+        }
+      }
+    }
+
   }
 
   &__drawPile, &__discardPile{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
     width: $BS * 380;
   }

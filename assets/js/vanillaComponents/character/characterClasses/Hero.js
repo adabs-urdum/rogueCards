@@ -3,11 +3,14 @@ import Smash from './../../cards/cardClasses/Smash.js'
 import Block from './../../cards/cardClasses/Block.js'
 
 class Hero extends Character{
+
   constructor(){
     super();
 
-    const handsize = 10;
+    const handsize = 5;
     const decksize = 15;
+
+    this.maxAp = 3;
 
     const cards = [
         Smash,
@@ -19,6 +22,9 @@ class Hero extends Character{
 
   }
 
+  fillApToMax(){
+    this.ap = this.maxAp;
+  }
 
 }
 

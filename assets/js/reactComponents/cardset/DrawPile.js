@@ -1,12 +1,13 @@
 import React from 'react';
 
 const drawPile = (props) => {
+
   return(
-    <div className="drawPile">
-      <div className="drawPile__number">
+    <div className="pile pile--draw">
+      <div className="pile__number">
         <span>{ props.count }</span>
       </div>
-      <span>draw</span>
+      <span className="pile__title">draw</span>
     </div>
   )
 }

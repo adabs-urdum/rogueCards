@@ -2,11 +2,11 @@ import React from 'react';
 
 const discardPile = (props) => {
   return(
-    <div className="discardPile">
-      <div className="discardPile__number">
+    <div className="pile pile--discard">
+      <div className="pile__number">
         <span>{ props.count }</span>
       </div>
-      <span>discard</span>
+      <span className="pile__title">banish</span>
     </div>
   )
 }

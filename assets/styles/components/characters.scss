@@ -6,6 +6,8 @@
   height: $BS * 662;
   display: flex;
   justify-content: space-between;
+  @include bs-font-size(32);
+  line-height: 170%;
 
   &__character{
     width: $BS * 380;

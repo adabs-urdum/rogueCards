@@ -2,8 +2,9 @@ import React, { Component, Fragment } from 'react';
 import RichardB from '../vanillaComponents/character/characterClasses/heroes/RichardB.js';
 import Xenomorph from '../vanillaComponents/character/characterClasses/monsters/Xenomorph.js';
 import Character from '../reactComponents/Character.js';
-import CardSet from '../reactComponents/CardSet.js';
+import CardSet from '../reactComponents/cardset/CardSet.js';
 import Arena from '../reactComponents/Arena.js';
+import Message from '../reactComponents/uiElements/Message.js';
 
 class App extends Component {
 
@@ -11,6 +12,7 @@ class App extends Component {
     super(props);
 
     this.state = {
+      'turn': 1,
       'hero': new RichardB(),
       'monster': new Xenomorph(),
       'hoveredCard': null,
@@ -18,8 +20,31 @@ class App extends Component {
       'BS': 100 / 2560,
       'handWidth': 1600,
       'endedTurn': false,
+      'message': null,
+      'messageDuration': 900,
+      'showMessage': false,
     }
 
+  }
+
+  componentDidMount = () => {
+    this.flashMessage('turn' + this.state.turn);
+  }
+
+  flashMessage = (message) => {
+    const duration = this.state.messageDuration;
+    const self = this;
+    this.setState({
+      'showMessage': true,
+      'message': message,
+    });
+
+    setTimeout( () => {
+      this.setState({
+        'showMessage': false,
+        'message': '',
+      });
+    }, duration);
   }
 
   handleMouseEnterCard = (e) => {
@@ -62,13 +87,21 @@ class App extends Component {
       return handCard.id == card.dataset.key;
     });
 
+    const availableAP = hero.ap;
+    const cardCostAP = cardObject.cost;
+
+    if( availableAP < cardCostAP ){
+      this.flashMessage('Not enough ActionPoints.');
+      return null;
+    }
+
     const clickedCardIndex = hand.indexOf(cardObject);
 
-    // add card to playedCards and get coordinates
+    // add card to playedCards
     const playedCard = deck.hand[clickedCardIndex];
     deck.playedCards.push(playedCard);
 
-    // remove played card
+    // remove played card from hand
     deck.hand = deck.hand.filter(card => {
       return card.id != cardObject.id;
     });
@@ -93,21 +126,29 @@ class App extends Component {
       'endedTurn': true,
     });
 
-    deck.discardPile = deck.discardPile.concat(hand, playedCards);
-    deck.hand = [];
-    deck.playedCards = [];
-
-    // TODO: reset cards / shuffle / draw / etc.
+    // remove cards from hand and arena after 700ms (after css transition)
+    window.setTimeout(() => {
+      deck.discardPile = deck.discardPile.concat(hand, playedCards);
+      deck.hand = [];
+      deck.playedCards = [];
+    }, 100);
+    hero.deck = deck;
 
     this.setState({
       hero: hero,
-    }, this.monsterAttack(monster, hero, monster.nextAttack));
+    }, () => {
+      this.flashMessage('enemy turn');
+      setTimeout(() => {
+        this.monsterAttack(monster, hero, monster.nextAttack);
+      }, this.state.messageDuration);
+    });
   }
 
   monsterAttack = () => {
     const monster = this.state.monster;
     const currentAttack = monster.nextAttack;
     let hero = this.state.hero;
+    const turn = this.state.turn;
 
     hero.health = monster.dealDamage(hero, currentAttack.attack);
     monster.gainBlock(currentAttack.block);
@@ -117,12 +158,36 @@ class App extends Component {
     this.setState({
       hero: hero,
       monster: monster,
+      turn: turn + 1,
+    }, () => {
+      window.setTimeout(()=>{
+        this.newTurn();
+      }, 1000);
+    } );
+  }
+
+  newTurn = () => {
+    this.flashMessage('turn ' + this.state.turn);
+
+    const hero = this.state.hero;
+    const deck = hero.deck;
+
+    deck.hand = deck.drawCards(deck.handsize);
+    hero.deck = deck;
+
+    hero.fillApToMax();
+
+    this.setState({
+      endedTurn: false,
+      hero: hero,
     });
   }
 
   render(){
 
     const hero = this.state.hero;
+    const ap = hero.ap;
+    const maxAp = hero.maxAp;
     const monster = this.state.monster;
     const cardWidth = this.state.cardWidth;
     const handWidth = this.state.handWidth;
@@ -133,7 +198,10 @@ class App extends Component {
     const playedCards = deck.playedCards;
     const hand = deck.hand;
     const discardPile = deck.discardPile;
+    const banishPile = deck.banishPile;
     const endedTurn = this.state.endedTurn;
+    const message = this.state.message;
+    const showMessage = this.state.showMessage;
 
     return (
       <Fragment>
@@ -141,8 +209,15 @@ class App extends Component {
         <section className="header">
         </section>
 
+        <Message
+          duration="0.5"
+          message={ message }
+          showMessage={ showMessage }
+        />
+
         <Arena
           deck={ deck }
+          endedTurn={ endedTurn }
         />
 
         <section className="characters">
@@ -162,6 +237,7 @@ class App extends Component {
           hand={ hand }
           playedCards={ playedCards }
           discardPile={ discardPile }
+          banishPile={ banishPile }
           cardWidth={ cardWidth }
           handWidth={ handWidth }
           BS={ BS }
@@ -171,6 +247,8 @@ class App extends Component {
           hoveredCard={ hoveredCard }
           endTurn={ this.endTurn }
           endedTurn={ endedTurn }
+          ap={ ap }
+          maxAp={ maxAp }
         />
 
       </Fragment>
