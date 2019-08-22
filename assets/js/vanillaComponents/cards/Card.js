@@ -15,7 +15,7 @@ class Card{
     const block = this.block;
 
     if(attack){
-      target.health = doer.dealDamage(target, attack);
+      target.takeDamage(doer, attack);
     }
 
     if(block){

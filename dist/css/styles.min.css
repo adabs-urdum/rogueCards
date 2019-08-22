@@ -546,6 +546,13 @@ a:active {
   transform: scale(0.96);
 }
 
+.animateScale {
+  display: inline-block;
+  transition: transform 0.2s linear;
+  transform: scale(2);
+  transform-origin: center;
+}
+
 .button {
   padding: 0.54688vw 1.64062vw 0.625vw;
   border: none;
@@ -574,6 +581,14 @@ a:active {
   pointer-events: none;
 }
 
+.button--fullscreen {
+  position: absolute;
+  z-index: 101;
+  top: 0.39062vw;
+  right: 0.39062vw;
+  font-size: calc(1rem + 0.03906vw * 16 - 16 * 1px);
+}
+
 .redHealth {
   color: #ad2a21;
 }
@@ -594,6 +609,14 @@ img, canvas {
   display: none;
 }
 
+.gameOver {
+  padding-left: 0.50781vw;
+}
+
+.gameOver a {
+  font-size: calc(1rem + 0.03906vw * 25 - 16 * 1px);
+}
+
 @media BreakpointS {
   .mobile_only {
     display: block;
@@ -611,6 +634,22 @@ img, canvas {
   width: 100%;
 }
 
+.gameOver {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameOver button {
+  margin-top: 1.95312vw;
+}
+
 .message {
   position: absolute;
   top: 0;
@@ -623,7 +662,7 @@ img, canvas {
   z-index: 99;
   font-size: calc(1rem + 0.03906vw * 100 - 16 * 1px);
   font-weight: 700;
-  animation: fadeInOut 0.8s forwards linear;
+  animation: fadeInOut 0.7s forwards linear;
 }
 
 @keyframes fadeInOut {
@@ -706,6 +745,11 @@ img, canvas {
   top: 0;
   left: 50%;
   transform: translate(-50%, -150%);
+}
+
+.deck__endTurn.button--flashButton {
+  background: #333;
+  color: #C4C4C4;
 }
 
 .deck__hand {
@@ -892,7 +936,20 @@ img, canvas {
 }
 
 .characters__character {
+  position: relative;
   width: 14.84375vw;
+}
+
+.characters__character--hero {
+  text-align: right;
+}
+
+.characters__next_attack {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateX(-100%) translateY(-50%);
+  text-align: right;
 }
 
 /*# sourceMappingURL=styles.min.css.map */

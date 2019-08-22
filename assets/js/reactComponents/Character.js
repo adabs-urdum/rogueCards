@@ -9,6 +9,11 @@ const character = (props) => {
   const block = props.character.block;
   const containerClass = props.containerClass;
   const deck = props.character.deck;
+  const blockChanged = props.character.blockChanged;
+  const healthChanged = props.character.healthChanged;
+
+  // const {forwardedRef, ...rest} = this.props;
+
   let nextAttack = props.nextAttack;
 
   if(nextAttack){
@@ -25,9 +30,8 @@ const character = (props) => {
     <div className={ containerClass }>
       <ul>
         <li><h3>{ name }</h3></li>
-        <li className="redHealth">Health: { health }/{ maxHealth }</li>
-        <li className="blueBlock">Block: { block }</li>
-        <li>Strength: { strength }</li>
+        <li className="redHealth">Health: <span className={healthChanged ? 'animateScale' : null}>{ health }</span>/{ maxHealth }</li>
+        <li className="blueBlock">Block: <span className={blockChanged ? 'animateScale' : null}>{ block }</span></li>
         <li>{ deck ? 'Handsize: ' + deck.handsize : null }</li>
       </ul>
       { nextAttack ? nextAttack : null }

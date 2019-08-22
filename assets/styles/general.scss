@@ -80,6 +80,13 @@ a{
   }
 }
 
+.animateScale{
+  display: inline-block;
+  transition: transform 0.2s linear;
+  transform: scale(2);
+  transform-origin: center;
+}
+
 .button{
   padding: $BS*14 $BS*42 $BS*16;
   border: none;
@@ -103,6 +110,13 @@ a{
     opacity: 0.7;
     pointer-events: none;
   }
+  &--fullscreen{
+    position: absolute;
+    z-index: 101;
+    top: $BS * 10;
+    right: $BS * 10;
+    @include bs-font-size(16);
+  }
 }
 
 .redHealth{
@@ -123,6 +137,13 @@ img, canvas{
 
 .mobile_only{
   display: none;
+}
+
+.gameOver{
+  padding-left: $BS * 13;
+  a{
+    @include bs-font-size(25)
+  }
 }
 
 

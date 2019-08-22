@@ -10,8 +10,9 @@
   z-index: 99;
   @include bs-font-size(100);
   font-weight: 700;
+  // background: rgba(255, 255, 255, 0.3);
   // background: radial-gradient(circle at center, rgba(255,255,255,0.3), $White);
-  animation: fadeInOut 0.8s forwards linear;
+  animation: fadeInOut 0.7s forwards linear;
 
   @keyframes fadeInOut{
     0%{

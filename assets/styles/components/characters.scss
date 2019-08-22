@@ -10,6 +10,20 @@
   line-height: 170%;
 
   &__character{
+    position: relative;
     width: $BS * 380;
+
+    &--hero{
+      text-align: right;
+    }
   }
+
+  &__next_attack{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateX(-100%) translateY(-50%);
+    text-align: right;
+  }
+
 }

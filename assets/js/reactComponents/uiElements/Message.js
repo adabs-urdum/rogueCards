@@ -11,9 +11,13 @@ const message = (props) => {
   // console.log(showMessage);
   // console.log('---------');
 
+  const style = {
+    'animationDuration': duration + 'ms',
+  };
+
   if(showMessage){
     return(
-      <section className="message"><span>{ message }</span></section>
+      <section className="message" style={ style }><span>{ message }</span></section>
     );
   }
   else{

@@ -13,6 +13,7 @@ class Character{
 
     // flag to know whether to "animate" a stat change
     this.blockChanged = false;
+    this.healthChanged = false;
   }
 
   newDeck = (cards, handsize, decksize) => {
@@ -21,34 +22,36 @@ class Character{
 
   gainBlock = (block) => {
     this.block += block;
+    this.blockChanged = true;
   }
 
   reduceAp = (affected, amount) => {
 
   }
 
-  dealDamage = (defender, attack) => {
+  die = () => {
+    console.log(this.name + ' is dead, mate');
+  }
 
-    if(attack){
+  takeDamage = (offender, attack) => {
 
-      if(defender.block - attack > 0){
-        defender.block -= attack;
-        defender.blockChanged = true;
-      }
-      else{
-        defender.health = defender.health + defender.block - attack;
-        defender.block = 0;
-        defender.blockChanged = true;
-        defender.healthChanged = true;
-      }
+    let block = this.block;
+    let remainingBlock = block - attack;
 
+    if(remainingBlock >= 0){
+      this.block = remainingBlock;
+      this.blockChanged = true;
+    }
+    else if(remainingBlock < 0){
+      this.block = 0;
+      this.health += remainingBlock;
+      this.healthChanged = true;
     }
 
-    if(defender.health <= 0){
-      defender.isDead = true;
+    if(this.health <= 0){
+      this.isDead = true;
+      this.health = 0;
     }
-
-    return defender.health;
 
   }
 

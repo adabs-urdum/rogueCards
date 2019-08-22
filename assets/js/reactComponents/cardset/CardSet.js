@@ -25,6 +25,9 @@ const cardSet = (props) => {
   const ap = props.ap;
   const maxAp = props.maxAp;
 
+  const flashAP = props.flashAP;
+  const flashEndTurn = props.flashEndTurn;
+
   const hoveredCard = props.hoveredCard;
   const hoveredCardIndex = hand.indexOf(hoveredCard);
 
@@ -75,15 +78,18 @@ const cardSet = (props) => {
     <section className="deck">
       <Button
         classes="button--endTurn deck__endTurn"
-        text="end turn"
+        text="End turn"
         onclick={ endTurn }
         disabled={ endedTurn }
+        flash={ flashEndTurn }
       />
       <div key="drawPile" className="deck__drawPile">
         <Pile
-          text={ ap + '/' + maxAp }
+          text={ ap }
+          textSuffix={ '/' + maxAp }
           type="ap"
           title="ap"
+          flash={ flashAP }
         />
         <Pile
           text={ drawPile.length }

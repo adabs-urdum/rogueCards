@@ -8,15 +8,15 @@ class Xenomorph extends Monster{
     this.maxHealth = 20;
     this.health = this.maxHealth;
     this.strength = 0;
-    this.block = 10;
+    this.block = 0;
     this.attacks = [
       {
         attack: 11,
-        block: 4,
+        block: 0,
       },
       {
         attack: 3,
-        block: 10,
+        block: 0,
       }
     ];
     this.nextAttack = this.getNewRandomAttack();
