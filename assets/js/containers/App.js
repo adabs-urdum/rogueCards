@@ -255,19 +255,22 @@ class App extends Component {
       console.log('game over');
       console.log('you lose');
       hero.die();
-      this.flashMessage('You dead. He won.', 5000);
-      this.setState({
-        'gameOver': true,
-      });
+      this.flashMessage('You dead. He won.', 4000);
+      window.setTimeout(()=>{
+        this.setState({
+          'gameOver': true,
+        });
+      }, 4000);
       return;
     }
     if(monster.isDead){
       monster.die();
-      this.flashMessage('He dead. You won.', 5000);
-      this.setState({
-        'gameOver': true,
-      });
-      return;
+      this.flashMessage('He dead. You won.', 4000);
+      window.setTimeout(()=>{
+        this.setState({
+          'gameOver': true,
+        });
+      }, 4000);
     }
 
     monster.gainBlock(currentAttack.block);
@@ -305,17 +308,10 @@ class App extends Component {
 
   restartGame = () => {
     this.setState({
-      'turn': 1,
       'hero': new RichardB(),
       'monster': new Xenomorph(),
-      'hoveredCard': null,
-      'endedTurn': false,
-      'message': null,
-      'showMessage': false,
-      'flashAP': false,
-      'flashEndTurn': false,
       'gameOver': false,
-      'inFullscreen': false,
+      'endedTurn': false,
     });
   }
 
