@@ -23,8 +23,10 @@ class Character{
   }
 
   gainBlock = (block) => {
-    this.block += block;
-    this.blockChanged = true;
+    if(block){
+      this.block += block;
+      this.blockChanged = true;
+    }
   }
 
   reduceAp = (affected, amount) => {

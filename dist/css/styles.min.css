@@ -630,8 +630,18 @@ img, canvas {
   position: absolute;
   top: 0;
   left: 0;
-  height: 5vw;
+  height: 2.5vw;
   width: 100%;
+}
+
+.info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 95%;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 149;
 }
 
 .gameOver {
@@ -965,7 +975,7 @@ img, canvas {
   height: 25.85938vw;
   display: flex;
   justify-content: space-between;
-  font-size: calc(1rem + 0.03906vw * 32 - 16 * 1px);
+  font-size: calc(1rem + 0.03906vw * 26 - 16 * 1px);
   line-height: 170%;
   font-weight: 700;
 }
@@ -979,12 +989,56 @@ img, canvas {
   text-align: right;
 }
 
+.characters__character--hero .characters__health_bar {
+  flex-direction: row-reverse;
+}
+
+.characters__character--hero .characters__health_bar_block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transform: translateX(-100%);
+  background: #1d7691;
+}
+
 .characters__next_attack {
   position: absolute;
   top: 50%;
   left: 0;
   transform: translateX(-100%) translateY(-50%);
   text-align: right;
+  font-size: calc(1rem + 0.03906vw * 32 - 16 * 1px);
+}
+
+.characters__health_bar_wrapper {
+  display: inline-block;
+  width: 7.8125vw;
+}
+
+.characters__health_bar {
+  display: flex;
+  height: 0.78125vw;
+  width: 100%;
+  border: solid #333 1px;
+}
+
+.characters__health_bar_health {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  background: #ad2a21;
+  transition: 0.3s ease-out width;
+}
+
+.characters__health_bar_block {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  transform: translateX(100%);
+  background: #1d7691;
+  transition: 0.3s ease-out width;
 }
 
 /*# sourceMappingURL=styles.min.css.map */

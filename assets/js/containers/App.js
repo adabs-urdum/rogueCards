@@ -3,10 +3,12 @@ import React, { Component, Fragment } from 'react';
 import RichardB from '../vanillaComponents/character/characterClasses/heroes/RichardB.js';
 import Xenomorph from '../vanillaComponents/character/characterClasses/monsters/Xenomorph.js';
 import Character from '../reactComponents/Character.js';
+import Header from '../reactComponents/Header.js';
 import CardSet from '../reactComponents/cardset/CardSet.js';
 import Arena from '../reactComponents/Arena.js';
 import Message from '../reactComponents/uiElements/Message.js';
 import Button from '../reactComponents/uiElements/Button.js';
+import Info from '../reactComponents/Info.js';
 
 class App extends Component {
 
@@ -31,6 +33,7 @@ class App extends Component {
       'flashEndTurn': false,
       'scaleEndTurnButton': false,
       'gameOver': false,
+      'showInfo': false,
     }
 
   }
@@ -342,7 +345,19 @@ class App extends Component {
     });
   }
 
-  toggleFullscreen = () => {
+  handleMouseEnterInfoButton = () => {
+    this.setState({
+      showInfo: true
+    });
+  }
+
+  handleMouseLeaveInfoButton = () => {
+    this.setState({
+      showInfo: false
+    });
+  }
+
+  toggleFullscreen = (e) => {
     if (document.fullscreenEnabled) {
       const inFullscreen = this.state.inFullscreen;
       console.log('fullscreenEnabled');
@@ -393,6 +408,12 @@ class App extends Component {
 
     const scaleEndTurnButton = this.state.scaleEndTurnButton;
 
+    const toggleFullscreen = this.toggleFullscreen;
+
+    const showInfo = this.state.showInfo;
+    const mouseLeaveInfoButton = this.handleMouseLeaveInfoButton;
+    const mouseEnterInfoButton = this.handleMouseEnterInfoButton;
+
     const gameOver = this.state.gameOver;
 
     const gameLoop = (
@@ -413,11 +434,13 @@ class App extends Component {
           <Character
             character={ hero }
             containerClass="characters__character characters__character--hero"
+            BS={ BS }
           />
           <Character
             character={ monster }
             containerClass="characters__character characters__character--monster"
             nextAttack={ monster.nextAttack }
+            BS={ BS }
           />
         </section>
 
@@ -451,13 +474,13 @@ class App extends Component {
     return (
       <Fragment>
 
-        <section className="header">
-          <Button
-            classes="button--fullscreen"
-            onclick={ this.toggleFullscreen }
-            text="Fullscreen"
-          />
-        </section>
+        <Header
+          toggleFullscreen={ toggleFullscreen }
+          mouseLeaveInfoButton={ mouseLeaveInfoButton }
+          mouseEnterInfoButton={ mouseEnterInfoButton }
+        />
+
+      { showInfo ? <Info /> : null }
 
         { gameOver ? <Fragment>
           <div className="gameOver">

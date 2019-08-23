@@ -15,6 +15,15 @@ const character = (props) => {
   const blockChanged = props.character.blockChanged;
   const healthChanged = props.character.healthChanged;
 
+  const healthBarWidth = 100 / maxHealth * health;
+  const healthBarStyles = {
+    width: healthBarWidth + '%',
+  };
+  const BlockBarWidth = 100 / maxHealth * block;
+  const blockBarStyles = {
+    width: BlockBarWidth + '%',
+  };
+
   // const {forwardedRef, ...rest} = this.props;
 
   let nextAttack = props.nextAttack;
@@ -33,6 +42,13 @@ const character = (props) => {
     <div className={ containerClass }>
       <ul>
         <li><h2>{ name }</h2></li>
+        <li className="characters__health_bar_wrapper">
+          <span className="characters__health_bar">
+            <span className="characters__health_bar_health" style={ healthBarStyles }>
+              <span className="characters__health_bar_block" style={ blockBarStyles }></span>
+            </span>
+          </span>
+        </li>
         <li className="redHealth">Health: <span className={healthChanged ? 'animateScale' : null}>
             <CountUp
               duration={1.5}
