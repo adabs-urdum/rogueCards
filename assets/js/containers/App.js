@@ -52,6 +52,7 @@ class App extends Component {
     const flashEndTurn = this.state.flashEndTurn;
     const startedTurn = this.state.startedTurn;
     const scaleEndTurnButton = this.state.scaleEndTurnButton;
+    const flashNextAttack = this.state.flashNextAttack;
 
     if(flashEndTurn == true){
       window.setTimeout(() => {
@@ -67,6 +68,14 @@ class App extends Component {
           flashAP: false
         });
       }, 300);
+    }
+
+    if(flashNextAttack == true){
+      window.setTimeout(() => {
+        this.setState({
+          flashNextAttack: false
+        });
+      }, 1000);
     }
 
     if(scaleEndTurnButton == true){
@@ -248,7 +257,14 @@ class App extends Component {
     }, () => {
       this.flashMessage('Enemie\'s turn', 700);
       setTimeout(() => {
-        this.monsterAttack(monster, hero, monster.nextAttack);
+
+        window.setTimeout(() => {
+          this.monsterAttack(monster, hero, monster.nextAttack);
+        }, 400);
+
+        this.setState({
+          'flashNextAttack': true,
+        });
       }, this.state.messageDuration);
     });
 
@@ -414,6 +430,8 @@ class App extends Component {
     const mouseLeaveInfoButton = this.handleMouseLeaveInfoButton;
     const mouseEnterInfoButton = this.handleMouseEnterInfoButton;
 
+    const flashNextAttack = this.state.flashNextAttack;
+
     const gameOver = this.state.gameOver;
 
     const gameLoop = (
@@ -441,6 +459,7 @@ class App extends Component {
             containerClass="characters__character characters__character--monster"
             nextAttack={ monster.nextAttack }
             BS={ BS }
+            flashNextAttack={ flashNextAttack }
           />
         </section>
 

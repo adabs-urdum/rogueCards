@@ -39,6 +39,10 @@
     transform: translateX(-100%) translateY(-50%);
     text-align: right;
     @include bs-font-size(32);
+    transition: transform 0.2s linear;
+    &--scale{
+      transform: translateX(-100%) translateY(-50%) scale(1.5);
+    }
   }
 
   &__health_bar_wrapper{

@@ -14,8 +14,8 @@ const card = ( props ) => {
       <div className="card__img_wrapper">
         <p className="card__name">{ card.name }</p>
         <div className="card__stats_wrapper">
-          <p className="card__stats redHealth">{ card.attack ? card.attack : 0 } <span className="card__unit">atk</span></p>
-          <p className="card__stats blueBlock">{ card.block ? card.block : 0 } <span className="card__unit">blk</span></p>
+          { card.attack ? <p className="card__stats redHealth">{ card.attack ? card.attack : 0 } <span className="card__unit">atk</span></p> : null }
+          { card.block ? <p className="card__stats blueBlock">{ card.block ? card.block : 0 } <span className="card__unit">blk</span></p> : null }
         </div>
       </div>
       <p className="card__cost">
