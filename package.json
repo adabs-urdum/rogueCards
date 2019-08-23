@@ -46,6 +46,8 @@
     "react-dom": "^16.8.6",
     "react-scripts": "^2.1.8",
     "node-sass": "latest",
-    "phaser": "latest"
+    "phaser": "latest",
+    "countup.js": "latest",
+    "react-countup": "latest"
   }
 }

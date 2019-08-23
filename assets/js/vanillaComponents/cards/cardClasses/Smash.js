@@ -6,8 +6,8 @@ class Smash extends Card{
     super();
 
     this.name = 'Smash';
-    this.description = 'Smash ipsum dolor sit amet, sectum sempra avada kedavra. Valar morghulis, valar doaheris.';
     this.attack = 7;
+    this.description = 'Deal <span class="redHealth">' + this.attack + '</span> damage.';
     this.block = 0;
     this.cost = 1;
   }

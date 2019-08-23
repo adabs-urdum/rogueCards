@@ -3,7 +3,7 @@ import Hero from './../Hero.js';
 class RichardB extends Hero{
   constructor(one, two){
     super();
-    this.name = 'Richard B.';
+    this.name = 'You';
     this.description = '"Where the hell\'s your God now?" -- Richard B. Riddick';
     this.maxHealth = 20;
     this.health = this.maxHealth;

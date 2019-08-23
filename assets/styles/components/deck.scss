@@ -12,9 +12,28 @@
     top: 0;
     left: 50%;
     transform: translate(-50%, -150%);
+    transition: transform 0.5s ease-out;
     &.button--flashButton{
       background: $Anthracite;
       color: $Grey;
+    }
+    &--scale{
+      animation: JIGGLE 0.25s linear forwards;
+      transform-origin: center;
+    }
+    @keyframes JIGGLE{
+      0%{
+        transform: translate(-50%, -150%) scale(1.5) rotate(0deg);
+      }
+      25%{
+        transform: translate(-50%, -150%) scale(1.5) rotate(20deg);
+      }
+      75%{
+        transform: translate(-50%, -150%) scale(1.5) rotate(-20deg);
+      }
+      100%{
+        transform: translate(-50%, -150%) scale(1.5) rotate(0deg);
+      }
     }
   }
 
@@ -26,9 +45,7 @@
     .card{
       position: absolute;
       top: 0;
-      left: 0;
       transition: transform 0.2s ease-out, left 0.2s ease-out;
-      transform-origin: center bottom;
       &:first-child{
         margin-left: 0;
       }
@@ -36,19 +53,41 @@
         margin-right: 0;
       }
       &:hover{
-        transform: scale(1.1) rotate(3deg);
+        animation: none !important;
+        transform: scale(1.1) rotate(3deg) !important;
         z-index: 3;
+      }
+    }
+
+    &--started{
+      .card{
+        animation: SlideIn 0.3s ease-in forwards;
+        pointer-events: none;
+        @keyframes SlideIn{
+          0%{
+            transform: translateX($BS * -200);
+            opacity: 0;
+          }
+          100%{
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
       }
     }
 
     &--ended{
       .card{
-        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-        transform: translate(250%, -20%) scale(0.1);
-        opacity: 0;
-        @for $i from 1 through 4{
-          &:nth-child(#{$i}){
-            transition-delay: #{$i * .1}s;
+        animation: SlideOut 0.3s ease-in forwards;
+        pointer-events: none;
+        @keyframes SlideOut{
+          0%{
+            transform: translateX(0);
+            opacity: 1;
+          }
+          100%{
+            transform: translateX($BS * 200);
+            opacity: 0;
           }
         }
       }

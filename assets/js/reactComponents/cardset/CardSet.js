@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import Card from '../Card.js';
 import DrawPile from './DrawPile.js';
 import Ap from './AP.js';
-import BanishPile from './BanishPile.js';
-import DiscardPile from './DiscardPile.js';
 import Pile from './Pile.js';
 import Button from '../uiElements/Button.js';
 
@@ -22,8 +20,11 @@ const cardSet = (props) => {
   const BS = props.BS;
   const endTurn = props.endTurn;
   const endedTurn = props.endedTurn;
+  const startedTurn = props.startedTurn;
   const ap = props.ap;
+  const oldAP = props.oldAP;
   const maxAp = props.maxAp;
+  const scaleEndTurnButton = props.scaleEndTurnButton;
 
   const flashAP = props.flashAP;
   const flashEndTurn = props.flashEndTurn;
@@ -74,10 +75,25 @@ const cardSet = (props) => {
 
   });
 
+  let handClass = 'deck__hand ';
+
+  if(startedTurn){
+    handClass += 'deck__hand--started';
+  }
+  else if(endedTurn){
+    handClass += 'deck__hand--ended';
+  }
+
+  let endTurnButtonClasses = 'button--endTurn deck__endTurn';
+
+  if(scaleEndTurnButton){
+    endTurnButtonClasses += ' deck__endTurn--scale';
+  }
+
   return(
     <section className="deck">
       <Button
-        classes="button--endTurn deck__endTurn"
+        classes={ endTurnButtonClasses }
         text="End turn"
         onclick={ endTurn }
         disabled={ endedTurn }
@@ -85,6 +101,7 @@ const cardSet = (props) => {
       />
       <div key="drawPile" className="deck__drawPile">
         <Pile
+          old={ oldAP }
           text={ ap }
           textSuffix={ '/' + maxAp }
           type="ap"
@@ -97,7 +114,7 @@ const cardSet = (props) => {
           title="draw"
         />
       </div>
-      <div key="hand" className={ endedTurn ? 'deck__hand deck__hand--ended' : 'deck__hand' }>
+      <div key="hand" className={ handClass }>
         { handJsx }
       </div>
       <div key="discardPile" className="deck__discardPile">

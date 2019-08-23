@@ -1,3 +1,4 @@
+import CountUp from 'react-countup';
 import React, { Component, Fragment } from 'react';
 import RichardB from '../vanillaComponents/character/characterClasses/heroes/RichardB.js';
 import Xenomorph from '../vanillaComponents/character/characterClasses/monsters/Xenomorph.js';
@@ -21,12 +22,14 @@ class App extends Component {
       'BS': 100 / 2560,
       'handWidth': 1600,
       'endedTurn': false,
+      'startedTurn': true,
       'message': null,
       'showMessage': false,
       'messageRef': React.createRef(),
       'messageDuration': 700,
       'flashAP': false,
       'flashEndTurn': false,
+      'scaleEndTurnButton': false,
       'gameOver': false,
     }
 
@@ -44,6 +47,8 @@ class App extends Component {
     const monster = this.state.monster;
     const flashAP = this.state.flashAP;
     const flashEndTurn = this.state.flashEndTurn;
+    const startedTurn = this.state.startedTurn;
+    const scaleEndTurnButton = this.state.scaleEndTurnButton;
 
     if(flashEndTurn == true){
       window.setTimeout(() => {
@@ -59,6 +64,22 @@ class App extends Component {
           flashAP: false
         });
       }, 300);
+    }
+
+    if(scaleEndTurnButton == true){
+      window.setTimeout(() => {
+        this.setState({
+          scaleEndTurnButton: false
+        });
+      }, 300);
+    }
+
+    if(startedTurn == true){
+      window.setTimeout(() => {
+        this.setState({
+          startedTurn: false
+        });
+      }, 1000);
     }
 
     if(monster.healthChanged == true){
@@ -163,6 +184,7 @@ class App extends Component {
       this.setState({
         'flashEndTurn': true,
         'flashAP': true,
+        'scaleEndTurnButton': true,
       });
       return null;
     }
@@ -283,12 +305,12 @@ class App extends Component {
       turn: turn + 1,
     }, () => {
       window.setTimeout(()=>{
-        this.newTurn();
+        this.startedTurn();
       }, 1000);
     } );
   }
 
-  newTurn = () => {
+  startedTurn = () => {
     this.flashMessage('Round ' + this.state.turn, 700);
 
     const hero = this.state.hero;
@@ -301,6 +323,7 @@ class App extends Component {
 
     this.setState({
       endedTurn: false,
+      startedTurn: true,
       hero: hero,
       flashAP: true,
     });
@@ -345,6 +368,7 @@ class App extends Component {
 
     const hero = this.state.hero;
     const ap = hero.ap;
+    const oldAP = hero.oldAP;
     const maxAp = hero.maxAp;
     const monster = this.state.monster;
     const cardWidth = this.state.cardWidth;
@@ -358,6 +382,7 @@ class App extends Component {
     const discardPile = deck.discardPile;
     const banishPile = deck.banishPile;
     const endedTurn = this.state.endedTurn;
+    const startedTurn = this.state.startedTurn;
 
     const message = this.state.message;
     const showMessage = this.state.showMessage;
@@ -365,6 +390,8 @@ class App extends Component {
 
     const flashAP = this.state.flashAP;
     const flashEndTurn = this.state.flashEndTurn;
+
+    const scaleEndTurnButton = this.state.scaleEndTurnButton;
 
     const gameOver = this.state.gameOver;
 
@@ -410,9 +437,12 @@ class App extends Component {
           endTurn={ this.endTurn }
           endedTurn={ endedTurn }
           ap={ ap }
+          oldAP={ oldAP }
           maxAp={ maxAp }
           flashAP={ flashAP }
           flashEndTurn={ flashEndTurn }
+          scaleEndTurnButton={ scaleEndTurnButton }
+          startedTurn={ startedTurn }
         />
 
       </section>

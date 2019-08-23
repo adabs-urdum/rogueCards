@@ -33,6 +33,9 @@
   &__description{
     @include bs-font-size(18);
     text-align: center;
+    span{
+      font-weight: 700;
+    }
   }
 
   &__cost{

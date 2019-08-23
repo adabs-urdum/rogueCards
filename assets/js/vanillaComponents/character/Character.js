@@ -6,6 +6,8 @@ class Character{
     this.name = '';
     this.description = '';
     this.health = 0;
+    this.healthBefore = 0;
+    this.blockBefore = 0;
     this.strength = 0;
 
     // flag to set game end
@@ -35,8 +37,11 @@ class Character{
 
   takeDamage = (offender, attack) => {
 
-    let block = this.block;
+    const block = this.block;
     let remainingBlock = block - attack;
+
+    this.oldBlock = block;
+    this.oldHealth = this.health;
 
     if(remainingBlock >= 0){
       this.block = remainingBlock;

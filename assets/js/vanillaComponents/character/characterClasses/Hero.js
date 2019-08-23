@@ -23,6 +23,7 @@ class Hero extends Character{
   }
 
   fillApToMax(){
+    this.oldAP = this.ap;
     this.ap = this.maxAp;
   }
 

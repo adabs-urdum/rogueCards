@@ -745,11 +745,32 @@ img, canvas {
   top: 0;
   left: 50%;
   transform: translate(-50%, -150%);
+  transition: transform 0.5s ease-out;
 }
 
 .deck__endTurn.button--flashButton {
   background: #333;
   color: #C4C4C4;
+}
+
+.deck__endTurn--scale {
+  animation: JIGGLE 0.25s linear forwards;
+  transform-origin: center;
+}
+
+@keyframes JIGGLE {
+  0% {
+    transform: translate(-50%, -150%) scale(1.5) rotate(0deg);
+  }
+  25% {
+    transform: translate(-50%, -150%) scale(1.5) rotate(20deg);
+  }
+  75% {
+    transform: translate(-50%, -150%) scale(1.5) rotate(-20deg);
+  }
+  100% {
+    transform: translate(-50%, -150%) scale(1.5) rotate(0deg);
+  }
 }
 
 .deck__hand {
@@ -761,9 +782,7 @@ img, canvas {
 .deck__hand .card {
   position: absolute;
   top: 0;
-  left: 0;
   transition: transform 0.2s ease-out, left 0.2s ease-out;
-  transform-origin: center bottom;
 }
 
 .deck__hand .card:first-child {
@@ -775,30 +794,41 @@ img, canvas {
 }
 
 .deck__hand .card:hover {
-  transform: scale(1.1) rotate(3deg);
+  animation: none !important;
+  transform: scale(1.1) rotate(3deg) !important;
   z-index: 3;
 }
 
+.deck__hand--started .card {
+  animation: SlideIn 0.3s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes SlideIn {
+  0% {
+    transform: translateX(-7.8125vw);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .deck__hand--ended .card {
-  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-  transform: translate(250%, -20%) scale(0.1);
-  opacity: 0;
+  animation: SlideOut 0.3s ease-in forwards;
+  pointer-events: none;
 }
 
-.deck__hand--ended .card:nth-child(1) {
-  transition-delay: 0.1s;
-}
-
-.deck__hand--ended .card:nth-child(2) {
-  transition-delay: 0.2s;
-}
-
-.deck__hand--ended .card:nth-child(3) {
-  transition-delay: 0.3s;
-}
-
-.deck__hand--ended .card:nth-child(4) {
-  transition-delay: 0.4s;
+@keyframes SlideOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(7.8125vw);
+    opacity: 0;
+  }
 }
 
 .deck__drawPile, .deck__discardPile {
@@ -885,6 +915,10 @@ img, canvas {
   text-align: center;
 }
 
+.card__description span {
+  font-weight: 700;
+}
+
 .card__cost {
   position: absolute;
   top: 0;
@@ -933,6 +967,7 @@ img, canvas {
   justify-content: space-between;
   font-size: calc(1rem + 0.03906vw * 32 - 16 * 1px);
   line-height: 170%;
+  font-weight: 700;
 }
 
 .characters__character {

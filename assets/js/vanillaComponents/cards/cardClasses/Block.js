@@ -6,10 +6,10 @@ class Block extends Card{
     super();
 
     this.name = 'Block';
-    this.description = 'Lorem ipsum dolor sit amet, sectum sempra avada kedavra. Valar morghulis, valar doaheris.';
     this.attack = 0;
     this.block = 4;
     this.cost = 1;
+    this.description = 'Gain <span class="blueBlock">' + this.block + '</span> block.';
   }
 
 }
