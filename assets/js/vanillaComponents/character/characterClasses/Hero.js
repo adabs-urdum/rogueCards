@@ -8,8 +8,8 @@ class Hero extends Character{
   constructor(){
     super();
 
-    const handsize = 5;
-    const decksize = 15;
+    const handsize = 4;
+    const decksize = 13;
 
     this.maxAp = 3;
 

@@ -5,10 +5,10 @@ class Block extends Card{
   constructor(){
     super();
 
-    this.name = 'Block';
+    this.name = 'Block 2';
     this.attack = 0;
-    this.block = 19;
-    this.cost = 3;
+    this.block = 12;
+    this.cost = 2;
     this.description = 'Gain <span class="blueBlock">' + this.block + '</span> block.';
   }
 

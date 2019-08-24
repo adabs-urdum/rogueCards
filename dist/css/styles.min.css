@@ -1043,7 +1043,7 @@ img, canvas {
 }
 
 .card__description {
-  font-size: calc(1rem + 0.03906vw * 18 - 16 * 1px);
+  font-size: calc(1rem + 0.03906vw * 20 - 16 * 1px);
   text-align: center;
 }
 
@@ -1072,21 +1072,42 @@ img, canvas {
 }
 
 .card__stats_wrapper {
-  padding: 0.3125vw;
   padding-top: 2.42188vw;
-  padding-left: 0.46875vw;
   font-weight: 700;
   font-size: calc(1rem + 0.03906vw * 30 - 16 * 1px);
 }
 
+.card__stats_bubble {
+  position: relative;
+  display: block;
+  width: 2.34375vw;
+  height: 2.34375vw;
+  color: #FFFFFF;
+  border-radius: 0 50% 50% 0;
+  margin-left: -0.3125vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card__stats_bubble--health {
+  background: #ad2a21;
+}
+
+.card__stats_bubble--block {
+  background: #1d7691;
+}
+
 .card__stats {
   margin-bottom: 0.19531vw;
+  display: flex;
+  align-items: center;
 }
 
 .card__unit {
-  font-size: calc(1rem + 0.03906vw * 16 - 16 * 1px);
+  font-size: calc(1rem + 0.03906vw * 20 - 16 * 1px);
   font-weight: 400;
-  margin-right: 0.3125vw;
+  margin-left: 0.3125vw;
 }
 
 .characters {

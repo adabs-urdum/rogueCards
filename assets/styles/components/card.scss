@@ -31,7 +31,7 @@
   }
 
   &__description{
-    @include bs-font-size(18);
+    @include bs-font-size(20);
     text-align: center;
     span{
       font-weight: 700;
@@ -58,23 +58,42 @@
   }
 
   &__stats_wrapper{
-    padding: $BS * 8;
     padding-top: $BS * 62;
-    padding-left: $BS * 12;
     font-weight: 700;
     @include bs-font-size(30);
   }
 
+  &__stats_bubble{
+    position: relative;
+    display: block;
+    width: $BS * 60;
+    height: $BS * 60;
+    color: $White;
+    border-radius: 0 50% 50% 0;
+    margin-left: $BS * -8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &--health{
+      background: $RedHealth
+    }
+    &--block{
+      background: $BlueBlock;
+    }
+  }
+
   &__stats{
     margin-bottom: $BS * 5;
+    display: flex;
+    align-items: center;
     &:last-child{
     }
   }
 
   &__unit{
-    @include bs-font-size(16);
+    @include bs-font-size(20);
     font-weight: 400;
-    margin-right: $BS * 8;
+    margin-left: $BS * 8;
   }
 
 }
