@@ -506,9 +506,10 @@ class App extends Component {
 
         { gameOver ? <Fragment>
           <div className="gameOver">
-            <h1>{ 'rogueCards alpha v0.0.1' }</h1>
+            <h1>{ 'rogueCards alpha v0.0.2' }</h1>
             <p>attempt to build a rogue like/light card deck builder<br/>using react and a yet to be chosen graphics/game engine</p>
-            <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://cyrill-lehmann.ch">www.cyrill-lehmann.ch</a>
+            <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://cyrill-lehmann.ch">cyrill-lehmann.ch</a>
+            <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://github.com/adabs-urdum/rogueCards">github.com/adabs-urdum/rogueCards</a>
             <Button
               onclick={ this.restartGame }
               text="Play"
