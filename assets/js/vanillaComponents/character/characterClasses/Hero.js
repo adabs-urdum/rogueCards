@@ -1,5 +1,6 @@
 import Character from './../Character.js';
 import Smash from './../../cards/cardClasses/Smash.js'
+import Smash2 from './../../cards/cardClasses/Smash2.js'
 import Block from './../../cards/cardClasses/Block.js'
 import Block2 from './../../cards/cardClasses/Block2.js'
 
@@ -15,6 +16,7 @@ class Hero extends Character{
 
     const cards = [
         Smash,
+        Smash2,
         Block,
         Block2,
     ];

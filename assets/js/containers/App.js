@@ -194,10 +194,14 @@ class App extends Component {
     if( availableAP < cardCostAP ){
       this.flashMessage('Not enough action points.', 700);
       this.setState({
-        'flashEndTurn': true,
         'flashAP': true,
-        'scaleEndTurnButton': true,
       });
+      if(availableAP == 0){
+        this.setState({
+          'flashEndTurn': true,
+          'scaleEndTurnButton': true,
+        });
+      }
       return null;
     }
 

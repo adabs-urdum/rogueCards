@@ -12,14 +12,18 @@ class Xenomorph extends Monster{
     this.attacks = [
       {
         attack: 11,
-        block: 0,
+        block: 11,
       },
       {
         attack: 2,
         block: 6,
       },
       {
-        attack: 4,
+        attack: 8,
+        block: 2,
+      },
+      {
+        attack: 10,
         block: 4,
       }
     ];
