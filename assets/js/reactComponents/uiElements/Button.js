@@ -20,7 +20,8 @@ const button = (props) => {
       disabled={ disabled }
       style={ style }
     >
-      { text }
+    <span className="button__content">{ text }</span>
+    { props.children }
     </button>
   );
 }

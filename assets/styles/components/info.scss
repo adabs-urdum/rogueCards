@@ -6,4 +6,55 @@
   height: 95%;
   background: rgba(255,255,255,0.5);
   z-index: 149;
+  @include bs-font-size(32);
+  font-weight: 700;
+  &__you{
+    position: absolute;
+    top: $BS * 235;
+    left: $BS * 450;
+    display: block;
+    margin-bottom: 0;
+  }
+  &__monster{
+    position: absolute;
+    top: $BS * 235;
+    left: $BS * 1900;
+    display: block;
+    margin-bottom: 0;
+  }
+  &__ap{
+    position: absolute;
+    top: $BS * 1100;
+    left: $BS * 50;
+  }
+  &__banish{
+    position: absolute;
+    top: $BS * 1100;
+    left: $BS * 2120;
+  }
+  &__draw{
+    position: absolute;
+    top: $BS * 1320;
+    left: $BS * 50;
+  }
+  &__discard{
+    position: absolute;
+    top: $BS * 1320;
+    left: $BS * 2120;
+  }
+  &__hand{
+    position: absolute;
+    top: $BS * 1030;
+    left: $BS * 1070;
+  }
+  &__endturn{
+    position: absolute;
+    top: $BS * 740;
+    left: $BS * 1180;
+  }
+  &__enemyattack{
+    position: absolute;
+    top: $BS * 480;
+    left: $BS * 1450;
+  }
 }

@@ -1,5 +1,5 @@
 .gameOver{
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -8,7 +8,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  @include bs-font-size(32);
+  background: White;
   button{
     margin-top: $BS * 50;
+  }
+
+  h1{
+    margin-bottom: $BS * 10;
   }
 }

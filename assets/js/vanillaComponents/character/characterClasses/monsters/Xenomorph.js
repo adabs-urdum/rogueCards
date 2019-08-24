@@ -15,8 +15,12 @@ class Xenomorph extends Monster{
         block: 0,
       },
       {
-        attack: 3,
-        block: 0,
+        attack: 2,
+        block: 6,
+      },
+      {
+        attack: 4,
+        block: 4,
       }
     ];
     this.nextAttack = this.getNewRandomAttack();

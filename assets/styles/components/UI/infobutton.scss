@@ -1,0 +1,12 @@
+.infobutton{
+  position: absolute;
+  top: 50%;
+  left: $BS * 5;
+  transform: translateY(-50%);
+  font-weight: 700;
+  @include bs-font-size(40);
+  cursor: help;
+  &__text{
+    padding: $BS * 5;
+  }
+}

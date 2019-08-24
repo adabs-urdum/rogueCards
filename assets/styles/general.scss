@@ -6,7 +6,10 @@ html{
   color: $Black;
   width: auto;
   height: 100%;
+  padding: 0;
+  margin: 0;
   cursor: default;
+  background: $Black;
 }
 
 body{
@@ -15,22 +18,23 @@ body{
   align-items: center;
   width: 100%;
   height: 100%;
-  background: $Black;
   @include bs-font-size(16);
   line-height: 150%;
   overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 #root{
   position: relative;
   background: $White;
   width: $BS * 2560;
-  height: $BS * 1440;
-  max-height: 100%;
+  max-height: $BS * 1446;
+  height: 100%;
 }
 
 h1, h2, h3, h4, h5, h6{
-  margin: 0;
+  margin-top: 0;
   padding: 0;
   line-height: 120%;
   font-weight: 700;
@@ -57,8 +61,9 @@ h5, h6{
 }
 
 p{
-  margin: 0;
+  margin-top: 0;
   padding: 0;
+  line-height: 140%;
 }
 
 ul, li{
@@ -110,12 +115,9 @@ a{
     opacity: 0.7;
     pointer-events: none;
   }
-  &--fullscreen{
-    position: absolute;
-    z-index: 101;
-    top: $BS * 10;
-    right: $BS * 10;
-    @include bs-font-size(16);
+  &__content{
+    display: block;
+    transform: translateY(10%);
   }
 }
 

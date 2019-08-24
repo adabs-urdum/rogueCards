@@ -32,7 +32,7 @@ class App extends Component {
       'flashAP': false,
       'flashEndTurn': false,
       'scaleEndTurnButton': false,
-      'gameOver': false,
+      'gameOver': true,
       'showInfo': false,
     }
 
@@ -83,7 +83,7 @@ class App extends Component {
         this.setState({
           scaleEndTurnButton: false
         });
-      }, 300);
+      }, 500);
     }
 
     if(startedTurn == true){
@@ -218,12 +218,12 @@ class App extends Component {
     if(monster.isDead){
       console.log('game over');
       console.log('you won');
-      this.flashMessage('He dead. You won.', 4000);
+      this.flashMessage('He dead. You won.', 2000);
       window.setTimeout(()=>{
         this.setState({
           'gameOver': true,
         });
-      }, 4000);
+      }, 2000);
     }
 
     this.setState({
@@ -296,27 +296,29 @@ class App extends Component {
       console.log('game over');
       console.log('you lose');
       hero.die();
-      this.flashMessage('You dead. He won.', 4000);
+      this.flashMessage('You dead. He won.', 2000);
       window.setTimeout(()=>{
         this.setState({
           'gameOver': true,
         });
-      }, 4000);
+      }, 2000);
       return;
     }
     if(monster.isDead){
       monster.die();
-      this.flashMessage('He dead. You won.', 4000);
+      this.flashMessage('He dead. You won.', 2000);
       window.setTimeout(()=>{
         this.setState({
           'gameOver': true,
         });
-      }, 4000);
+      }, 2000);
     }
 
     monster.gainBlock(currentAttack.block);
 
-    monster.getNextAttack();
+    window.setTimeout(()=>{
+      monster.getNextAttack();
+    }, 1000);
 
     this.setState({
       hero: hero,
@@ -358,6 +360,7 @@ class App extends Component {
       'monster': new Xenomorph(),
       'gameOver': false,
       'endedTurn': false,
+      'startedTurn': true,
     });
   }
 
@@ -504,10 +507,11 @@ class App extends Component {
         { gameOver ? <Fragment>
           <div className="gameOver">
             <h1>{ 'rogueCards alpha v0.0.1' }</h1>
+            <p>attempt to build a rogue like/light card deck builder<br/>using react and a yet to be chosen graphics/game engine</p>
             <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://cyrill-lehmann.ch">www.cyrill-lehmann.ch</a>
             <Button
               onclick={ this.restartGame }
-              text="again"
+              text="Play"
               disabled={ !gameOver }
             />
           </div>

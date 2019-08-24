@@ -20,7 +20,8 @@ const character = (props) => {
   const healthBarStyles = {
     width: healthBarWidth + '%',
   };
-  const BlockBarWidth = 100 / maxHealth * block;
+  
+  const BlockBarWidth = 100 / health * block;
   const blockBarStyles = {
     width: BlockBarWidth + '%',
   };
@@ -32,7 +33,7 @@ const character = (props) => {
   if(nextAttack){
     nextAttack = (
       <div className={ flashNextAttack ? "characters__next_attack characters__next_attack--scale" : "characters__next_attack"}>
-        <h4>Next enemy attack</h4>
+        <h4>Next attack</h4>
         <p className="redHealth">ATK: { nextAttack.attack }</p>
         <p className="blueBlock">BLK: { nextAttack.block }</p>
       </div>
@@ -66,6 +67,7 @@ const character = (props) => {
           </span>
         </li>
         <li>{ deck ? 'Handsize: ' + deck.handsize : null }</li>
+        <li>{ deck ? 'Decksize: ' + deck.decksize : null }</li>
       </ul>
       { nextAttack ? nextAttack : null }
     </div>
