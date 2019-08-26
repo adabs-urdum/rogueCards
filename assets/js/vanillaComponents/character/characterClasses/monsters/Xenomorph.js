@@ -3,7 +3,7 @@ import Monster from '../Monster.js';
 class Xenomorph extends Monster{
   constructor(){
     super();
-    this.name = 'Monster';
+    this.name = 'Enemy';
     this.description = '';
     this.maxHealth = 20;
     this.health = this.maxHealth;

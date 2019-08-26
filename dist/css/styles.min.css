@@ -1207,7 +1207,7 @@ img, canvas {
 }
 
 .characters__next_attack--scale {
-  transform: translateX(-100%) translateY(-50%) scale(1.5);
+  transform: translateX(-150%) translateY(-150%) scale(1.5);
 }
 
 .characters__health_bar_wrapper {

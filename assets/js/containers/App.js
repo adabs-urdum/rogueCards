@@ -42,9 +42,10 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    window.setTimeout(()=>{
-      this.flashMessage('Round ' + this.state.turn, 700);
-    }, 500);
+
+    const animation = new Animation();
+    animation.createHeroFighters(4);
+    this.startedTurn();
 
     // const plugins = [ CSSPlugin, AttrPlugin ];
     // var tl = new TimelineLite();
@@ -60,9 +61,8 @@ class App extends Component {
     //   }
     // });
 
-    const animation = new Animation();
     this.setState({
-      'animation': animation,
+      animation: animation,
     });
   }
 
@@ -240,7 +240,7 @@ class App extends Component {
     });
 
     // play actual card stats
-    [hero, monster] = cardObject.playCard(hero, monster);
+    [hero, monster] = cardObject.playCard(hero, monster, animation);
 
     this.animateShieldIfBlockChanged();
 
@@ -265,6 +265,8 @@ class App extends Component {
     const hero = this.state.hero;
     const monster = this.state.monster;
     const animation = this.state.animation;
+
+    console.log(animation);
 
     if(hero.blockChanged){
       console.log('hero.blockChanged');
@@ -392,7 +394,6 @@ class App extends Component {
 
     this.setState({
       endedTurn: false,
-      startedTurn: true,
       hero: hero,
       flashAP: true,
     });
@@ -408,7 +409,7 @@ class App extends Component {
       'monster': new Xenomorph(),
       'gameOver': false,
       'endedTurn': false,
-      'startedTurn': true,
+      'startedTurn': true
     });
   }
 
