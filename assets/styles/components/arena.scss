@@ -11,9 +11,10 @@
   .card{
     transform: scale(0.615);
     transform-origin: center top;
+    height: auto;
     cursor: default;
     animation: layDown 0.5s ease-out;
-    margin: 0 $BS*-90 $BS*-350;
+    margin: 0 $BS*-90 0;
 
     @keyframes layDown {
       0%{

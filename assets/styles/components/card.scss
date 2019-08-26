@@ -1,38 +1,45 @@
 .card{
   position: relative;
   width: $BS * 300;
-  height: $BS * 450;
-  background: $Grey;
-  border-radius: $BS * 5;
-  padding: $BS * 8;
+  min-height: $BS * 300;
+  background: scale-color(#998099, $alpha: -40%);
+  border-radius: $BS * 10;
   box-sizing: border-box;
   z-index: 1;
-  border: solid 1px #333;
+  border: solid 1px $White;
   cursor: pointer;
 
   &__img_wrapper{
     position: relative;
-    width: $BS * 284;
-    height: $BS * 250;
-    background: $White;
+    width: 100%;
     border-radius: $BS * 5;
     margin-bottom: $BS * 36;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
   }
 
   &__name{
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 50%);
+    transform: translate(0, 0);
     font-weight: 700;
-    background: $Grey;
-    padding: $BS*10 $BS*20;
-    border-radius: $BS*5;
+    background: $White;
+    padding: $BS*10 $BS*20 $BS*10;
+    border-radius: 0 $BS*5 0 0;
+    text-align: right;
+    margin-bottom: -1px;
+    max-width: $BS * 210;
+    @include bs-font-size(30);
+    box-sizing: border-box;
   }
 
   &__description{
+    padding: $BS * 16;
     @include bs-font-size(20);
-    text-align: center;
+    text-align: right;
+    background: $White;
+    max-width: $BS * 210;
+    box-sizing: border-box;
+    border-radius: $BS*5 0 0 $BS*5;
     span{
       font-weight: 700;
     }
@@ -47,7 +54,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 0% 50% 50% 50%;
+    border-radius: $BS*10 50% 50% 50%;
     background: $Anthracite;
     font-weight: 700;
     color: $YellowAp;
@@ -58,8 +65,8 @@
   }
 
   &__stats_wrapper{
-    padding-top: $BS * 62;
     font-weight: 700;
+    align-self: flex-start;
     @include bs-font-size(30);
   }
 
@@ -70,7 +77,6 @@
     height: $BS * 60;
     color: $White;
     border-radius: 0 50% 50% 0;
-    margin-left: $BS * -8;
     display: flex;
     justify-content: center;
     align-items: center;

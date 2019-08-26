@@ -9,7 +9,7 @@ const character = (props) => {
   const maxHealth = props.character.maxHealth;
   const strength = props.character.strength;
   const block = props.character.block;
-  const oldBlock = props.character.oldBlock;
+  const blockBefore = props.character.blockBefore;
   const containerClass = props.containerClass;
   const deck = props.character.deck;
   const blockChanged = props.character.blockChanged;
@@ -20,7 +20,7 @@ const character = (props) => {
   const healthBarStyles = {
     width: healthBarWidth + '%',
   };
-  
+
   const BlockBarWidth = 100 / health * block;
   const blockBarStyles = {
     width: BlockBarWidth + '%',
@@ -61,7 +61,7 @@ const character = (props) => {
         <li className="blueBlock">Block: <span className={blockChanged ? 'animateScale' : null}>
             <CountUp
               duration={1.5}
-              start={oldBlock}
+              start={blockBefore}
               end={block}
             />
           </span>

@@ -48,6 +48,8 @@
     "node-sass": "latest",
     "phaser": "latest",
     "countup.js": "latest",
-    "react-countup": "latest"
+    "react-countup": "latest",
+    "gsap": "latest",
+    "babylonjs": "latest"
   }
 }

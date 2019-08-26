@@ -7,13 +7,14 @@
   &__number{
     width: $BS * 120;
     height: $BS * 120;
-    background: $Grey;
+    background: $White;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     @include bs-font-size(35);
     font-weight: 700;
+    background: radial-gradient(circle at center, $White 50%, $Grey 80%, $Anthracite 100%)
   }
 
   &__title{
@@ -22,12 +23,13 @@
     text-transform: uppercase;
     font-weight: 700;
     text-align: center;
-    background: $Grey;
+    background: $White;
     border-radius: $BS * 5;
     min-width: 100%;
     padding: $BS*20 $BS*20 $BS*15;
     box-sizing: border-box;
     margin-top: $BS * -15;
+    background: linear-gradient($Grey, $White 5%, $White 50%, $Grey 90%, $Anthracite 100%)
   }
 
   &--ap{
@@ -35,6 +37,13 @@
       &__number, &__title{
         background: $Anthracite;
         color: $YellowAp;
+      }
+      &__number{
+        background: radial-gradient(circle at center, $Anthracite 50%, $Grey 90%, $Anthracite 100%)
+      }
+      &__title{
+        background: linear-gradient($Anthracite 75%, $Black);
+        box-shadow: inset 0 0 $BS*10 $BS*1 $White;
       }
     }
   }

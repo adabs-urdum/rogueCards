@@ -24,6 +24,7 @@ class Character{
 
   gainBlock = (block) => {
     if(block){
+      this.blockBefore = this.block;
       this.block += block;
       this.blockChanged = true;
     }
@@ -38,11 +39,10 @@ class Character{
   }
 
   takeDamage = (offender, attack) => {
-
     const block = this.block;
     let remainingBlock = block - attack;
 
-    this.oldBlock = block;
+    this.blockBefore = block;
     this.oldHealth = this.health;
 
     if(remainingBlock >= 0){
@@ -50,6 +50,9 @@ class Character{
       this.blockChanged = true;
     }
     else if(remainingBlock < 0){
+      if(block > 0){
+        this.blockChanged = true;
+      }
       this.block = 0;
       this.health += remainingBlock;
       this.healthChanged = true;
@@ -59,6 +62,8 @@ class Character{
       this.isDead = true;
       this.health = 0;
     }
+
+    return this;
 
   }
 

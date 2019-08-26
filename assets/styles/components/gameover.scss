@@ -10,7 +10,8 @@
   align-items: center;
   text-align: center;
   @include bs-font-size(32);
-  background: White;
+  background: $Anthracite;
+  color: $White;
   button{
     margin-top: $BS * 50;
   }

@@ -27,7 +27,6 @@ body{
 
 #root{
   position: relative;
-  background: $White;
   width: $BS * 2560;
   max-height: $BS * 1446;
   height: 100%;
@@ -96,19 +95,20 @@ a{
   padding: $BS*14 $BS*42 $BS*16;
   border: none;
   outline: none;
-  background: $Grey;
+  background: $Anthracite;
+  color: $White;
+  border: solid $White 1px;
   cursor: pointer;
   font-weight: 700;
   @include bs-font-size(24);
-  border-radius: $BS * 10;
   box-sizing: border-box;
-  border: solid transparent 1px;
   transition: border 0.3s ease-out, background 0.3s ease-out, color 0.3s ease-out, opacity 0.3s ease-out;
   &:hover{
-    border: solid $Black 1px;
+    background: $White;
+    color: $Black;
   }
   &:active{
-    background: $Anthracite;
+    background: $Black;
     color: $Grey;
   }
   &:disabled{
@@ -117,7 +117,6 @@ a{
   }
   &__content{
     display: block;
-    transform: translateY(10%);
   }
 }
 

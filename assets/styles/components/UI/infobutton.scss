@@ -5,6 +5,7 @@
   transform: translateY(-50%);
   font-weight: 700;
   @include bs-font-size(40);
+  color: $Grey;
   cursor: help;
   &__text{
     padding: $BS * 5;

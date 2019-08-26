@@ -9,6 +9,8 @@ import Arena from '../reactComponents/Arena.js';
 import Message from '../reactComponents/uiElements/Message.js';
 import Button from '../reactComponents/uiElements/Button.js';
 import Info from '../reactComponents/Info.js';
+import Animation from '../threeComponents/Animation.js';
+import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 
 class App extends Component {
 
@@ -19,6 +21,7 @@ class App extends Component {
       'turn': 1,
       'hero': new RichardB(),
       'monster': new Xenomorph(),
+      'animation': null,
       'hoveredCard': null,
       'cardWidth': 300,
       'BS': 100 / 2560,
@@ -32,7 +35,7 @@ class App extends Component {
       'flashAP': false,
       'flashEndTurn': false,
       'scaleEndTurnButton': false,
-      'gameOver': true,
+      'gameOver': false,
       'showInfo': false,
     }
 
@@ -42,6 +45,25 @@ class App extends Component {
     window.setTimeout(()=>{
       this.flashMessage('Round ' + this.state.turn, 700);
     }, 500);
+
+    // const plugins = [ CSSPlugin, AttrPlugin ];
+    // var tl = new TimelineLite();
+    //
+    // tl.fromTo("#gameOverTitle", 1, {
+    //   x:-200,
+    //   opacity:0,
+    // }, {
+    //   x:0,
+    //   opacity:1,
+    //   onComplete: () => {
+    //     console.log('onComplete');
+    //   }
+    // });
+
+    const animation = new Animation();
+    this.setState({
+      'animation': animation,
+    });
   }
 
   componentDidUpdate = () => {
@@ -178,11 +200,12 @@ class App extends Component {
   // handle click on card, now play card
   handleClickCard = (e, id) => {
     const card = e.currentTarget;
-    const hero = this.state.hero;
-    const monster = this.state.monster;
+    let hero = this.state.hero;
+    let monster = this.state.monster;
     const deck = hero.deck;
     const hand = deck.hand;
     const discardPile = deck.discardPile;
+    const animation = this.state.animation;
 
     const cardObject = hand.find(handCard => {
       return handCard.id == card.dataset.key;
@@ -217,11 +240,11 @@ class App extends Component {
     });
 
     // play actual card stats
-    cardObject.playCard(hero, monster);
+    [hero, monster] = cardObject.playCard(hero, monster);
+
+    this.animateShieldIfBlockChanged();
 
     if(monster.isDead){
-      console.log('game over');
-      console.log('you won');
       this.flashMessage('He dead. You won.', 2000);
       window.setTimeout(()=>{
         this.setState({
@@ -233,7 +256,26 @@ class App extends Component {
     this.setState({
       'deck': deck,
       'flashAP': true,
+      'hero': hero,
+      'monster': monster,
     });
+  }
+
+  animateShieldIfBlockChanged = () => {
+    const hero = this.state.hero;
+    const monster = this.state.monster;
+    const animation = this.state.animation;
+
+    if(hero.blockChanged){
+      console.log('hero.blockChanged');
+      animation.animateShield(hero.blockBefore, hero.block, animation.heroShield);
+      console.log(animation.heroShield);
+    }
+    if(monster.blockChanged){
+      console.log('monster.blockChanged');
+      animation.animateShield(monster.blockBefore, monster.block, animation.monsterShield);
+      console.log(animation.monsterShield);
+    }
   }
 
   endTurn = () => {
@@ -293,6 +335,7 @@ class App extends Component {
     const currentAttack = monster.nextAttack;
     let hero = this.state.hero;
     const turn = this.state.turn;
+    const animation = this.state.animation;
 
     hero.takeDamage(monster, currentAttack.attack);
 
@@ -319,6 +362,7 @@ class App extends Component {
     }
 
     monster.gainBlock(currentAttack.block);
+    this.animateShieldIfBlockChanged();
 
     window.setTimeout(()=>{
       monster.getNextAttack();
@@ -506,11 +550,11 @@ class App extends Component {
           mouseEnterInfoButton={ mouseEnterInfoButton }
         />
 
-      { showInfo ? <Info /> : null }
+        { showInfo ? <Info /> : null }
 
         { gameOver ? <Fragment>
           <div className="gameOver">
-            <h1>{ 'rogueCards alpha v0.0.2' }</h1>
+            <h1 id="gameOverTitle">{ 'rogueCards alpha v0.0.2' }</h1>
             <p>attempt to build a rogue like/light card deck builder<br/>using react and a yet to be chosen graphics/game engine</p>
             <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://cyrill-lehmann.ch">cyrill-lehmann.ch</a>
             <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://github.com/adabs-urdum/rogueCards">github.com/adabs-urdum/rogueCards</a>
@@ -522,6 +566,7 @@ class App extends Component {
           </div>
         </Fragment> : gameLoop }
 
+        <canvas id="animation" className="animation" />
 
       </Fragment>
     );
