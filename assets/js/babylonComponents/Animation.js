@@ -27,9 +27,10 @@ class Animation {
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {
-      this.heroShield.addRotation(Math.PI / -1000, Math.PI / -1000, Math.PI / -1000);
+      const shieldRotation = 0.0005;
+      this.heroShield.addRotation(0,shieldRotation,0);
       this.hero.addRotation(Math.PI / 3000, Math.PI / 3000, Math.PI / 3000);
-      this.monsterShield.addRotation(Math.PI / 1000, Math.PI / 1000, Math.PI / 1000);
+      this.monsterShield.addRotation(0,shieldRotation,0);
       this.monster.addRotation(Math.PI / -3000, Math.PI / -3000, Math.PI / -3000);
       scene.render();
     });
@@ -89,32 +90,35 @@ class Animation {
   }
 
   animateShield = (from, to, shield) => {
-    // console.log('start animateShield');
-    // console.log(from, to, shield);
-    from = from;
-    to = to;
-    const step = ((to / 200) - (from / 200)) / 10;
-    const shieldAnimation = setInterval(shieldAnimationTimer, 30);
 
-    function shieldAnimationTimer() {
+    const opacityFactor = 150;
+    const frames = 20;
+    const step = ((to / opacityFactor) - (from / opacityFactor)) / frames;
+
+    const stopAnimateShield = () => {
+      this.scene.unregisterAfterRender(animateShield);
+    }
+
+    const animateShield = () => {
+
       if(step > 0){
-        if(shield.material.alpha >= to / 200 ){
-          stopShieldAnimation();
+        if(shield.material.alpha >= to / opacityFactor ){
+          stopAnimateShield();
           return;
         }
       }
       else if(step < 0){
-        if(shield.material.alpha <= to / 200 ){
-          stopShieldAnimation();
+        if(shield.material.alpha <= to / opacityFactor ){
+          stopAnimateShield();
           return;
         }
       }
+
       shield.material.alpha += step;
     }
 
-    function stopShieldAnimation() {
-      clearInterval(shieldAnimation);
-    }
+    this.scene.registerAfterRender(animateShield);
+
   }
 
   createHero = (heroColors) => {
@@ -140,18 +144,28 @@ class Animation {
     return hero;
   }
 
-  createHeroFighters = (amount) => {
+  playCard = (doer, target, card) => {
+    const attack = card.attack;
+    const block = card.block;
+    const fleetSize = doer.fleetSize;
 
-    const hero = this.hero;
+    if(attack && doer.fleetSize > 0){
+      this.attack(doer, target);
+    }
 
-    // hero.material.alpha = 0.5;
+    if(block){
+      this.animateShield(doer.block, doer.block + block, doer.baShield);
+    }
 
-    let fighterCount = 0;
-    while(fighterCount < amount){
+  }
+
+  createFighters = (character, body) => {
+    let counter = 0;
+
+    while(counter < character.fleetSize){
 
       const fighter = BABYLON.Mesh.CreateBox("fighter", 0.03, this.scene);
       const pivot = new BABYLON.TransformNode("root");
-      const hero = this.hero;
 
       const fighterMaterial = new BABYLON.StandardMaterial("fighterMaterial", this.scene);
       fighterMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
@@ -160,9 +174,9 @@ class Animation {
       fighterMaterial.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
       fighter.material = fighterMaterial;
 
-      pivot.position = hero.position;
+      pivot.position = body.position;
       fighter.parent = pivot;
-      fighter.position = new BABYLON.Vector3(0.7, 0, 0);
+      fighter.position = new BABYLON.Vector3(body.getBoundingInfo().boundingBox.extendSize.x * 1.5, 0, 0);
 
       const angle = Math.random() * -0.02;
       const axis = new BABYLON.Vector3(0,6,Math.random());
@@ -170,19 +184,19 @@ class Animation {
         pivot.rotate(axis, angle, BABYLON.Space.WORLD);
       }
       this.scene.registerAfterRender(rotateAnimation);
-      this.heroFighters.push({
+      character.fleet.push({
         fighter: fighter,
         animation: rotateAnimation,
       });
 
-      fighterCount += 1;
+      counter++;
     }
 
   }
 
-  attack = () => {
+  attack = (doer, target) => {
 
-    const fighter = this.heroFighters.shift();
+    const fighter = doer.fleet.shift();
 
     const fighterPosition = fighter.fighter.position;
     this.scene.unregisterAfterRender(fighter.animation);
@@ -195,9 +209,9 @@ class Animation {
     fighter.fighter.position = new BABYLON.Vector3(0,0,0);
 
     const distance = {
-      x: this.monsterPosition.x - fighterPosition.x,
-      y: this.monsterPosition.y - fighterPosition.y,
-      z: this.monsterPosition.z - fighterPosition.z,
+      x: target.baBody.position.x - fighterPosition.x,
+      y: target.baBody.position.y - fighterPosition.y,
+      z: target.baBody.position.z - fighterPosition.z,
     };
     const axis = new BABYLON.Vector3(distance.x, distance.y, distance.z);
     // const axisLine = BABYLON.MeshBuilder.CreateLines("axisLine", { points: [fighterPosition.add(axis.scale(-50)), fighterPosition.add(axis.scale(50))] }, this.scene);
@@ -207,11 +221,12 @@ class Animation {
       pivot.position = pivot.position.add(axisNormal.scale(0.15)); //move fighter along axis
 
 
-      // if fighter hits monstershield
-      if (fighter.fighter.intersectsMesh(this.monsterShield, true) && this.monsterShield.material.alpha > 0){
-        // console.log('hit shield');
+      // if fighter hits shield
+      if (fighter.fighter.intersectsMesh(target.baShield, true) && target.baShield.material.alpha > 0){
 
         stopMoveFighter();
+
+        this.animateShield(target.blockBefore, target.block, target.baShield);
 
         var particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
         particleSystem.particleTexture = new BABYLON.Texture('/dist/textures/flare.png', this.scene);
@@ -227,8 +242,8 @@ class Animation {
         particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0);
 
         // size of particles
-        particleSystem.minSize = 0.05;
-        particleSystem.maxSize = 0.01;
+        particleSystem.minSize = 0.005;
+        particleSystem.maxSize = 0.015;
 
         // lifetime of particles
         particleSystem.minLifeTime = 0.05;
@@ -287,8 +302,7 @@ class Animation {
 
 
       // if fighter hits monster
-      if (fighter.fighter.intersectsMesh(this.monster, true)){
-        // console.log('hit monster');
+      if (fighter.fighter.intersectsMesh(target.baBody, true)){
 
         stopMoveFighter();
 

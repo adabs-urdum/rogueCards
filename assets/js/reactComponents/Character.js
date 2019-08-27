@@ -15,6 +15,7 @@ const character = (props) => {
   const blockChanged = props.character.blockChanged;
   const healthChanged = props.character.healthChanged;
   const flashNextAttack = props.flashNextAttack;
+  const fleetSize = props.character.fleetSize;
 
   const healthBarWidth = 100 / maxHealth * health;
   const healthBarStyles = {
@@ -68,6 +69,7 @@ const character = (props) => {
         </li>
         <li>{ deck ? 'Handsize: ' + deck.handsize : null }</li>
         <li>{ deck ? 'Decksize: ' + deck.decksize : null }</li>
+        <li>{ 'Fleetsize: ' + fleetSize }</li>
       </ul>
       { nextAttack ? nextAttack : null }
     </div>

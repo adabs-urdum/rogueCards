@@ -10,13 +10,13 @@ class Card{
     return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
   }
 
-  playCard = (doer, target, animation) => {
+  playCard = (doer, target) => {
     const attack = this.attack;
     const block = this.block;
+    const fleetSize = doer.fleetSize;
 
-    if(attack){
+    if(attack && doer.fleetSize > 0){
       target.takeDamage(doer, attack);
-      animation.attack();
     }
 
     if(block){

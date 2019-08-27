@@ -10,6 +10,9 @@ class Character{
     this.blockBefore = 0;
     this.strength = 0;
 
+    this.fleetSize = 0;
+    this.fleet = [];
+
     // flag to set game end
     this.isDead = false;
 

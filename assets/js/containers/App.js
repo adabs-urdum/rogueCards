@@ -12,7 +12,7 @@ import Info from '../reactComponents/Info.js';
 import Animation from '../babylonComponents/Animation.js';
 import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 
-const DEBUG = true;
+const DEBUG = false;
 
 class App extends Component {
 
@@ -61,11 +61,20 @@ class App extends Component {
   startBattle = () => {
     console.log('this.startBattle()');
 
+    const animation = new Animation();
+    const hero = new Hero();
+    const monster = new Enemy();
+
+    hero.baBody = animation.hero;
+    hero.baShield = animation.heroShield;
+    monster.baBody = animation.monster;
+    monster.baShield = animation.monsterShield;
+
     this.setState({
       'turn': 1,
-      'hero': new Hero(),
-      'monster': new Enemy(),
-      'animation':  new Animation(),
+      'hero': hero,
+      'monster': monster,
+      'animation':  animation,
       'hoveredCard': null,
       'cardWidth': 300,
       'handWidth': 1600,
@@ -86,10 +95,14 @@ class App extends Component {
     }, () => {
 
       const animation = this.state.animation;
+      const hero = this.state.hero;
+      const monster = this.state.monster;
 
       this.startedTurn();
 
-      animation.createHeroFighters(10);
+      animation.createFighters(hero, animation.hero);
+      animation.createFighters(monster, animation.monster);
+
     });
   }
 
@@ -147,40 +160,44 @@ class App extends Component {
       }, 1000);
     }
 
-    if(monster.healthChanged == true){
-      window.setTimeout(() => {
-        monster.healthChanged = false;
-        this.setState({
-          monster: monster
-        });
-      }, 300);
+    if(monster){
+      if(monster.healthChanged == true){
+        window.setTimeout(() => {
+          monster.healthChanged = false;
+          this.setState({
+            monster: monster
+          });
+        }, 300);
+      }
+
+      if(monster.blockChanged == true){
+        window.setTimeout(() => {
+          monster.blockChanged = false;
+          this.setState({
+            monster: monster
+          });
+        }, 300);
+      }
     }
 
-    if(monster.blockChanged == true){
-      window.setTimeout(() => {
-        monster.blockChanged = false;
-        this.setState({
-          monster: monster
-        });
-      }, 300);
-    }
+    if(hero){
+      if(hero.healthChanged == true){
+        window.setTimeout(() => {
+          hero.healthChanged = false;
+          this.setState({
+            hero: hero
+          });
+        }, 300);
+      }
 
-    if(hero.healthChanged == true){
-      window.setTimeout(() => {
-        hero.healthChanged = false;
-        this.setState({
-          hero: hero
-        });
-      }, 300);
-    }
-
-    if(hero.blockChanged == true){
-      window.setTimeout(() => {
-        hero.blockChanged = false;
-        this.setState({
-          hero: hero
-        });
-      }, 300);
+      if(hero.blockChanged == true){
+        window.setTimeout(() => {
+          hero.blockChanged = false;
+          this.setState({
+            hero: hero
+          });
+        }, 300);
+      }
     }
 
     const gameOver = this.state.gameOver;
@@ -300,9 +317,8 @@ class App extends Component {
     });
 
     // play actual card stats
-    [hero, monster] = cardObject.playCard(hero, monster, animation);
-
-    this.animateShieldIfBlockChanged();
+    [hero, monster] = cardObject.playCard(hero, monster);
+    animation.playCard(hero, monster, cardObject);
 
     if(monster.isDead){
       this.flashMessage('He dead. You won.', 2000);
@@ -319,28 +335,6 @@ class App extends Component {
       'hero': hero,
       'monster': monster,
     });
-  }
-
-  animateShieldIfBlockChanged = () => {
-
-    if(DEBUG){
-      console.log('this.animateShieldIfBlockChanged()');
-    }
-
-    const hero = this.state.hero;
-    const monster = this.state.monster;
-    const animation = this.state.animation;
-
-    if(hero.blockChanged){
-      console.log('hero.blockChanged');
-      animation.animateShield(hero.blockBefore, hero.block, animation.heroShield);
-      console.log(animation.heroShield);
-    }
-    if(monster.blockChanged){
-      console.log('monster.blockChanged');
-      animation.animateShield(monster.blockBefore, monster.block, animation.monsterShield);
-      console.log(animation.monsterShield);
-    }
   }
 
   endTurn = () => {
@@ -413,6 +407,8 @@ class App extends Component {
     const animation = this.state.animation;
 
     hero.takeDamage(monster, currentAttack.attack);
+    animation.playCard(monster, hero, currentAttack);
+    // animation.animateShield(hero.blockBefore, hero.block, hero.baShield);
 
     if(hero.isDead){
       console.log('game over');
@@ -437,7 +433,7 @@ class App extends Component {
     }
 
     monster.gainBlock(currentAttack.block);
-    this.animateShieldIfBlockChanged();
+    animation.animateShield(monster.block, currentAttack.block + monster.block, monster.baShield);
 
     window.setTimeout(()=>{
       monster.getNextAttack();
@@ -471,6 +467,11 @@ class App extends Component {
     hero.fillApToMax();
 
     const turn = this.state.turn;
+
+    const animation = this.state.animation;
+    const monster = this.state.monster;
+    animation.createFighters(hero, animation.hero);
+    animation.createFighters(monster, animation.monster);
 
     this.setState({
       turn: turn + 1,

@@ -8,7 +8,7 @@ class RichardB extends Hero{
     this.maxHealth = 20;
     this.health = this.maxHealth;
     this.strength = 3;
-    this.block = 10;
+    this.block = 0;
     this.maxAp = 3;
     this.fleetSize = 10;
     this.ap = this.maxAp;
