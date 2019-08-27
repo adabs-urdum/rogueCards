@@ -9,7 +9,7 @@ import Arena from '../reactComponents/Arena.js';
 import Message from '../reactComponents/uiElements/Message.js';
 import Button from '../reactComponents/uiElements/Button.js';
 import Info from '../reactComponents/Info.js';
-import Animation from '../threeComponents/Animation.js';
+import Animation from '../babylonComponents/Animation.js';
 import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 
 class App extends Component {
