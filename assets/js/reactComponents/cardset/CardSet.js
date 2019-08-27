@@ -38,6 +38,7 @@ const cardSet = (props) => {
   const margin = (handWidth - cardsTotalWidth) / (hand.length - 1);
   const smallMargin = 25;
   let siblingIsHovered = false;
+
   const handJsx = hand.map(card => {
     let left;
 

@@ -10,6 +10,7 @@ class RichardB extends Hero{
     this.strength = 3;
     this.block = 10;
     this.maxAp = 3;
+    this.fleetSize = 10;
     this.ap = this.maxAp;
   }
 }
