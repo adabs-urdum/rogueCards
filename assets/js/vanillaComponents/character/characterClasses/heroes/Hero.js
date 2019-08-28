@@ -14,6 +14,11 @@ class RichardB extends Hero{
     this.ap = this.maxAp;
     this.handsize = 4;
     this.decksize = 15;
+    this.mainColor = {
+      r: Math.random() + 0.2,
+      g: Math.random() + 0.2,
+      b: Math.random() + 0.2
+    };
 
     this.getNewDeck();
   }

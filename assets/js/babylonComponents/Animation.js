@@ -9,9 +9,11 @@ class Animation {
     BABYLON.ParticleHelper.BaseAssetsUrl = './dist/js/particleSets';
 
     this.materials = [
-      'dirt.jpg',
-      'rocks.jpg',
+      'drops.jpg',
       'water.jpg',
+      'rocky.jpg',
+      'forest.png',
+      'marmor.jpg',
     ];
 
     this.canvas = document.getElementById("animation"); // Get the canvas element
@@ -64,19 +66,6 @@ class Animation {
     scene.ambientColor = new BABYLON.Color3(colors.r - darken, colors.g - darken, colors.b - darken);
   	light.groundColor = new BABYLON.Color3(Math.random() - darken, Math.random() - darken, Math.random() - darken);
 
-    // add your character (sphere mesh) and potential shield
-    const heroColors = {
-      r: Math.random() - 0.2,
-      g: Math.random() - 0.2,
-      b: Math.random() - 0.2
-    };
-    this.createHero(heroColors);
-    this.createHeroShield(heroColors);
-
-    // add enemy and potential shield
-    this.createMonster();
-    this.createMonsterShield();
-
     return scene;
 
   }
@@ -121,27 +110,54 @@ class Animation {
 
   }
 
-  createHero = (heroColors) => {
+  createCharacter = (object) => {
 
-    const hero = BABYLON.MeshBuilder.CreateSphere(
-      "hero",
+    const character = BABYLON.MeshBuilder.CreateSphere(
+      object.name,
       {
-        diameter:1,
+        diameter: object.baDiameter,
+        segments:object.baSegments,
+      },
+      this.scene
+    );
+
+    character.position = new BABYLON.Vector3(object.baMainPosition[0],object.baMainPosition[1],object.baMainPosition[2]);
+
+    const characterMaterial = new BABYLON.StandardMaterial(object.name + "Material", this.scene);
+    const material = this.materials.getRandomValue();
+    characterMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + material, this.scene);
+    characterMaterial.diffuseColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
+    characterMaterial.ambientColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
+    character.material = characterMaterial;
+
+    return character;
+  }
+
+  createShield = (character) => {
+
+    const shield = BABYLON.MeshBuilder.CreateSphere(
+      character.name + 'shield',
+      {
+        diameter:character.baDiameter * 2,
         segments:32,
       },
       this.scene
     );
-    this.hero = hero;
-    hero.position = this.heroPosition;
 
-    const heroMaterial = new BABYLON.StandardMaterial("heroMaterial", this.scene);
-    const material = this.materials.getRandomValue();
-    heroMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + material, this.scene);
-    heroMaterial.diffuseColor = new BABYLON.Color3(heroColors.r, heroColors.g, heroColors.b);
-    heroMaterial.ambientColor = new BABYLON.Color3(heroColors.r, heroColors.g, heroColors.b);
-    hero.material = heroMaterial;
+    shield.position = new BABYLON.Vector3(character.baMainPosition[0],character.baMainPosition[1],character.baMainPosition[2]);
 
-    return hero;
+    var shieldMaterial = new BABYLON.StandardMaterial(character.name + 'ShieldMaterial', this.scene);
+    shieldMaterial.diffuseColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
+    shieldMaterial.specularColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
+    shieldMaterial.ambientColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
+    shieldMaterial.emissiveColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
+    shieldMaterial.specularPower = 150;
+    shieldMaterial.alpha = 0;
+    shield.material = shieldMaterial;
+    shield.material.wireframe = true;
+
+    return shield;
+
   }
 
   playCard = (doer, target, card) => {
@@ -159,29 +175,35 @@ class Animation {
 
   }
 
-  createFighters = (character, body) => {
+  createFighters = (character) => {
     let counter = 0;
 
     while(counter < character.fleetSize){
 
-      const fighter = BABYLON.Mesh.CreateBox("fighter", 0.03, this.scene);
+      // const fighter = BABYLON.Mesh.CreateBox("fighter", 0.03, this.scene);
+      const fighter = BABYLON.Mesh.CreateTorus("torus", 0.05, 0.05, 28, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
+
       const pivot = new BABYLON.TransformNode("root");
 
       const fighterMaterial = new BABYLON.StandardMaterial("fighterMaterial", this.scene);
-      fighterMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
-      fighterMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
-      fighterMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
-      fighterMaterial.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+
+      fighterMaterial.diffuseColor = new BABYLON.Color3(character.mainColor.r, character.mainColor.g, character.mainColor.b);
+      // fighterMaterial.specularColor = new BABYLON.Color3(character.mainColor.r, character.mainColor.g, character.mainColor.b);
+      // fighterMaterial.emissiveColor = new BABYLON.Color3(0.001,0.001,0.01);
       fighter.material = fighterMaterial;
 
-      pivot.position = body.position;
+      pivot.position = character.baBody.position;
       fighter.parent = pivot;
-      fighter.position = new BABYLON.Vector3(body.getBoundingInfo().boundingBox.extendSize.x * 1.5, 0, 0);
+      fighter.position = new BABYLON.Vector3(character.baBody.getBoundingInfo().boundingBox.extendSize.x * 1.5, 0, 0);
 
       const angle = Math.random() * -0.02;
       const axis = new BABYLON.Vector3(0,6,Math.random());
+      const rotateFactor = Math.random() - 0.5;
       const rotateAnimation = () => {
         pivot.rotate(axis, angle, BABYLON.Space.WORLD);
+        fighter.rotation.x += rotateFactor * 0.05;
+        fighter.rotation.y += rotateFactor * 0.05;
+        fighter.rotation.z += rotateFactor * 0.05;
       }
       this.scene.registerAfterRender(rotateAnimation);
       character.fleet.push({
@@ -239,7 +261,7 @@ class Animation {
       const distance = {
         x: target.baBody.position.x - fighterPosition.x,
         y: target.baBody.position.y - fighterPosition.y,
-        z: target.baBody.position.z - fighterPosition.z,
+        z: target.baBody.position.z - fighterPosition.z + 0.1,
       };
       const axis = new BABYLON.Vector3(distance.x, distance.y, distance.z);
       // const axisLine = BABYLON.MeshBuilder.CreateLines("axisLine", { points: [fighterPosition.add(axis.scale(-50)), fighterPosition.add(axis.scale(50))] }, this.scene);
@@ -253,6 +275,7 @@ class Animation {
 
           if(!residueDamage){
             stopMoveFighter();
+            fighter.fighter.parent = target.baBody;
           }
 
           this.animateShield(target.blockBefore, target.block, target.baShield);
@@ -324,7 +347,6 @@ class Animation {
         if (fighter.fighter.intersectsMesh(target.baBody, true)){
 
           if(residueDamage){
-            console.log('residueDamage');
             BABYLON.ParticleHelper.CreateAsync("smoke", this.scene).then((set) => {
               set.start(fighter.fighter);
             });
@@ -343,16 +365,6 @@ class Animation {
 
           if(target.isDead){
             this.explodePlanet(target.baBody);
-            const scaleBodyDown = () => {
-              target.baBody.scaling.x -= 0.05;
-              target.baBody.scaling.y -= 0.05;
-              target.baBody.scaling.z -= 0.05;
-              if(target.baBody.scaling.x <= 0.4){
-                this.scene.unregisterAfterRender(scaleBodyDown);
-                target.baBody.material.alpha = 0;
-              }
-            }
-            this.scene.registerAfterRender(scaleBodyDown);
           }
 
 
@@ -369,81 +381,18 @@ class Animation {
 
   }
 
-  createHeroShield = (heroColors) => {
-    const shield = BABYLON.MeshBuilder.CreateSphere(
-      "shield",
-      {
-        diameter:2,
-        segments:32,
-      },
-      this.scene
-    );
-
-    this.heroShield = shield;
-    shield.position = new BABYLON.Vector3(2.5,0.5,0);
-
-    var shieldMaterial = new BABYLON.StandardMaterial("heroMaterial", this.scene);
-    shieldMaterial.diffuseColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
-    shieldMaterial.specularColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
-    shieldMaterial.ambientColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
-    shieldMaterial.emissiveColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
-    shieldMaterial.specularPower = 150;
-    shieldMaterial.alpha = 0;
-    shield.material = shieldMaterial;
-    shield.material.wireframe = true;
-  }
-
-  createMonster = () => {
-
-    const monster = BABYLON.MeshBuilder.CreateSphere(
-      "monster",
-      {
-        diameter: this.monsterSize,
-        segments:32,
-      },
-      this.scene
-    );
-    this.monster = monster;
-    monster.position = this.monsterPosition;
-
-    const monsterMaterial = new BABYLON.StandardMaterial("monsterMaterial", this.scene);
-    const material = this.materials.getRandomValue();
-    monsterMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + material, this.scene);
-    monsterMaterial.diffuseColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-    monsterMaterial.ambientColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
-    monster.material = monsterMaterial;
-
-    return monster;
-  }
-
-  createMonsterShield = () => {
-
-    const shield = BABYLON.MeshBuilder.CreateSphere(
-      "shield",
-      {
-        diameter: this.monsterSize * 2,
-        segments:32,
-      },
-      this.scene
-    );
-
-    shield.position = new BABYLON.Vector3(-2.5,0.5,0);
-
-    var shieldMaterial = new BABYLON.StandardMaterial("shieldMaterial", this.scene);
-    shieldMaterial.diffuseColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
-    shieldMaterial.specularColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
-    shieldMaterial.ambientColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
-    shieldMaterial.emissiveColor = new BABYLON.Color3(0.078125, 0.62890625, 0.796875);
-    shieldMaterial.specularPower = 150;
-    shieldMaterial.alpha = 0;
-    shield.material = shieldMaterial;
-    shield.material.wireframe = true;
-
-    this.monsterShield = shield;
-  }
-
   explodePlanet = ( body ) => {
     BABYLON.ParticleHelper.CreateAsync("explosionPlanet", this.scene).then((set) => {
+      const animateOpacity = () => {
+        body.material.alpha -= 0.07;
+        body.scaling.x -= 0.05;
+        body.scaling.y -= 0.05;
+        body.scaling.z -= 0.05;
+        if(body.material <= 0){
+          this.scene.unregisterAfterRender(animateOpacity);
+        }
+      }
+      this.scene.registerAfterRender(animateOpacity);
       set.systems.forEach(s => {
           s.disposeOnStop = true;
       });

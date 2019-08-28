@@ -10,6 +10,11 @@ class Xenomorph extends Monster{
     this.strength = 0;
     this.fleetSize = 10;
     this.block = 0;
+    this.mainColor = {
+      r: Math.random() + 0.2,
+      g: Math.random() + 0.2,
+      b: Math.random() + 0.2
+    };
     this.attacks = [
       {
         attack: 11,

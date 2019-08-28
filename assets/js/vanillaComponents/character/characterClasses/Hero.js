@@ -18,6 +18,10 @@ class Hero extends Character{
         Block2,
     ];
 
+    this.baDiameter = 1;
+    this.baSegments = 32;
+    this.baMainPosition = [2.5,0.5,0];
+
   }
 
   fillApToMax(){

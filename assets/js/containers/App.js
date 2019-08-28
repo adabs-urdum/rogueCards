@@ -3,6 +3,9 @@ import { BrowserRouter, Route, Link, NavLink, Switch, Redirect, withRouter } fro
 import Animation from '../babylonComponents/Animation.js';
 import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 
+// import react components
+import Header from '../reactComponents/Header.js';
+
 // import all views
 import StartScreen from '../reactComponents/views/StartScreen.js';
 import Battle from '../reactComponents/views/Battle.js';
@@ -13,7 +16,9 @@ class App extends Component {
     super(props);
 
     this.state = {
-      BS: 100 / 2560
+      BS: 100 / 2560,
+      inFullscreen: false,
+      showInfo: false,
     }
 
   }
@@ -33,6 +38,19 @@ class App extends Component {
     //     console.log('onComplete');
     //   }
     // });
+  }
+
+  handleMouseEnterInfoButton = () => {
+
+    this.setState({
+      showInfo: true
+    });
+  }
+
+  handleMouseLeaveInfoButton = () => {
+    this.setState({
+      showInfo: false
+    });
   }
 
   toggleFullscreen = (e) => {
@@ -64,6 +82,12 @@ class App extends Component {
     return (
       <Fragment>
 
+        <Header
+          toggleFullscreen={ (e) => { this.toggleFullscreen(e) } }
+          mouseEnterInfoButton={ this.handleMouseEnterInfoButton }
+          mouseLeaveInfoButton={ this.handleMouseLeaveInfoButton }
+        />
+
         <BrowserRouter>
 
           <Switch>
@@ -71,8 +95,8 @@ class App extends Component {
             <Route path="/battle" exact render={() =>
               <Battle
                 BS={BS}
-                toggleFullscreen={toggleFullscreen}
                 hero={this.state.hero}
+                showInfo={this.state.showInfo}
               />
             } />
 

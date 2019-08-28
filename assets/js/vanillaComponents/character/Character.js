@@ -10,6 +10,7 @@ class Character{
     this.blockBefore = 0;
     this.strength = 0;
     this.recentAttack = 0;
+    this.mainColor = {};
 
     this.fleetSize = 0;
     this.fleet = [];
@@ -20,6 +21,7 @@ class Character{
     // flag to know whether to "animate" a stat change
     this.blockChanged = false;
     this.healthChanged = false;
+    this.mainColor = [Math.random(), Math.random(), Math.random()];
   }
 
   newDeck = (cards, handsize, decksize) => {

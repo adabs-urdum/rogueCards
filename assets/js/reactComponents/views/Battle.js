@@ -7,7 +7,6 @@ import Enemy from '../../vanillaComponents/character/characterClasses/monsters/E
 
 // import react components
 import Character from '../Character.js';
-import Header from '../Header.js';
 import Message from '../uiElements/Message.js';
 import CardSet from '../cardset/CardSet.js';
 import Arena from '../Arena.js';
@@ -23,7 +22,6 @@ class Battle extends Component{
     super(props);
 
     const BS = props.BS;
-    const toggleFullscreen = props.toggleFullscreen;
 
     const monster = new Enemy();
     const hero = new Hero();
@@ -47,11 +45,9 @@ class Battle extends Component{
       'flashEndTurn': false,
       'scaleEndTurnButton': false,
       'gameOver': false,
-      'showInfo': false,
       'battleStarted': true,
       'startScreen': false,
       'battleScreen': true,
-      'toggleFullscreen': toggleFullscreen,
     };
 
   }
@@ -68,13 +64,17 @@ class Battle extends Component{
 
     const animation = new Animation();
 
-    hero.baBody = animation.hero;
-    hero.baShield = animation.heroShield;
-    monster.baBody = animation.monster;
-    monster.baShield = animation.monsterShield;
+    hero.baBody = animation.createCharacter(hero);
+    animation.hero = hero.baBody;
+    animation.createFighters(hero);
+    hero.baShield = animation.createShield(hero);
+    animation.heroShield = hero.baShield;
 
-    animation.createFighters(hero, animation.hero);
-    animation.createFighters(monster, animation.monster);
+    monster.baBody = animation.createCharacter(monster);
+    animation.monster = monster.baBody;
+    animation.createFighters(monster);
+    monster.baShield = animation.createShield(monster);
+    animation.monsterShield = monster.baShield;
 
     this.setState({
       'animation':  animation,
@@ -173,19 +173,6 @@ class Battle extends Component{
       }
     }
 
-  }
-
-  handleMouseEnterInfoButton = () => {
-
-    this.setState({
-      showInfo: true
-    });
-  }
-
-  handleMouseLeaveInfoButton = () => {
-    this.setState({
-      showInfo: false
-    });
   }
 
   handleMouseEnterCard = (e) => {
@@ -457,7 +444,7 @@ class Battle extends Component{
 
     const flashNextAttack = this.state.flashNextAttack;
 
-    const showInfo = this.state.showInfo;
+    const showInfo = this.props.showInfo;
 
     const BS = this.state.BS;
 
@@ -466,12 +453,6 @@ class Battle extends Component{
       <Fragment>
 
         <canvas id="animation" className="animation" />
-
-        <Header
-          toggleFullscreen={ this.state.toggleFullscreen }
-          mouseLeaveInfoButton={ this.handleMouseLeaveInfoButton }
-          mouseEnterInfoButton={ this.handleMouseEnterInfoButton }
-        />
 
         <section className="gameloop">
 
