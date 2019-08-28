@@ -1,4 +1,4 @@
-class Cardset{
+class Deck{
 
   constructor(allCards, handsize, decksize){
     this.handsize = handsize;
@@ -12,18 +12,23 @@ class Cardset{
     this.playedCards = [];
   }
 
-  drawCards = (amount) => {
+  drawCards = (handsize) => {
+
     let cards = [];
-    if(amount > this.drawPile.length){
-      const leftOvers = amount - this.drawPile.length;
+
+    if(handsize > this.drawPile.length){
+      const leftOvers = handsize - this.drawPile.length;
       cards = cards.concat(this.drawPile.splice(0, this.drawPile.length));
       this.shuffleDiscardIntoDraw();
       cards = cards.concat(this.drawCards(leftOvers));
     }
     else{
-      cards = cards.concat(this.drawPile.splice(0, amount));
+      cards = cards.concat(this.drawPile.splice(0, handsize));
+
     }
+
     return cards;
+    
   }
 
   shuffleDiscardIntoDraw = () => {
@@ -53,4 +58,4 @@ class Cardset{
 
 }
 
-export default Cardset;
+export default Deck;

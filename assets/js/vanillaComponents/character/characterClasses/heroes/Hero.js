@@ -1,7 +1,7 @@
 import Hero from './../Hero.js';
 
 class RichardB extends Hero{
-  constructor(one, two){
+  constructor(){
     super();
     this.name = 'You';
     this.description = '"Where the hell\'s your God now?" -- Richard B. Riddick';
@@ -12,6 +12,10 @@ class RichardB extends Hero{
     this.maxAp = 3;
     this.fleetSize = 10;
     this.ap = this.maxAp;
+    this.handsize = 4;
+    this.decksize = 15;
+
+    this.getNewDeck();
   }
 }
 

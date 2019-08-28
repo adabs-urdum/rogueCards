@@ -11,6 +11,7 @@ import Header from '../Header.js';
 import Message from '../uiElements/Message.js';
 import CardSet from '../cardset/CardSet.js';
 import Arena from '../Arena.js';
+import Info from '../Info.js';
 
 // import babylon components
 import Animation from '../../babylonComponents/Animation.js';
@@ -24,8 +25,8 @@ class Battle extends Component{
     const BS = props.BS;
     const toggleFullscreen = props.toggleFullscreen;
 
-    const hero = new Hero();
     const monster = new Enemy();
+    const hero = new Hero();
 
     this.state = {
       'BS': BS,
@@ -55,23 +56,15 @@ class Battle extends Component{
 
   }
 
-  handleMouseEnterInfoButton = () => {
-
-    this.setState({
-      showInfo: true
-    });
-  }
-
-  handleMouseLeaveInfoButton = () => {
-    this.setState({
-      showInfo: false
-    });
-  }
-
   componentDidMount = () => {
 
     const hero = this.state.hero;
     const monster = this.state.monster;
+
+    // if hero not defined, return to startscreen
+    if(!hero){
+      props.history.push('/');
+    }
 
     const animation = new Animation();
 
@@ -180,14 +173,19 @@ class Battle extends Component{
       }
     }
 
-    const gameOver = this.state.gameOver;
-    if(gameOver){
-      this.setState({
-        startScreen: true,
-        battleScreen: false,
-        gameOver: false,
-      });
-    }
+  }
+
+  handleMouseEnterInfoButton = () => {
+
+    this.setState({
+      showInfo: true
+    });
+  }
+
+  handleMouseLeaveInfoButton = () => {
+    this.setState({
+      showInfo: false
+    });
   }
 
   handleMouseEnterCard = (e) => {
@@ -320,16 +318,10 @@ class Battle extends Component{
     if(hero.isDead){
       console.log('game over');
       console.log('you lose');
-      this.setState({
-        'gameOver': true,
-      });
     }
     if(monster.isDead){
       console.log('game over');
       console.log('you won');
-      this.setState({
-        'gameOver': true,
-      });
     }
   }
 
@@ -339,7 +331,9 @@ class Battle extends Component{
     const hero = this.state.hero;
     const deck = hero.deck;
 
-    deck.hand = deck.drawCards(deck.handsize);
+    if(this.state.turn != 1){
+      deck.hand = deck.drawCards(deck.handsize);
+    }
     hero.deck = deck;
 
     hero.fillApToMax();
@@ -375,22 +369,16 @@ class Battle extends Component{
       console.log('game over');
       console.log('you lose');
       hero.die();
-      this.flashMessage('You dead. He won.', 2000);
-      window.setTimeout(()=>{
-        this.setState({
-          'gameOver': true,
-        });
-      }, 2000);
+      this.flashMessage('You dead. He won.', 2000, () => {
+        this.props.history.push('/');
+      });
       return;
     }
     if(monster.isDead){
       monster.die();
-      this.flashMessage('He dead. You won.', 2000);
-      window.setTimeout(()=>{
-        this.setState({
-          'gameOver': true,
-        });
-      }, 2000);
+      this.flashMessage('He dead. You won.', 2000, () => {
+        this.props.history.push('/');
+      });
     }
 
     monster.gainBlock(currentAttack.block);

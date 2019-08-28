@@ -9,26 +9,24 @@ class Hero extends Character{
   constructor(){
     super();
 
-    const handsize = 4;
-    const decksize = 13;
-
     this.maxAp = 3;
 
-    const cards = [
+    this.cards = [
         Smash,
         Smash2,
         Block,
         Block2,
     ];
 
-    // inherited from Character.js
-    this.deck = this.newDeck(cards, handsize, decksize);
-
   }
 
   fillApToMax(){
     this.oldAP = this.ap;
     this.ap = this.maxAp;
+  }
+
+  getNewDeck = () => {
+    this.deck = this.newDeck(this.cards, this.handsize, this.decksize);
   }
 
 }

@@ -9,7 +9,6 @@ const cardSet = (props) => {
 
   const drawPile = props.drawPile;
   const hand = props.hand;
-  const playedCards = props.playedCards;
   const discardPile = props.discardPile;
   const banishPile = props.banishPile;
   const handleClickCard = props.handleClickCard;
@@ -18,13 +17,13 @@ const cardSet = (props) => {
   const cardWidth = props.cardWidth;
   const handWidth = props.handWidth;
   const BS = props.BS;
-  const endTurn = props.endTurn;
   const endedTurn = props.endedTurn;
   const startedTurn = props.startedTurn;
   const ap = props.ap;
   const oldAP = props.oldAP;
   const maxAp = props.maxAp;
   const scaleEndTurnButton = props.scaleEndTurnButton;
+  const endTurn = props.endTurn;
 
   const flashAP = props.flashAP;
   const flashEndTurn = props.flashEndTurn;
@@ -32,8 +31,8 @@ const cardSet = (props) => {
   const hoveredCard = props.hoveredCard;
   const hoveredCardIndex = hand.indexOf(hoveredCard);
 
+  // calculate position of card inside hand
   let cardCount = 0;
-  // calculate position of card inside hand from left
   const cardsTotalWidth = cardWidth * hand.length;
   const margin = (handWidth - cardsTotalWidth) / (hand.length - 1);
   const smallMargin = 25;
@@ -50,8 +49,8 @@ const cardSet = (props) => {
       // else calculate from left
       left = (cardCount * cardWidth + cardCount * margin) * BS;
 
+      // move cards after hovered a bit to the right, so we can read the hovered card
       if(siblingIsHovered){
-        // left += (cardWidth / hand.length) * BS;
         left += (((cardsTotalWidth - handWidth) / hand.length) + smallMargin * 1) * BS;
         let siblingIsHovered = false;
       }

@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter, Route, Link, NavLink, Switch, Redirect, withRouter } from 'react-router-dom';
-import CountUp from 'react-countup';
-import Info from '../reactComponents/Info.js';
 import Animation from '../babylonComponents/Animation.js';
 import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 
@@ -9,35 +7,18 @@ import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 import StartScreen from '../reactComponents/views/StartScreen.js';
 import Battle from '../reactComponents/views/Battle.js';
 
-const DEBUG = true;
-
 class App extends Component {
 
   constructor(props){
     super(props);
 
     this.state = {
-      BS: 100 / 2560,
-      startScreen: true,
-      battleScreen: false,
-    }
-
-    if(DEBUG){
-      console.log('constructor()');
-      this.state = {
-        BS: 100 / 2560,
-        startScreen: false,
-        battleScreen: true,
-      }
+      BS: 100 / 2560
     }
 
   }
 
   componentDidMount = () => {
-
-    if(DEBUG){
-      console.log('componentDidMount()');
-    }
 
     // const plugins = [ CSSPlugin, AttrPlugin ];
     // var tl = new TimelineLite();
@@ -51,35 +32,6 @@ class App extends Component {
     //   onComplete: () => {
     //     console.log('onComplete');
     //   }
-    // });
-  }
-
-  componentDidUpdate = () => {
-
-    if(DEBUG){
-      console.log('componentDidUpdate()');
-    }
-
-  }
-
-  restartGame = () => {
-
-    if(DEBUG){
-      console.log('this.restartGame()');
-    }
-
-    this.startBattle();
-
-    // window.setTimeout(()=>{
-    //   this.flashMessage('Round ' + this.state.turn, 700);
-    // }, 500);
-    // this.setState({
-    //   'turn': 1,
-    //   'hero': new Hero(),
-    //   'monster': new Enemy(),
-    //   'gameOver': false,
-    //   'endedTurn': false,
-    //   'startedTurn': true
     // });
   }
 
@@ -106,26 +58,8 @@ class App extends Component {
 
   render(){
 
-    if(DEBUG){
-      console.log('render()');
-    }
-
     const BS = this.state.BS;
     const toggleFullscreen = this.toggleFullscreen;
-
-    const startScreen = this.state.startScreen;
-
-    const showInfo = this.state.showInfo;
-
-    const mouseLeaveInfoButton = this.handleMouseLeaveInfoButton;
-    const mouseEnterInfoButton = this.handleMouseEnterInfoButton;
-
-    let gameLoop = null;
-    if(this.state.battleStarted){
-      gameLoop = this.getGameLoop();
-    }
-
-    //this.getGameLoop()
 
     return (
       <Fragment>
@@ -138,6 +72,7 @@ class App extends Component {
               <Battle
                 BS={BS}
                 toggleFullscreen={toggleFullscreen}
+                hero={this.state.hero}
               />
             } />
 

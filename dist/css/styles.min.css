@@ -1202,8 +1202,9 @@ img, canvas {
 .info__monster {
   position: absolute;
   top: 9.17969vw;
-  left: 74.21875vw;
+  right: 17.57812vw;
   display: block;
+  text-align: right;
   margin-bottom: 0;
 }
 
@@ -1233,7 +1234,7 @@ img, canvas {
 
 .info__hand {
   position: absolute;
-  top: 40.23438vw;
+  top: 51.5625vw;
   left: 41.79688vw;
 }
 
@@ -1246,7 +1247,8 @@ img, canvas {
 .info__enemyattack {
   position: absolute;
   top: 18.75vw;
-  left: 56.64062vw;
+  right: 17.57812vw;
+  text-align: right;
 }
 
 /*# sourceMappingURL=styles.min.css.map */

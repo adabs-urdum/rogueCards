@@ -6,11 +6,6 @@ const message = (props) => {
   const duration = props.duration;
   const showMessage = props.showMessage;
 
-  // console.log(message);
-  // console.log(duration);
-  // console.log(showMessage);
-  // console.log('---------');
-
   const style = {
     'animationDuration': duration + 'ms',
   };
