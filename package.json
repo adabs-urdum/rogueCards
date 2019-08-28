@@ -50,6 +50,8 @@
     "countup.js": "latest",
     "react-countup": "latest",
     "gsap": "latest",
-    "babylonjs": "latest"
+    "babylonjs": "latest",
+    "react-router": "latest",
+    "react-router-dom": "latest"
   }
 }
