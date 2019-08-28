@@ -196,130 +196,160 @@ class Animation {
 
   attack = (doer, target) => {
 
+    // get first fighter in fleet
+    let startedMovement = false;
     const fighter = doer.fleet.shift();
 
+    const doerPosition = doer.baBody.position;
     const fighterPosition = fighter.fighter.position;
-    this.scene.unregisterAfterRender(fighter.animation);
-    this.monster.removeChild(fighter.fighter);
 
-    const pivot = new BABYLON.TransformNode("root");
-    pivot.position = fighterPosition;
-
-    fighter.fighter.parent = pivot;
-    fighter.fighter.position = new BABYLON.Vector3(0,0,0);
-
-    const distance = {
-      x: target.baBody.position.x - fighterPosition.x,
-      y: target.baBody.position.y - fighterPosition.y,
-      z: target.baBody.position.z - fighterPosition.z,
-    };
-    const axis = new BABYLON.Vector3(distance.x, distance.y, distance.z);
-    // const axisLine = BABYLON.MeshBuilder.CreateLines("axisLine", { points: [fighterPosition.add(axis.scale(-50)), fighterPosition.add(axis.scale(50))] }, this.scene);
-    const axisNormal = axis.normalize();
-
-    const moveFighter = () => {
-      pivot.position = pivot.position.add(axisNormal.scale(0.15)); //move fighter along axis
-
-
-      // if fighter hits shield
-      if (fighter.fighter.intersectsMesh(target.baShield, true) && target.baShield.material.alpha > 0){
-
-        stopMoveFighter();
-
-        this.animateShield(target.blockBefore, target.block, target.baShield);
-
-        var particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
-        particleSystem.particleTexture = new BABYLON.Texture('/dist/textures/flare.png', this.scene);
-
-        // An optional mask to filter some colors out of the texture, or filter a part of the alpha channel
-        particleSystem.textureMask = new BABYLON.Color4(0, 0.5, 0.5, 0.5);
-
-        particleSystem.emitter = fighter.fighter;
-
-        // colors 1 and 2 get combined, dead is the color it takes right before it disappears
-        particleSystem.color1 = new BABYLON.Color4(1, 1, 1, 1);
-        particleSystem.color2 = new BABYLON.Color4(1, 1, 1, 1);
-        particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0);
-
-        // size of particles
-        particleSystem.minSize = 0.005;
-        particleSystem.maxSize = 0.015;
-
-        // lifetime of particles
-        particleSystem.minLifeTime = 0.05;
-        particleSystem.maxLifeTime = 0.3;
-
-        // the density of particles, the rate of particles flow
-        particleSystem.emitRate = 100;
-
-        // emit only 300 particles at once
-        particleSystem.manualEmitCount = 200;
-
-        particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_STANDARD;
-
-        //Set the gravity of all particles (not necessary down)
-        particleSystem.gravity = new BABYLON.Vector3(5, 0, 0);
-
-        // random direction of each particle after it has been emitted, between direction1 and direction2
-        particleSystem.direction1 = new BABYLON.Vector3(1, 1, 1);
-        particleSystem.direction2 = new BABYLON.Vector3(0, -1, 0);
-
-        // AngularSpeed. You can define a rotation for each particle (in radian)
-        particleSystem.minAngularSpeed = Math.PI;
-        particleSystem.maxAngularSpeed = Math.PI;
-
-        // Speed/Strength. You can define the power in emitting particles, and the overall motion speed (0.01 is default update speed, faster updates = faster animation).
-        particleSystem.minEmitPower = 1;
-        particleSystem.maxEmitPower = 15;
-        particleSystem.updateSpeed = 0.005;
-
-        // Duration. You can set the amount of time the particle system is running (depends of the overall speed above).
-        const animationDuration = 5;
-        particleSystem.targetStopDuration = animationDuration;
-
-        // Dispose. Disposes or not the particle system on stop (very useful if you want to create a one shot particle system with a specific targetStopDuration)
-        particleSystem.disposeOnStop = true;
-
-        particleSystem.start();
-
-        fighter.fighter.material.alpha = 0;
-
-        window.setTimeout(()=>{
-          fighter.fighter.dispose();
-        }, animationDuration * 5000);
-
-        // BABYLON.ParticleHelper.CreateAsync('explosion', this.scene).then((set) => {
-        //   set.start(fighter.fighter);
-        //   window.setTimeout(() => {
-        //     set.dispose(fighter.fighter);
-        //   }, 1000);
-        // });
-
-        // const shieldParticles = BABYLON.ParticleHelper.CreateDefault(fighter.fighter);
-        // shieldParticles.start();
-
+    // check if fighter won't crash into own planet
+    const checkFighterPosition = () => {
+      const result = Math.abs(doerPosition.x) - Math.abs(fighterPosition.x);
+      if(!startedMovement && result > 0){
+        startedMovement = true;
+        attackAnimation();
       }
-
-
-      // if fighter hits monster
-      if (fighter.fighter.intersectsMesh(target.baBody, true)){
-
-        stopMoveFighter();
-
-        BABYLON.ParticleHelper.CreateAsync('explosion', this.scene).then((set) => {
-          set.start(fighter.fighter);
-          window.setTimeout(() => {
-            set.dispose(fighter.fighter);
-          }, 1000);
-        });
-
+      else{
+        window.clearTimeout(checkFighterPositionTimer);
       }
-	  }
+      return result;
+    }
+    const checkFighterPositionTimer = window.setTimeout(checkFighterPosition, 100);
 
-    this.scene.registerAfterRender(moveFighter);
+    // play explosion AND shield-deflect if attack is larger than block
+    let residueDamage = false;
+    if(doer.recentAttack > target.blockBefore && target.block != target.blockBefore){
+      residueDamage = true;
+    }
 
-    const stopMoveFighter = () => {
-      this.scene.unregisterAfterRender(moveFighter);
+    // if fighter is in good position, then attack
+    const attackAnimation = () => {
+
+      // stop moving around planet
+      this.scene.unregisterAfterRender(fighter.animation);
+      // detach from planet
+      this.monster.removeChild(fighter.fighter);
+
+      const pivot = new BABYLON.TransformNode("root");
+      pivot.position = fighterPosition;
+      fighter.fighter.parent = pivot;
+      fighter.fighter.position = new BABYLON.Vector3(0,0,0);
+
+      const distance = {
+        x: target.baBody.position.x - fighterPosition.x,
+        y: target.baBody.position.y - fighterPosition.y,
+        z: target.baBody.position.z - fighterPosition.z,
+      };
+      const axis = new BABYLON.Vector3(distance.x, distance.y, distance.z);
+      // const axisLine = BABYLON.MeshBuilder.CreateLines("axisLine", { points: [fighterPosition.add(axis.scale(-50)), fighterPosition.add(axis.scale(50))] }, this.scene);
+      const axisNormal = axis.normalize();
+
+      const moveFighter = () => {
+        pivot.position = pivot.position.add(axisNormal.scale(0.2)); //move fighter along axis
+
+        // if fighter hits shield
+        if (fighter.fighter.intersectsMesh(target.baShield, true) && target.baShield.material.alpha > 0){
+
+          if(!residueDamage){
+            stopMoveFighter();
+          }
+
+          this.animateShield(target.blockBefore, target.block, target.baShield);
+
+          var particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
+          particleSystem.particleTexture = new BABYLON.Texture('/dist/textures/flare.png', this.scene);
+
+          // An optional mask to filter some colors out of the texture, or filter a part of the alpha channel
+          particleSystem.textureMask = new BABYLON.Color4(0, 0.5, 0.5, 0.5);
+
+          particleSystem.emitter = fighter.fighter;
+
+          // colors 1 and 2 get combined, dead is the color it takes right before it disappears
+          particleSystem.color1 = new BABYLON.Color4(1, 1, 1, 1);
+          particleSystem.color2 = new BABYLON.Color4(1, 1, 1, 1);
+          particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0);
+
+          // size of particles
+          particleSystem.minSize = 0.005;
+          particleSystem.maxSize = 0.015;
+
+          // lifetime of particles
+          particleSystem.minLifeTime = 0.05;
+          particleSystem.maxLifeTime = 0.3;
+
+          // the density of particles, the rate of particles flow
+          particleSystem.emitRate = 100;
+
+          // emit only 300 particles at once
+          particleSystem.manualEmitCount = 200;
+
+          particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_STANDARD;
+
+          //Set the gravity of all particles (not necessary down)
+          particleSystem.gravity = new BABYLON.Vector3(5, 0, 0);
+
+          // random direction of each particle after it has been emitted, between direction1 and direction2
+          particleSystem.direction1 = new BABYLON.Vector3(1, 1, 1);
+          particleSystem.direction2 = new BABYLON.Vector3(0, -1, 0);
+
+          // AngularSpeed. You can define a rotation for each particle (in radian)
+          particleSystem.minAngularSpeed = Math.PI;
+          particleSystem.maxAngularSpeed = Math.PI;
+
+          // Speed/Strength. You can define the power in emitting particles, and the overall motion speed (0.01 is default update speed, faster updates = faster animation).
+          particleSystem.minEmitPower = 1;
+          particleSystem.maxEmitPower = 15;
+          particleSystem.updateSpeed = 0.005;
+
+          // Duration. You can set the amount of time the particle system is running (depends of the overall speed above).
+          const animationDuration = 5;
+          particleSystem.targetStopDuration = animationDuration;
+
+          // Dispose. Disposes or not the particle system on stop (very useful if you want to create a one shot particle system with a specific targetStopDuration)
+          particleSystem.disposeOnStop = true;
+
+          particleSystem.start();
+
+          fighter.fighter.material.alpha = 0;
+
+          window.setTimeout(()=>{
+            fighter.fighter.dispose();
+          }, animationDuration * 5000);
+
+        }
+
+
+        // if fighter hits monster
+        if (fighter.fighter.intersectsMesh(target.baBody, true)){
+
+          if(residueDamage){
+            console.log('residueDamage');
+            BABYLON.ParticleHelper.CreateAsync("smoke", this.scene).then((set) => {
+              set.start(fighter.fighter);
+            });
+          }
+          else{
+            BABYLON.ParticleHelper.CreateAsync('explosion', this.scene).then((set) => {
+              set.start(fighter.fighter);
+              window.setTimeout(() => {
+                set.dispose(fighter.fighter);
+              }, 1000);
+            });
+          }
+
+          stopMoveFighter();
+          fighter.fighter.material.alpha = 0;
+
+
+        }
+  	  }
+
+      this.scene.registerAfterRender(moveFighter);
+
+      const stopMoveFighter = () => {
+        this.scene.unregisterAfterRender(moveFighter);
+      }
     }
 
   }

@@ -32,7 +32,10 @@ class Xenomorph extends Monster{
   }
 
   getNewRandomAttack = () => {
-    return this.attacks.getRandomValue();
+    const randomAttack = this.attacks.getRandomValue();
+    this.recentAttack = randomAttack.attack;
+
+    return randomAttack;
   }
 }
 

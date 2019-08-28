@@ -12,6 +12,7 @@ class Card{
 
   playCard = (doer, target) => {
     const attack = this.attack;
+    doer.recentAttack = this.attack;
     const block = this.block;
     const fleetSize = doer.fleetSize;
 

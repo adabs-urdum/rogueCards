@@ -9,6 +9,7 @@ class Character{
     this.healthBefore = 0;
     this.blockBefore = 0;
     this.strength = 0;
+    this.recentAttack = 0;
 
     this.fleetSize = 0;
     this.fleet = [];
