@@ -318,10 +318,16 @@ class Battle extends Component{
     if(hero.isDead){
       console.log('game over');
       console.log('you lose');
+      this.flashMessage('You dead. He won.', 4000, () => {
+        this.props.history.push('/');
+      });
     }
     if(monster.isDead){
       console.log('game over');
       console.log('you won');
+      this.flashMessage('He dead. You won.', 4000, () => {
+        this.props.history.push('/');
+      });
     }
   }
 
@@ -369,14 +375,14 @@ class Battle extends Component{
       console.log('game over');
       console.log('you lose');
       hero.die();
-      this.flashMessage('You dead. He won.', 2000, () => {
+      this.flashMessage('You dead. He won.', 4000, () => {
         this.props.history.push('/');
       });
       return;
     }
     if(monster.isDead){
       monster.die();
-      this.flashMessage('He dead. You won.', 2000, () => {
+      this.flashMessage('He dead. You won.', 4000, () => {
         this.props.history.push('/');
       });
     }

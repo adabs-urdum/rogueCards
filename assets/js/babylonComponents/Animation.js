@@ -330,7 +330,7 @@ class Animation {
             });
           }
           else{
-            BABYLON.ParticleHelper.CreateAsync('explosion', this.scene).then((set) => {
+            BABYLON.ParticleHelper.CreateAsync('explosionFighter', this.scene).then((set) => {
               set.start(fighter.fighter);
               window.setTimeout(() => {
                 set.dispose(fighter.fighter);
@@ -341,8 +341,23 @@ class Animation {
           stopMoveFighter();
           fighter.fighter.material.alpha = 0;
 
+          if(target.isDead){
+            this.explodePlanet(target.baBody);
+            const scaleBodyDown = () => {
+              target.baBody.scaling.x -= 0.05;
+              target.baBody.scaling.y -= 0.05;
+              target.baBody.scaling.z -= 0.05;
+              if(target.baBody.scaling.x <= 0.4){
+                this.scene.unregisterAfterRender(scaleBodyDown);
+                target.baBody.material.alpha = 0;
+              }
+            }
+            this.scene.registerAfterRender(scaleBodyDown);
+          }
+
 
         }
+
   	  }
 
       this.scene.registerAfterRender(moveFighter);
@@ -425,6 +440,15 @@ class Animation {
     shield.material.wireframe = true;
 
     this.monsterShield = shield;
+  }
+
+  explodePlanet = ( body ) => {
+    BABYLON.ParticleHelper.CreateAsync("explosionPlanet", this.scene).then((set) => {
+      set.systems.forEach(s => {
+          s.disposeOnStop = true;
+      });
+      set.start(body);
+    });
   }
 
 }
