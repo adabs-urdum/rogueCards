@@ -682,8 +682,8 @@ class App extends Component {
 
         { startScreen ? <Fragment>
           <div className="gameOver">
-            <h1 id="gameOverTitle">{ 'rogueCards alpha v0.0.2' }</h1>
-            <p>attempt to build a rogue like/light card deck builder<br/>using react and a yet to be chosen graphics/game engine</p>
+            <h1 id="gameOverTitle">{ 'rogueCards alpha v0.0.3' }</h1>
+            <p>attempt to build a rogue like/light card deck builder<br/>using react.js and babylon.js</p>
             <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://cyrill-lehmann.ch">cyrill-lehmann.ch</a>
             <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://github.com/adabs-urdum/rogueCards">github.com/adabs-urdum/rogueCards</a>
             <Button
