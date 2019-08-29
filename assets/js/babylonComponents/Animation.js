@@ -24,7 +24,7 @@ class Animation {
     this.scene = scene;
 
     this.stars = [];
-    this.createStars(500);
+    this.createStars(150);
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {

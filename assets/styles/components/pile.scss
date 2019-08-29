@@ -14,7 +14,7 @@
     align-items: center;
     @include bs-font-size(35);
     font-weight: 700;
-    background: radial-gradient(circle at center, $White 50%, $Grey 80%, $Anthracite 100%)
+    background: radial-gradient(circle at center, $White 50%, $Grey 80%, $Anthracite 100%);
   }
 
   &__title{
@@ -35,14 +35,14 @@
   &--ap{
     .pile{
       &__number, &__title{
-        background: $Anthracite;
+        background: transparent;
         color: $YellowAp;
       }
       &__number{
-        background: radial-gradient(circle at center, $Anthracite 50%, $Grey 90%, $Anthracite 100%)
+        background: radial-gradient(circle at center, transparent 50%, White 90%, transparent 100%)
       }
       &__title{
-        background: linear-gradient($Anthracite 75%, $Black);
+        background: $Black;
         box-shadow: inset 0 0 $BS*10 $BS*1 $White;
       }
     }
