@@ -14,7 +14,6 @@ const character = (props) => {
   const deck = props.character.deck;
   const blockChanged = props.character.blockChanged;
   const healthChanged = props.character.healthChanged;
-  const flashNextAttack = props.flashNextAttack;
   const fleetSize = props.character.fleetSize;
 
   const healthBarWidth = 100 / maxHealth * health;
@@ -33,7 +32,7 @@ const character = (props) => {
 
   if(nextAttack){
     nextAttack = (
-      <div className={ flashNextAttack ? "characters__next_attack characters__next_attack--scale" : "characters__next_attack"}>
+      <div id="MonsterNextAttack" className="characters__next_attack">
         <h4>Next attack</h4>
         <p className="redHealth">ATK: { nextAttack.attack }</p>
         <p className="blueBlock">BLK: { nextAttack.block }</p>

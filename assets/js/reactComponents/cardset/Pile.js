@@ -1,8 +1,8 @@
 import React from 'react';
 import CountUp from 'react-countup';
 
-const pile = (props) => {
-
+const pile = (props, ref) => {
+  const numberId = props.numberId;
   const type = props.type;
   const text = props.text;
   const title = props.title;
@@ -14,7 +14,7 @@ const pile = (props) => {
     <div className={"pile pile--" + type }>
       <div className="pile__number">
         <span>
-          <span className={ flash ? 'animateScale' : null }>
+          <span id={numberId} className={ flash ? 'animateScale' : null }>
             <CountUp
               start={old}
               end={text}
@@ -27,6 +27,6 @@ const pile = (props) => {
       <span className="pile__title">{ title }</span>
     </div>
   )
-}
+};
 
 export default pile;

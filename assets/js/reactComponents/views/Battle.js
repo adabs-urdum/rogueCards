@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
+import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 
 // import vanilla models
 import Hero from '../../vanillaComponents/character/characterClasses/heroes/Hero.js';
@@ -41,13 +42,10 @@ class Battle extends Component{
       'showMessage': false,
       'messageRef': React.createRef(),
       'messageDuration': 700,
-      'flashAP': false,
-      'flashEndTurn': false,
-      'scaleEndTurnButton': false,
       'gameOver': false,
       'battleStarted': true,
       'startScreen': false,
-      'battleScreen': true,
+      'battleScreen': true
     };
 
   }
@@ -87,43 +85,7 @@ class Battle extends Component{
   componentDidUpdate = () => {
     const hero = this.state.hero;
     const monster = this.state.monster;
-    const flashAP = this.state.flashAP;
-    const flashEndTurn = this.state.flashEndTurn;
     const startedTurn = this.state.startedTurn;
-    const scaleEndTurnButton = this.state.scaleEndTurnButton;
-    const flashNextAttack = this.state.flashNextAttack;
-
-    if(flashEndTurn == true){
-      window.setTimeout(() => {
-        this.setState({
-          flashEndTurn: false
-        });
-      }, 300);
-    }
-
-    if(flashAP == true){
-      window.setTimeout(() => {
-        this.setState({
-          flashAP: false
-        });
-      }, 300);
-    }
-
-    if(flashNextAttack == true){
-      window.setTimeout(() => {
-        this.setState({
-          flashNextAttack: false
-        });
-      }, 1000);
-    }
-
-    if(scaleEndTurnButton == true){
-      window.setTimeout(() => {
-        this.setState({
-          scaleEndTurnButton: false
-        });
-      }, 500);
-    }
 
     if(startedTurn == true){
       window.setTimeout(() => {
@@ -204,6 +166,29 @@ class Battle extends Component{
     });
   }
 
+  flashPile = (elementId) => {
+    const plugins = [ CSSPlugin, AttrPlugin ];
+    const tl = new TimelineLite();
+    const totalFlashDuration = 0.5;
+
+    tl.fromTo(
+      elementId, totalFlashDuration / 2, {
+      display: 'inline-block',
+      transform: 'scale(1)',
+      transformOrigin: 'center',
+    }, {
+      display: 'inline-block',
+      transform: 'scale(2)',
+      transformOrigin: 'center',
+    }).to(
+      elementId, totalFlashDuration / 2, {
+      display: 'inline-block',
+      transform: 'scale(1)',
+      transformOrigin: 'center',
+    });
+
+  }
+
   // handle click on card, now play card
   handleClickCard = (e, id) => {
 
@@ -223,15 +208,38 @@ class Battle extends Component{
     const cardCostAP = cardObject.cost;
 
     if( availableAP < cardCostAP ){
+
       this.flashMessage('Not enough action points.', 700);
-      this.setState({
-        'flashAP': true,
-      });
+      this.flashPile('#numberAP');
+
       if(availableAP == 0){
-        this.setState({
-          'flashEndTurn': true,
-          'scaleEndTurnButton': true,
-        });
+        const plugins = [ CSSPlugin, AttrPlugin ];
+
+        const tl = new TimelineLite();
+        const totalWiggleDuration = 0.3;
+        tl.fromTo(
+          "#endTurnButton", totalWiggleDuration / 100 * 10, {
+          transform: 'translate(-50%, -180%) scale(1) rotate(0deg)'
+        }, {
+          transform: 'translate(-50%, -180%) scale(1.3) rotate(0deg)',
+        }).to(
+          "#endTurnButton", totalWiggleDuration / 100 * 15, {
+          transform: 'translate(-50%, -180%) scale(1.3) rotate(-10deg)'
+          }
+        ).to(
+          "#endTurnButton", totalWiggleDuration / 100 * 50, {
+          transform: 'translate(-50%, -180%) scale(1.3) rotate(10deg)'
+          }
+        ).to(
+          "#endTurnButton", totalWiggleDuration / 100 * 15, {
+          transform: 'translate(-50%, -180%) scale(1.3) rotate(0deg)'
+          }
+        ).to(
+          "#endTurnButton", totalWiggleDuration / 100 * 10, {
+          transform: 'translate(-50%, -180%) scale(1) rotate(0deg)'
+          }
+        );
+
       }
       return null;
     }
@@ -257,9 +265,10 @@ class Battle extends Component{
       });
     }
 
+    this.flashPile('#numberAP');
+
     this.setState({
       'deck': deck,
-      'flashAP': true,
       'hero': hero,
       'monster': monster,
     });
@@ -296,9 +305,23 @@ class Battle extends Component{
           this.monsterAttack(monster, hero, monster.nextAttack);
         }, 400);
 
-        this.setState({
-          'flashNextAttack': true,
+        const plugins = [ CSSPlugin, AttrPlugin ];
+        const tl = new TimelineLite();
+        const totalFlashDuration = 1.5;
+
+        tl.fromTo(
+          '#MonsterNextAttack', totalFlashDuration / 6, {
+          transform: 'translateX(0%) translateY(0%) scale(1)',
+        }, {
+          transform: 'translateX(-150%) translateY(-150%) scale(1.5)',
+        }).to(
+          '#MonsterNextAttack', totalFlashDuration / 6 * 4, {
+          transform: 'translateX(-150%) translateY(-150%) scale(1.5)',
+        }).to(
+          '#MonsterNextAttack', totalFlashDuration / 6, {
+          transform: 'translateX(0%) translateY(0%) scale(1)',
         });
+
       }, this.state.messageDuration);
     });
 
@@ -338,11 +361,12 @@ class Battle extends Component{
     animation.createFighters(hero, animation.hero);
     animation.createFighters(monster, animation.monster);
 
+    this.flashPile('#numberAP');
+
     this.setState({
       turn: turn + 1,
       endedTurn: false,
       hero: hero,
-      flashAP: true,
     });
   }
 
@@ -437,13 +461,6 @@ class Battle extends Component{
     const showMessage = this.state.showMessage;
     const messageDuration = this.state.messageDuration;
 
-    const flashAP = this.state.flashAP;
-    const flashEndTurn = this.state.flashEndTurn;
-
-    const scaleEndTurnButton = this.state.scaleEndTurnButton;
-
-    const flashNextAttack = this.state.flashNextAttack;
-
     const showInfo = this.props.showInfo;
 
     const BS = this.state.BS;
@@ -480,7 +497,6 @@ class Battle extends Component{
               containerClass="characters__character characters__character--monster"
               nextAttack={ monster.nextAttack }
               BS={ BS }
-              flashNextAttack={ flashNextAttack }
             />
           </section>
 
@@ -500,11 +516,9 @@ class Battle extends Component{
             endTurn={ this.handleClickEndTurn }
             endedTurn={ endedTurn }
             ap={ ap }
+            apRef={ this.state.apRef }
             oldAP={ oldAP }
             maxAp={ maxAp }
-            flashAP={ flashAP }
-            flashEndTurn={ flashEndTurn }
-            scaleEndTurnButton={ scaleEndTurnButton }
             startedTurn={ startedTurn }
           />
 

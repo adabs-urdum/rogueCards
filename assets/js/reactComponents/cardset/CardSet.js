@@ -22,11 +22,7 @@ const cardSet = (props) => {
   const ap = props.ap;
   const oldAP = props.oldAP;
   const maxAp = props.maxAp;
-  const scaleEndTurnButton = props.scaleEndTurnButton;
   const endTurn = props.endTurn;
-
-  const flashAP = props.flashAP;
-  const flashEndTurn = props.flashEndTurn;
 
   const hoveredCard = props.hoveredCard;
   const hoveredCardIndex = hand.indexOf(hoveredCard);
@@ -86,27 +82,23 @@ const cardSet = (props) => {
 
   let endTurnButtonClasses = 'button--endTurn deck__endTurn';
 
-  if(scaleEndTurnButton){
-    endTurnButtonClasses += ' deck__endTurn--scale';
-  }
-
   return(
     <section className="deck">
       <Button
+        id='endTurnButton'
         classes={ endTurnButtonClasses }
         text="End turn"
         onclick={ endTurn }
         disabled={ endedTurn }
-        flash={ flashEndTurn }
       />
       <div key="drawPile" className="deck__drawPile">
         <Pile
+          numberId="numberAP"
           old={ oldAP }
           text={ ap }
           textSuffix={ '/' + maxAp }
           type="ap"
           title="ap"
-          flash={ flashAP }
         />
         <Pile
           text={ drawPile.length }

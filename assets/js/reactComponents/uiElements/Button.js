@@ -3,6 +3,7 @@ import React from 'react';
 const button = (props) => {
 
   let classes = props.classes;
+  const id = props.id;
   const text = props.text;
   const onclick = props.onclick;
   const disabled = props.disabled;
@@ -15,6 +16,7 @@ const button = (props) => {
 
   return(
     <button
+      id={id}
       className={"button " + classes}
       onClick={onclick ? (e) => onclick(e) : null}
       disabled={ disabled }

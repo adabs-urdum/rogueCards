@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter, Route, Link, NavLink, Switch, Redirect, withRouter } from 'react-router-dom';
 import Animation from '../babylonComponents/Animation.js';
-import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 
 // import react components
 import Header from '../reactComponents/Header.js';
@@ -21,23 +20,6 @@ class App extends Component {
       showInfo: false,
     }
 
-  }
-
-  componentDidMount = () => {
-
-    // const plugins = [ CSSPlugin, AttrPlugin ];
-    // var tl = new TimelineLite();
-    //
-    // tl.fromTo("#gameOverTitle", 1, {
-    //   x:-200,
-    //   opacity:0,
-    // }, {
-    //   x:0,
-    //   opacity:1,
-    //   onComplete: () => {
-    //     console.log('onComplete');
-    //   }
-    // });
   }
 
   handleMouseEnterInfoButton = () => {
