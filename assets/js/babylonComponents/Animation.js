@@ -18,22 +18,21 @@ class Animation {
 
     this.canvas = document.getElementById("animation"); // Get the canvas element
     this.engine = new BABYLON.Engine(this.canvas, true); // Generate the BABYLON 3D engine
-    this.monsterSize = Math.random() + 0.3;
-    this.monsterPosition = new BABYLON.Vector3(-2.5,0.5,0);
-    this.heroPosition = new BABYLON.Vector3(2.5,0.5,0);
-
     this.heroFighters = [];
 
     const scene = this.createScene(); //Call the createScene function
     this.scene = scene;
 
+    this.stars = [];
+    this.createStars(500);
+
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {
       const shieldRotation = 0.0005;
       this.heroShield.addRotation(0,shieldRotation,0);
-      this.hero.addRotation(Math.PI / 3000, Math.PI / 3000, Math.PI / 3000);
+      this.hero.addRotation(Math.PI / 5000, Math.PI / 5000, Math.PI / 5000);
       this.monsterShield.addRotation(0,shieldRotation,0);
-      this.monster.addRotation(Math.PI / -3000, Math.PI / -3000, Math.PI / -3000);
+      this.monster.addRotation(Math.PI / -5000, Math.PI / -5000, Math.PI / -5000);
       scene.render();
     });
 
@@ -44,9 +43,9 @@ class Animation {
   createScene = () => {
 
     const colors = {
-      r: Math.random(),
-      g: Math.random(),
-      b: Math.random()
+      r: 1,
+      g: 1,
+      b: 1
     };
 
     // Create the scene space
@@ -60,11 +59,19 @@ class Animation {
     camera.attachControl(this.canvas);
 
     // add lights to the scene
-    const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, -10), scene);
-    light.diffuse = new BABYLON.Color3(colors.r, colors.g, colors.b);
     const darken = 0.2;
+
+    const light = new BABYLON.DirectionalLight("light", new BABYLON.Vector3(0, -10, 0), scene);
+    light.diffuse = new BABYLON.Color3(colors.r, colors.g, colors.b);
+    light.intensity = 0.7;
     scene.ambientColor = new BABYLON.Color3(colors.r - darken, colors.g - darken, colors.b - darken);
-  	light.groundColor = new BABYLON.Color3(Math.random() - darken, Math.random() - darken, Math.random() - darken);
+  	light.groundColor = new BABYLON.Color3(colors.r, colors.g, colors.b);
+
+    const light2 = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(0, 0, 7), scene);
+    light2.diffuse = new BABYLON.Color3(colors.r, colors.g, colors.b);
+    light2.intensity = 0.2;
+    scene.ambientColor = new BABYLON.Color3(colors.r - darken, colors.g - darken, colors.b - darken);
+  	light2.groundColor = new BABYLON.Color3(colors.r, colors.g, colors.b);
 
     return scene;
 
@@ -124,11 +131,27 @@ class Animation {
     character.position = new BABYLON.Vector3(object.baMainPosition[0],object.baMainPosition[1],object.baMainPosition[2]);
 
     const characterMaterial = new BABYLON.StandardMaterial(object.name + "Material", this.scene);
-    const material = this.materials.getRandomValue();
-    characterMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + material, this.scene);
+    const materialTexture = this.materials.getRandomValue();
+    characterMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture, this.scene);
     characterMaterial.diffuseColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
     characterMaterial.ambientColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
+    characterMaterial.roughness = 0;
+
+    var characterMaterial2 = new BABYLON.StandardMaterial("mat1", this.scene);
+    const materialTexture2 = this.materials.getRandomValue();
+    characterMaterial2.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture2, this.scene);
+    characterMaterial2.diffuseColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
+    characterMaterial2.ambientColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
+
     character.material = characterMaterial;
+
+    // var multimat = new BABYLON.MultiMaterial("multi", this.scene);
+    // multimat.subMaterials.push(characterMaterial);
+    // multimat.subMaterials.push(characterMaterial2);
+    // character.subMeshes = [];
+    // var verticesCount = character.getTotalVertices();
+    // new BABYLON.SubMesh(0, 0, verticesCount, 0, 8000, character);
+    // new BABYLON.SubMesh(1, 0, verticesCount, 9000, 20000, character);
 
     return character;
   }
@@ -175,35 +198,56 @@ class Animation {
 
   }
 
+  createStars = (amount) => {
+
+    let starCount = 0;
+
+    while(starCount < amount){
+      starCount += 1;
+      const star = BABYLON.MeshBuilder.CreateBox('star' + starCount, {height: 1, width: 1, depth: 1}, this.scene);
+      star.position = new BABYLON.Vector3((Math.random() - 0.5) * 1000, (Math.random() - 0.5) * 1000, (Math.random() - 1.5) * 1000);
+      // const star = BABYLON.MeshBuilder.CreateBox('star' + starCount, {height: Math.random() * 0.001, width: Math.random() * 0.001, depth: Math.random() * 0.001}, this.scene);
+      const starMaterial = new BABYLON.StandardMaterial('starMaterial' + starCount, this.scene);
+      starMaterial.diffuseColor = new BABYLON.Color3(1,1,1);
+      starMaterial.ambientColor = new BABYLON.Color3(1,1,1);
+      starMaterial.emissiveColor = new BABYLON.Color3(1,1,1);
+      star.material = starMaterial;
+      this.stars.push(star);
+    }
+
+  }
+
   createFighters = (character) => {
     let counter = 0;
 
     while(counter < character.fleetSize){
 
       // const fighter = BABYLON.Mesh.CreateBox("fighter", 0.03, this.scene);
-      const fighter = BABYLON.Mesh.CreateTorus("torus", 0.05, 0.05, 28, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
-
+      const fighterSize = Math.random() * (0.04 - 0.025) + 0.025;
+      const fighter = BABYLON.Mesh.CreateTorus("torus", fighterSize, fighterSize, 28, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
       const pivot = new BABYLON.TransformNode("root");
 
+      const materialTexture = this.materials.getRandomValue();
       const fighterMaterial = new BABYLON.StandardMaterial("fighterMaterial", this.scene);
-
+      // fighterMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture, this.scene);
       fighterMaterial.diffuseColor = new BABYLON.Color3(character.mainColor.r, character.mainColor.g, character.mainColor.b);
       // fighterMaterial.specularColor = new BABYLON.Color3(character.mainColor.r, character.mainColor.g, character.mainColor.b);
-      // fighterMaterial.emissiveColor = new BABYLON.Color3(0.001,0.001,0.01);
+      // fighterMaterial.emissiveColor = new BABYLON.Color3(1,1,1);
       fighter.material = fighterMaterial;
 
       pivot.position = character.baBody.position;
+      pivot.rotation = new BABYLON.Vector3(Math.PI * Math.random(),Math.PI * (Math.random() - 0.5),0);
       fighter.parent = pivot;
       fighter.position = new BABYLON.Vector3(character.baBody.getBoundingInfo().boundingBox.extendSize.x * 1.5, 0, 0);
 
-      const angle = Math.random() * -0.02;
+      const angle = Math.random() * -0.005;
       const axis = new BABYLON.Vector3(0,6,Math.random());
-      const rotateFactor = Math.random() - 0.5;
+      const rotateFactor = Math.random() - 0.75;
       const rotateAnimation = () => {
         pivot.rotate(axis, angle, BABYLON.Space.WORLD);
-        fighter.rotation.x += rotateFactor * 0.05;
-        fighter.rotation.y += rotateFactor * 0.05;
-        fighter.rotation.z += rotateFactor * 0.05;
+        fighter.rotation.x += rotateFactor * 0.025;
+        fighter.rotation.y += rotateFactor * 0.025;
+        fighter.rotation.z += rotateFactor * 0.025;
       }
       this.scene.registerAfterRender(rotateAnimation);
       character.fleet.push({
@@ -261,14 +305,14 @@ class Animation {
       const distance = {
         x: target.baBody.position.x - fighterPosition.x,
         y: target.baBody.position.y - fighterPosition.y,
-        z: target.baBody.position.z - fighterPosition.z + 0.1,
+        z: target.baBody.position.z - fighterPosition.z + 0.05,
       };
       const axis = new BABYLON.Vector3(distance.x, distance.y, distance.z);
       // const axisLine = BABYLON.MeshBuilder.CreateLines("axisLine", { points: [fighterPosition.add(axis.scale(-50)), fighterPosition.add(axis.scale(50))] }, this.scene);
       const axisNormal = axis.normalize();
 
       const moveFighter = () => {
-        pivot.position = pivot.position.add(axisNormal.scale(0.2)); //move fighter along axis
+        pivot.position = pivot.position.add(axisNormal.scale(0.12)); //move fighter along axis
 
         // if fighter hits shield
         if (fighter.fighter.intersectsMesh(target.baShield, true) && target.baShield.material.alpha > 0){

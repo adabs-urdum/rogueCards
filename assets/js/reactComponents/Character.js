@@ -26,8 +26,6 @@ const character = (props) => {
     width: BlockBarWidth + '%',
   };
 
-  // const {forwardedRef, ...rest} = this.props;
-
   let nextAttack = props.nextAttack;
 
   if(nextAttack){
