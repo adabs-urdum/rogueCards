@@ -14,6 +14,8 @@ class Card{
     const attack = this.attack;
     doer.recentAttack = this.attack;
     const block = this.block;
+    const ap = this.ap;
+    const draw = this.draw;
     const fleetSize = doer.fleetSize;
 
     if(attack && doer.fleetSize > 0){
@@ -22,6 +24,16 @@ class Card{
 
     if(block){
       doer.gainBlock(block);
+    }
+
+    if(ap){
+      doer.gainAP(ap);
+    }
+
+    if(draw){
+      doer.deck.handBefore = [...doer.deck.hand];
+      doer.deck.drawPileBefore = [...doer.deck.drawPile];
+      doer.deck.hand = doer.deck.hand.concat(doer.deck.drawCards(draw));
     }
 
     doer.ap -= this.cost;

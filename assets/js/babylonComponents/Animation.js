@@ -224,7 +224,7 @@ class Animation {
 
       // const fighter = BABYLON.Mesh.CreateBox("fighter", 0.03, this.scene);
       const fighterSize = Math.random() * (0.04 - 0.025) + 0.025;
-      const fighter = BABYLON.Mesh.CreateTorus("torus", fighterSize, fighterSize, 28, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
+      const fighter = BABYLON.Mesh.CreateTorus("fighter" + counter, fighterSize, fighterSize, 28, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
       const pivot = new BABYLON.TransformNode("root");
 
       const materialTexture = this.materials.getRandomValue();
@@ -253,6 +253,7 @@ class Animation {
       character.fleet.push({
         fighter: fighter,
         animation: rotateAnimation,
+        pivot: pivot,
       });
 
       counter++;
@@ -264,7 +265,20 @@ class Animation {
 
     // get first fighter in fleet
     let startedMovement = false;
-    const fighter = doer.fleet.shift();
+
+    let fighter = null;
+    fighter = doer.fleet.find(loopFighter => {
+      return Math.abs(doer.baBody._absolutePosition.x) > Math.abs(loopFighter.fighter._absolutePosition.x);
+    });
+
+    if(fighter == null || fighter == false){
+      fighter = doer.fleet.shift();
+    }
+    else{
+      doer.fleet = doer.fleet.filter( obj => {
+        return obj.fighter.id !== fighter.fighter.id;
+      });
+    }
 
     const doerPosition = doer.baBody.position;
     const fighterPosition = fighter.fighter.position;
@@ -295,9 +309,9 @@ class Animation {
       // stop moving around planet
       this.scene.unregisterAfterRender(fighter.animation);
       // detach from planet
-      this.monster.removeChild(fighter.fighter);
+      doer.baBody.removeChild(fighter.fighter);
 
-      const pivot = new BABYLON.TransformNode("root");
+      const pivot = new BABYLON.TransformNode('pivot' + fighter.fighter.id);
       pivot.position = fighterPosition;
       fighter.fighter.parent = pivot;
       fighter.fighter.position = new BABYLON.Vector3(0,0,0);
@@ -387,7 +401,7 @@ class Animation {
         }
 
 
-        // if fighter hits monster
+        // if fighter hits enemy
         if (fighter.fighter.intersectsMesh(target.baBody, true)){
 
           if(residueDamage){
@@ -400,6 +414,7 @@ class Animation {
               set.start(fighter.fighter);
               window.setTimeout(() => {
                 set.dispose(fighter.fighter);
+                fighter.fighter.dispose();
               }, 1000);
             });
           }

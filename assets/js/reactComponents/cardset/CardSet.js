@@ -8,8 +8,11 @@ import Button from '../uiElements/Button.js';
 const cardSet = (props) => {
 
   const drawPile = props.drawPile;
+  const drawPileBefore = props.drawPileBefore;
   const hand = props.hand;
+  const handBefore = props.handBefore;
   const discardPile = props.discardPile;
+  const discardPileBefore = props.discardPileBefore;
   const banishPile = props.banishPile;
   const handleClickCard = props.handleClickCard;
   const handleMouseEnterCard = props.handleMouseEnterCard;
@@ -19,8 +22,9 @@ const cardSet = (props) => {
   const BS = props.BS;
   const endedTurn = props.endedTurn;
   const startedTurn = props.startedTurn;
+  const drawnNewCards = props.drawnNewCards;
   const ap = props.ap;
-  const oldAP = props.oldAP;
+  const apBefore = props.apBefore;
   const maxAp = props.maxAp;
   const endTurn = props.endTurn;
 
@@ -56,10 +60,19 @@ const cardSet = (props) => {
       siblingIsHovered = true;
     }
 
+    let additionalClasses = '';
+
+    if(drawnNewCards){
+      if(!handBefore.includes(card)){
+        additionalClasses = 'card--new';
+      }
+    }
+
     cardCount++;
 
     return (
       <Card
+        classes={ additionalClasses }
         key={ card.id }
         card={ card }
         handleClickCard={ handleClickCard }
@@ -94,7 +107,7 @@ const cardSet = (props) => {
       <div key="drawPile" className="deck__drawPile">
         <Pile
           numberId="numberAP"
-          old={ oldAP }
+          old={ apBefore }
           text={ ap }
           textSuffix={ '/' + maxAp }
           type="ap"
@@ -102,6 +115,7 @@ const cardSet = (props) => {
         />
         <Pile
           text={ drawPile.length }
+          old={ drawPileBefore }
           type="draw"
           title="draw"
         />
@@ -117,6 +131,7 @@ const cardSet = (props) => {
         />
         <Pile
           text={ discardPile.length }
+          text={ discardPileBefore }
           type="discard"
           title="discard"
         />

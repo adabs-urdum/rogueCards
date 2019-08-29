@@ -6,6 +6,7 @@ class Character{
     this.name = '';
     this.description = '';
     this.health = 0;
+    this.apBefore = 0;
     this.healthBefore = 0;
     this.blockBefore = 0;
     this.strength = 0;
@@ -33,6 +34,14 @@ class Character{
       this.blockBefore = this.block;
       this.block += block;
       this.blockChanged = true;
+    }
+  }
+
+  gainAP = (ap) => {
+    if(ap){
+      this.apBefore = this.ap;
+      this.ap += ap;
+      this.apChanged = true;
     }
   }
 

@@ -6,9 +6,13 @@ class Deck{
     this.decksize = decksize;
     this.deck = this.getNewDeck(decksize);
     this.drawPile = [...this.deck];
+    this.drawPileBefore = [];
     this.hand = this.drawCards(handsize);
+    this.handBefore = [];
     this.discardPile = [];
+    this.discardPileBefore = [];
     this.banishPile = [];
+    this.banishPileBefore = [];
     this.playedCards = [];
   }
 
@@ -28,12 +32,14 @@ class Deck{
     }
 
     return cards;
-    
+
   }
 
   shuffleDiscardIntoDraw = () => {
     const discard = this.discardPile;
+    this.drawPileBefore = this.drawPile;
     this.drawPile = discard.shuffle();
+    this.discardPileBefore = this.discardPile;
     this.discardPile = [];
     return;
   }

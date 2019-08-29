@@ -8,7 +8,7 @@ const pile = (props, ref) => {
   const title = props.title;
   const flash = props.flash;
   const textSuffix = props.textSuffix;
-  const old = props.oldAP > 0 ? props.oldAP : 0;
+  const old = props.old > 0 ? props.old : 0;
 
   return(
     <div className={"pile pile--" + type }>

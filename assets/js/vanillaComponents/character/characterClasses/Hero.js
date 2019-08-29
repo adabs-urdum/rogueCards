@@ -1,8 +1,10 @@
 import Character from './../Character.js';
-import Smash from './../../cards/cardClasses/Smash.js'
-import Smash2 from './../../cards/cardClasses/Smash2.js'
-import Block from './../../cards/cardClasses/Block.js'
-import Block2 from './../../cards/cardClasses/Block2.js'
+import Smash from './../../cards/cardClasses/Smash.js';
+import Smash2 from './../../cards/cardClasses/Smash2.js';
+import Block from './../../cards/cardClasses/Block.js';
+import Block2 from './../../cards/cardClasses/Block2.js';
+import AP from './../../cards/cardClasses/AP.js';
+import Cards from './../../cards/cardClasses/Cards.js';
 
 class Hero extends Character{
 
@@ -16,6 +18,8 @@ class Hero extends Character{
         Smash2,
         Block,
         Block2,
+        Cards,
+        AP,
     ];
 
     this.baDiameter = 1;
@@ -25,7 +29,7 @@ class Hero extends Character{
   }
 
   fillApToMax(){
-    this.oldAP = this.ap;
+    this.apBefore = this.ap;
     this.ap = this.maxAp;
   }
 

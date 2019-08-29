@@ -45,8 +45,28 @@ class Battle extends Component{
       'gameOver': false,
       'battleStarted': true,
       'startScreen': false,
-      'battleScreen': true
+      'battleScreen': true,
+      'drawnNewCards': false,
     };
+
+  }
+
+  checkIfGameOver = () => {
+
+    if(this.state.hero.isDead){
+      console.log('game over');
+      console.log('you lose');
+      this.flashMessage('You dead. He won.', 7000, () => {
+        this.props.history.push('/');
+      });
+    }
+    if(this.state.monster.isDead){
+      console.log('game over');
+      console.log('you won');
+      this.flashMessage('He dead. You won.', 7000, () => {
+        this.props.history.push('/');
+      });
+    }
 
   }
 
@@ -93,6 +113,14 @@ class Battle extends Component{
           startedTurn: false
         });
       }, 1000);
+    }
+
+    if(this.state.drawnNewCards != false){
+      window.setTimeout(() => {
+        this.setState({
+          drawnNewCards: false
+        });
+      }, 500);
     }
 
     if(monster){
@@ -196,6 +224,8 @@ class Battle extends Component{
     let hero = this.state.hero;
     let monster = this.state.monster;
     const deck = hero.deck;
+    deck.handBefore = deck.hand;
+    deck.drawPileBefore = deck.drawPile;
     const hand = deck.hand;
     const discardPile = deck.discardPile;
     const animation = this.state.animation;
@@ -259,18 +289,21 @@ class Battle extends Component{
     [hero, monster] = cardObject.playCard(hero, monster);
     animation.playCard(hero, monster, cardObject);
 
-    if(monster.isDead){
-      this.flashMessage('He dead. You won.', 2000, () => {
-        this.props.history.push('/');
-      });
+    let drawnNewCards = false;
+    if(cardObject.draw){
+      drawnNewCards = true;
     }
+
+    this.checkIfGameOver();
 
     this.flashPile('#numberAP');
 
+    hero.deck = deck;
+
     this.setState({
-      'deck': deck,
-      'hero': hero,
-      'monster': monster,
+      hero: hero,
+      monster: monster,
+      drawnNewCards: drawnNewCards
     });
   }
 
@@ -289,7 +322,9 @@ class Battle extends Component{
 
     // remove cards from hand and arena after 700ms (after css transition)
     window.setTimeout(() => {
+      deck.discardPileBefore = deck.discardPile;
       deck.discardPile = deck.discardPile.concat(hand, playedCards);
+      deck.handBefore = deck.hand;
       deck.hand = [];
       deck.playedCards = [];
     }, 100);
@@ -325,20 +360,8 @@ class Battle extends Component{
       }, this.state.messageDuration);
     });
 
-    if(hero.isDead){
-      console.log('game over');
-      console.log('you lose');
-      this.flashMessage('You dead. He won.', 4000, () => {
-        this.props.history.push('/');
-      });
-    }
-    if(monster.isDead){
-      console.log('game over');
-      console.log('you won');
-      this.flashMessage('He dead. You won.', 4000, () => {
-        this.props.history.push('/');
-      });
-    }
+    this.checkIfGameOver();
+
   }
 
   startedTurn = () => {
@@ -346,9 +369,13 @@ class Battle extends Component{
 
     const hero = this.state.hero;
     const deck = hero.deck;
+    let drawnNewCards = false;
 
     if(this.state.turn != 1){
+      deck.handBefore = deck.hand;
+      deck.drawPileBefore = deck.drawPile;
       deck.hand = deck.drawCards(deck.handsize);
+      drawnNewCards = true;
     }
     hero.deck = deck;
 
@@ -358,8 +385,6 @@ class Battle extends Component{
 
     const animation = this.state.animation;
     const monster = this.state.monster;
-    animation.createFighters(hero, animation.hero);
-    animation.createFighters(monster, animation.monster);
 
     this.flashPile('#numberAP');
 
@@ -367,6 +392,7 @@ class Battle extends Component{
       turn: turn + 1,
       endedTurn: false,
       hero: hero,
+      drawnNewCards: drawnNewCards,
     });
   }
 
@@ -380,23 +406,8 @@ class Battle extends Component{
 
     hero.takeDamage(monster, currentAttack.attack);
     animation.playCard(monster, hero, currentAttack);
-    // animation.animateShield(hero.blockBefore, hero.block, hero.baShield);
 
-    if(hero.isDead){
-      console.log('game over');
-      console.log('you lose');
-      hero.die();
-      this.flashMessage('You dead. He won.', 4000, () => {
-        this.props.history.push('/');
-      });
-      return;
-    }
-    if(monster.isDead){
-      monster.die();
-      this.flashMessage('He dead. You won.', 4000, () => {
-        this.props.history.push('/');
-      });
-    }
+    this.checkIfGameOver();
 
     monster.gainBlock(currentAttack.block);
     animation.animateShield(monster.block, currentAttack.block + monster.block, monster.baShield);
@@ -441,7 +452,7 @@ class Battle extends Component{
 
     const hero = this.state.hero;
     const ap = hero.ap;
-    const oldAP = hero.oldAP;
+    const apBefore = hero.apBefore;
     const maxAp = hero.maxAp;
     const monster = this.state.monster;
     const cardWidth = this.state.cardWidth;
@@ -450,12 +461,16 @@ class Battle extends Component{
 
     const deck = hero.deck;
     const drawPile = deck.drawPile;
+    const drawPileBefore = deck.drawPileBefore;
     const playedCards = deck.playedCards;
     const hand = deck.hand;
+    const handBefore = deck.handBefore;
     const discardPile = deck.discardPile;
+    const discardPileBefore = deck.discardPileBefore;
     const banishPile = deck.banishPile;
     const endedTurn = this.state.endedTurn;
     const startedTurn = this.state.startedTurn;
+    const drawnNewCards = this.state.drawnNewCards;
 
     const message = this.state.message;
     const showMessage = this.state.showMessage;
@@ -502,9 +517,12 @@ class Battle extends Component{
 
           <CardSet
             drawPile={ drawPile }
+            drawPileBefore={ drawPileBefore.length }
             hand={ hand }
+            handBefore={ handBefore }
             playedCards={ playedCards }
             discardPile={ discardPile }
+            discardPileBefore={ discardPileBefore.length }
             banishPile={ banishPile }
             cardWidth={ cardWidth }
             handWidth={ handWidth }
@@ -517,9 +535,10 @@ class Battle extends Component{
             endedTurn={ endedTurn }
             ap={ ap }
             apRef={ this.state.apRef }
-            oldAP={ oldAP }
+            apBefore={ apBefore }
             maxAp={ maxAp }
             startedTurn={ startedTurn }
+            drawnNewCards={ drawnNewCards }
           />
 
         </section>

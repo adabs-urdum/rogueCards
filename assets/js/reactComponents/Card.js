@@ -3,14 +3,25 @@ import React from 'react';
 const card = ( props ) => {
 
   const card = props.card;
+  const classes = props.classes;
   const handleClickCard = props.handleClickCard;
   const handleMouseEnterCard = props.handleMouseEnterCard;
   const handleMouseLeaveCard = props.handleMouseLeaveCard;
   const left = props.left + 'vw';
   const startedTurn = props.startedTurn;
 
+  let className = 'card';
+
+  if(startedTurn){
+    className += ' card--started';
+  }
+
+  if(classes){
+    className += ' ' + classes;
+  }
+
   return(
-    <div style={{ left: left }} className={ startedTurn ? 'card card--started' : 'card' } data-key={ card.id } onMouseLeave={ handleMouseLeaveCard } onMouseEnter={ handleMouseEnterCard } onClick={ (e) => handleClickCard(e, card.id) }>
+    <div style={{ left: left }} className={ className } data-key={ card.id } onMouseLeave={ handleMouseLeaveCard } onMouseEnter={ handleMouseEnterCard } onClick={ (e) => handleClickCard(e, card.id) }>
       <div className="card__img_wrapper">
         <p className="card__name">{ card.name }</p>
         <div className="card__description" dangerouslySetInnerHTML={{__html: card.description}}></div>
