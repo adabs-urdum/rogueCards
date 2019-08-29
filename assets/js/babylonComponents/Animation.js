@@ -29,10 +29,10 @@ class Animation {
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {
       const shieldRotation = 0.0005;
-      this.heroShield.addRotation(0,shieldRotation,0);
-      this.hero.addRotation(Math.PI / 5000, Math.PI / 5000, Math.PI / 5000);
+      this.heroShield.addRotation(0, shieldRotation, 0);
+      this.hero.addRotation(0, Math.PI / -5000, 0);
       this.monsterShield.addRotation(0,shieldRotation,0);
-      this.monster.addRotation(Math.PI / -5000, Math.PI / -5000, Math.PI / -5000);
+      this.monster.addRotation(0, Math.PI / 5000, 0);
       scene.render();
     });
 
@@ -312,7 +312,7 @@ class Animation {
       const axisNormal = axis.normalize();
 
       const moveFighter = () => {
-        pivot.position = pivot.position.add(axisNormal.scale(0.12)); //move fighter along axis
+        pivot.position = pivot.position.add(axisNormal.scale(0.07)); //move fighter along axis
 
         // if fighter hits shield
         if (fighter.fighter.intersectsMesh(target.baShield, true) && target.baShield.material.alpha > 0){
