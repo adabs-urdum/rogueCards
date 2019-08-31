@@ -13,7 +13,7 @@ const startScreen = (props) => {
         <p>attempt to build a rogue like/light card deck builder<br/>using react.js and babylon.js</p>
         <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://cyrill-lehmann.ch">cyrill-lehmann.ch</a>
         <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://github.com/adabs-urdum/rogueCards">github.com/adabs-urdum/rogueCards</a>
-        <NavLink className="button" to="/battle">Play</NavLink>
+        <NavLink className="button" to="/character">Play</NavLink>
       </div>
     </Fragment>
   )

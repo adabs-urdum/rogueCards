@@ -14,7 +14,7 @@ import Arena from '../Arena.js';
 import Info from '../Info.js';
 
 // import babylon components
-import Animation from '../../babylonComponents/Animation.js';
+import Animation from '../../babylonComponents/BattleAnimation.js';
 
 
 class Battle extends Component{
@@ -25,7 +25,11 @@ class Battle extends Component{
     const BS = props.BS;
 
     const monster = new Enemy();
-    const hero = new Hero();
+
+    let hero = props.hero;
+    if(!hero){
+      hero = new Hero();
+    }
 
     this.state = {
       'BS': BS,
@@ -56,15 +60,15 @@ class Battle extends Component{
     if(this.state.hero.isDead){
       console.log('game over');
       console.log('you lose');
-      this.flashMessage('You dead. He won.', 7000, () => {
-        this.props.history.push('/');
+      this.flashMessage('You dead. He won.', 6000, () => {
+        this.props.history.push('/character');
       });
     }
     if(this.state.monster.isDead){
       console.log('game over');
       console.log('you won');
-      this.flashMessage('He dead. You won.', 7000, () => {
-        this.props.history.push('/');
+      this.flashMessage('He dead. You won.', 6000, () => {
+        this.props.history.push('/character');
       });
     }
 

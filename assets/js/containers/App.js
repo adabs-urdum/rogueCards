@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter, Route, Link, NavLink, Switch, Redirect, withRouter } from 'react-router-dom';
-import Animation from '../babylonComponents/Animation.js';
+import Character from '../reactComponents/views/Character.js';
 
 // import react components
 import Header from '../reactComponents/Header.js';
@@ -18,8 +18,19 @@ class App extends Component {
       BS: 100 / 2560,
       inFullscreen: false,
       showInfo: false,
+      hero: null,
     }
 
+  }
+
+  componentDidUpdate = () => {
+    console.log(this.state.hero);
+  }
+
+  setHero = (hero) => {
+    this.setState({
+      hero: hero,
+    });
   }
 
   handleMouseEnterInfoButton = () => {
@@ -79,6 +90,12 @@ class App extends Component {
                 BS={BS}
                 hero={this.state.hero}
                 showInfo={this.state.showInfo}
+              />
+            } />
+
+          <Route path="/character" exact render={() =>
+              <Character
+                setHero={ this.setHero }
               />
             } />
 

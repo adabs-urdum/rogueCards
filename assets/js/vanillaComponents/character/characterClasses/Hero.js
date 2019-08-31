@@ -11,6 +11,7 @@ class Hero extends Character{
   constructor(){
     super();
 
+    this.xp = 0;
     this.maxAp = 3;
 
     this.cards = [

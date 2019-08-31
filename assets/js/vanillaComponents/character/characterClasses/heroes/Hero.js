@@ -5,6 +5,7 @@ class RichardB extends Hero{
     super();
     this.name = 'You';
     this.description = '"Where the hell\'s your God now?" -- Richard B. Riddick';
+    this.gold = 0;
     this.maxHealth = 20;
     this.health = this.maxHealth;
     this.strength = 3;
