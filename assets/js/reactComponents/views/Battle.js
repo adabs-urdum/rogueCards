@@ -31,6 +31,10 @@ class Battle extends Component{
       hero = new Hero();
     }
 
+    const timings = {
+      beforeTurnStart: 2500,
+    }
+
     this.state = {
       'BS': BS,
       'turn': 0,
@@ -52,11 +56,20 @@ class Battle extends Component{
       'battleScreen': true,
       'drawnNewCards': false,
       'battleLog': {},
+      'returnBattleLog': props.setNewBattleLog,
+      'timings': timings,
     };
 
   }
 
   checkIfGameOver = () => {
+
+    if(this.state.hero.isDead || this.state.monster.isDead){
+      this.state.returnBattleLog(this.state.battleLog);
+      this.setState({
+        'gameOver': true,
+      });
+    }
 
     if(this.state.hero.isDead){
       console.log('game over');
@@ -296,16 +309,16 @@ class Battle extends Component{
     animation.playCard(hero, monster, cardObject);
 
     const battleLog = this.state.battleLog;
-    battleLog[hero.name + '-' + this.state.turn] = {
-      'move': cardObject,
-    };
+    const battleLogEntryKey = hero.name + '-' + this.state.turn;
+    if(!Array.isArray(battleLog[battleLogEntryKey])){
+      battleLog[battleLogEntryKey] = [];
+    }
+    battleLog[battleLogEntryKey].push(cardObject);
 
     let drawnNewCards = false;
     if(cardObject.draw){
       drawnNewCards = true;
     }
-
-    this.checkIfGameOver();
 
     this.flashPile('#numberAP');
 
@@ -316,6 +329,8 @@ class Battle extends Component{
       monster: monster,
       drawnNewCards: drawnNewCards,
       battleLog: battleLog,
+    },() => {
+      this.checkIfGameOver();
     });
   }
 
@@ -383,11 +398,12 @@ class Battle extends Component{
 
     const hero = this.state.hero;
     const deck = hero.deck;
-    let drawnNewCards = false;
 
     deck.handBefore = deck.hand;
     deck.drawPileBefore = deck.drawPile;
     deck.hand = deck.drawCards(deck.handsize);
+    const drawnNewCards = true;
+
 
     hero.deck = deck;
 
@@ -417,8 +433,6 @@ class Battle extends Component{
     hero.takeDamage(monster, currentAttack.attack);
     animation.playCard(monster, hero, currentAttack);
 
-    this.checkIfGameOver();
-
     monster.gainBlock(currentAttack.block);
     animation.animateShield(monster.block, currentAttack.block + monster.block, monster.baShield);
 
@@ -436,10 +450,10 @@ class Battle extends Component{
       monster: monster,
       battleLog: battleLog,
     }, () => {
-      console.log(this.state);
+      this.checkIfGameOver();
       window.setTimeout(()=>{
         this.startedTurn();
-      }, 1000);
+      }, this.state.timings.beforeTurnStart);
     } );
   }
 
@@ -549,6 +563,7 @@ class Battle extends Component{
             hoveredCard={ hoveredCard }
             endTurn={ this.handleClickEndTurn }
             endedTurn={ endedTurn }
+            gameOver={ this.state.gameOver }
             ap={ ap }
             apRef={ this.state.apRef }
             apBefore={ apBefore }

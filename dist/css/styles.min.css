@@ -875,6 +875,13 @@ img, canvas {
   background: #C4C4C4;
 }
 
+.battleLog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 101;
+}
+
 .message {
   position: absolute;
   top: 0;

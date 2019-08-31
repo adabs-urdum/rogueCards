@@ -102,7 +102,7 @@ const cardSet = (props) => {
         classes={ endTurnButtonClasses }
         text="End turn"
         onclick={ endTurn }
-        disabled={ endedTurn }
+        disabled={ endedTurn || props.gameOver }
       />
       <div key="drawPile" className="deck__drawPile">
         <Pile

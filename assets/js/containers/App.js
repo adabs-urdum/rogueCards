@@ -19,17 +19,30 @@ class App extends Component {
       inFullscreen: false,
       showInfo: false,
       hero: null,
+      battleLogs: [],
+      heroStatsChanged: false
     }
 
   }
 
   componentDidUpdate = () => {
-    console.log(this.state.hero);
+    // console.log('App componentDidUpdate');
+    // console.log(this.state);
+    // console.log('----------');
   }
 
   setHero = (hero) => {
     this.setState({
       hero: hero,
+    });
+  }
+
+  setNewBattleLog = (battleLog) => {
+    const battleLogs = this.state.battleLogs;
+    battleLogs.push(battleLog);
+    this.setState({
+      battleLogs: battleLogs,
+      heroStatsChanged: true,
     });
   }
 
@@ -90,12 +103,17 @@ class App extends Component {
                 BS={BS}
                 hero={this.state.hero}
                 showInfo={this.state.showInfo}
+                setNewBattleLog={this.setNewBattleLog}
               />
             } />
 
-          <Route path="/character" exact render={() =>
+            <Route path="/character" exact render={() =>
               <Character
                 setHero={ this.setHero }
+                gold={ this.state.gold }
+                setGold={ this.setGold }
+                battleLogs={ this.state.battleLogs }
+                heroStatsChanged={ this.state.heroStatsChanged }
               />
             } />
 

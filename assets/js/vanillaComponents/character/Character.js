@@ -3,6 +3,8 @@ import Deck from './../cards/Deck.js';
 class Character{
 
   constructor(){
+    this.xp = 0;
+    this.gold = 0;
     this.name = '';
     this.description = '';
     this.health = 0;

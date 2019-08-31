@@ -12,6 +12,9 @@ class Hero extends Character{
     super();
 
     this.xp = 0;
+    this.xpBefore = 0;
+    this.gold = 0;
+    this.goldBefore = 0;
     this.maxAp = 3;
 
     this.cards = [
