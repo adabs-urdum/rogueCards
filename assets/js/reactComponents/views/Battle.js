@@ -46,7 +46,7 @@ class Battle extends Component{
       'cardWidth': 300,
       'handWidth': 1600,
       'endedTurn': false,
-      'startedTurn': true,
+      'startTurn': true,
       'message': null,
       'showMessage': false,
       'messageRef': React.createRef(),
@@ -82,10 +82,11 @@ class Battle extends Component{
           state: { showBattleLog: true }
         });
       });
+      return true;
     }
     if(this.state.monster.isDead){
       console.log('game over');
-      console.log('you won');
+      console.log('you win');
       this.flashMessage('He dead. You won.', 6000, () => {
         this.state.animation.destroy();
         this.props.history.push({
@@ -93,7 +94,10 @@ class Battle extends Component{
           state: { showBattleLog: true }
         });
       });
+      return true;
     }
+
+    return false;
 
   }
 
@@ -134,7 +138,7 @@ class Battle extends Component{
     this.setState({
       'animation':  animation,
     }, () => {
-      this.startedTurn();
+      this.startTurn();
     });
 
   }
@@ -142,12 +146,12 @@ class Battle extends Component{
   componentDidUpdate = () => {
     const hero = this.state.hero;
     const monster = this.state.monster;
-    const startedTurn = this.state.startedTurn;
+    const startTurn = this.state.startTurn;
 
-    if(startedTurn == true){
+    if(startTurn == true){
       window.setTimeout(() => {
         this.setState({
-          startedTurn: false
+          startTurn: false
         });
       }, 1000);
     }
@@ -254,6 +258,35 @@ class Battle extends Component{
 
   }
 
+  animateEndturnButton = () => {
+    const plugins = [ CSSPlugin, AttrPlugin ];
+    // wiggle animation;
+    const tl = new TimelineLite();
+    const totalWiggleDuration = 0.3;
+    tl.fromTo(
+      "#endTurnButton", totalWiggleDuration / 100 * 10, {
+      transform: 'translate(-50%, -180%) scale(1) rotate(0deg)'
+    }, {
+      transform: 'translate(-50%, -180%) scale(1.3) rotate(0deg)',
+    }).to(
+      "#endTurnButton", totalWiggleDuration / 100 * 15, {
+      transform: 'translate(-50%, -180%) scale(1.3) rotate(-10deg)'
+      }
+    ).to(
+      "#endTurnButton", totalWiggleDuration / 100 * 50, {
+      transform: 'translate(-50%, -180%) scale(1.3) rotate(10deg)'
+      }
+    ).to(
+      "#endTurnButton", totalWiggleDuration / 100 * 15, {
+      transform: 'translate(-50%, -180%) scale(1.3) rotate(0deg)'
+      }
+    ).to(
+      "#endTurnButton", totalWiggleDuration / 100 * 10, {
+      transform: 'translate(-50%, -180%) scale(1) rotate(0deg)'
+      }
+    );
+  }
+
   // handle click on card, now play card
   handleClickCard = (e, id) => {
 
@@ -280,35 +313,9 @@ class Battle extends Component{
       this.flashPile('#numberAP');
 
       if(availableAP == 0){
-        const plugins = [ CSSPlugin, AttrPlugin ];
-
-        // wiggle animation;
-        const tl = new TimelineLite();
-        const totalWiggleDuration = 0.3;
-        tl.fromTo(
-          "#endTurnButton", totalWiggleDuration / 100 * 10, {
-          transform: 'translate(-50%, -180%) scale(1) rotate(0deg)'
-        }, {
-          transform: 'translate(-50%, -180%) scale(1.3) rotate(0deg)',
-        }).to(
-          "#endTurnButton", totalWiggleDuration / 100 * 15, {
-          transform: 'translate(-50%, -180%) scale(1.3) rotate(-10deg)'
-          }
-        ).to(
-          "#endTurnButton", totalWiggleDuration / 100 * 50, {
-          transform: 'translate(-50%, -180%) scale(1.3) rotate(10deg)'
-          }
-        ).to(
-          "#endTurnButton", totalWiggleDuration / 100 * 15, {
-          transform: 'translate(-50%, -180%) scale(1.3) rotate(0deg)'
-          }
-        ).to(
-          "#endTurnButton", totalWiggleDuration / 100 * 10, {
-          transform: 'translate(-50%, -180%) scale(1) rotate(0deg)'
-          }
-        );
-
+        this.animateEndturnButton();
       }
+
       return null;
     }
 
@@ -326,6 +333,14 @@ class Battle extends Component{
     // play actual card stats
     [hero, monster] = cardObject.playCard(hero, monster);
     animation.playCard(hero, monster, cardObject);
+
+    if(hero.deck.hand.length == 0){
+      this.flashMessage('No more cards to draw.', 1200, () => {
+        if(!this.state.endedTurn){
+          this.animateEndturnButton();
+        }
+      });
+    }
 
     const battleLog = this.state.battleLog;
     const battleLogEntryKey = hero.name + '-' + this.state.turn;
@@ -410,7 +425,7 @@ class Battle extends Component{
 
   }
 
-  startedTurn = () => {
+  startTurn = () => {
 
     const turn = this.state.turn + 1;
     this.flashMessage('Round ' + turn, 700);
@@ -422,7 +437,6 @@ class Battle extends Component{
     deck.drawPileBefore = deck.drawPile;
     deck.hand = deck.drawCards(deck.handsize);
     const drawnNewCards = true;
-
 
     hero.deck = deck;
 
@@ -469,9 +483,16 @@ class Battle extends Component{
       monster: monster,
       battleLog: battleLog,
     }, () => {
-      this.checkIfGameOver();
+      const gameOver = this.checkIfGameOver();
       window.setTimeout(()=>{
-        this.startedTurn();
+        if(!gameOver){
+          this.startTurn();
+        }
+        else{
+          this.setState({
+            endedTurn: false,
+          });
+        }
       }, this.state.timings.beforeTurnStart);
     } );
   }
@@ -518,7 +539,7 @@ class Battle extends Component{
     const discardPileBefore = deck.discardPileBefore;
     const banishPile = deck.banishPile;
     const endedTurn = this.state.endedTurn;
-    const startedTurn = this.state.startedTurn;
+    const startTurn = this.state.startTurn;
     const drawnNewCards = this.state.drawnNewCards;
 
     const message = this.state.message;
@@ -587,7 +608,7 @@ class Battle extends Component{
             apRef={ this.state.apRef }
             apBefore={ apBefore }
             maxAp={ maxAp }
-            startedTurn={ startedTurn }
+            startTurn={ startTurn }
             drawnNewCards={ drawnNewCards }
           />
 

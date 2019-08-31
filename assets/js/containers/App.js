@@ -36,6 +36,9 @@ class App extends Component {
     hero.baBody = null;
     hero.baShield = null;
     hero.fleet = [];
+    hero.healthBefore = hero.health;
+    hero.health = hero.maxHealth;
+    hero.isDead = false;
     this.setState({
       hero: hero,
     });

@@ -33,6 +33,10 @@ class Deck{
 
     let cards = [];
 
+    if(this.discardPile.length == 0 && this.drawPile.length == 0){
+      return [];
+    }
+
     if(handsize > this.drawPile.length){
       const leftOvers = handsize - this.drawPile.length;
       cards = cards.concat(this.drawPile.splice(0, this.drawPile.length));
