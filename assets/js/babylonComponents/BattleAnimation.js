@@ -60,7 +60,7 @@ class Animation {
 
     // Add a camera to the scene and attach it to the canvas
     // const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, new BABYLON.Vector3(0,0,7), scene);
-    const camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 0, 7), scene);
+    const camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 3, 7), scene);
     camera.setTarget(BABYLON.Vector3.Zero());
     camera.attachControl(this.canvas);
 
