@@ -58,14 +58,6 @@ class Character extends Component{
     const animation = new CharacterAnimation();
   }
 
-  componentDidUpdate(){
-
-    // if(this.state.showDeathNote){
-    //   window.setTimeout(()=>{}, 2000)
-    // }
-
-  }
-
   toggleHeroStatsChanged = (xp, gold, card) => {
 
     const hero = this.state.hero;

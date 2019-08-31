@@ -20,6 +20,10 @@ class Deck{
     this.deck = this.deck.filter(loopCard => {
       return loopCard.id != card.id;
     });
+    this.decksize -= 1;
+    this.drawPile = this.deck;
+    this.drawPileBefore = this.drawPile;
+    return this.deck;
   }
 
   resetBattle = () => {
