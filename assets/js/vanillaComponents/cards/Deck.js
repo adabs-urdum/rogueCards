@@ -35,7 +35,7 @@ class Deck{
     this.playedCards = [];
   }
 
-  drawCards = (handsize) => {
+  drawCards = (amount) => {
 
     let cards = [];
 
@@ -43,14 +43,14 @@ class Deck{
       return [];
     }
 
-    if(handsize > this.drawPile.length){
-      const leftOvers = handsize - this.drawPile.length;
+    if(amount > this.drawPile.length){
+      const leftOvers = amount - this.drawPile.length;
       cards = cards.concat(this.drawPile.splice(0, this.drawPile.length));
       this.shuffleDiscardIntoDraw();
       cards = cards.concat(this.drawCards(leftOvers));
     }
     else{
-      cards = cards.concat(this.drawPile.splice(0, handsize));
+      cards = cards.concat(this.drawPile.splice(0, amount));
 
     }
 
@@ -72,9 +72,27 @@ class Deck{
     let cardCount = 0;
 
     while(cardCount < decksize){
-      const Card = this.allCards.getRandomValue();
-      returnList.push(new Card());
+
+      let card = null;
+      const getCard = () => {
+        const Card = this.allCards.getRandomValue();
+        const card = new Card();
+
+        if(Math.random() <= card.chance){
+          return card;
+        }
+
+        return null;
+
+      }
+
+      while(card == null){
+        card = getCard();
+      }
+
+      returnList.push(card);
       cardCount += 1;
+
     }
 
     return returnList;
