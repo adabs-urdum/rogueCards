@@ -16,6 +16,19 @@ class Deck{
     this.playedCards = [];
   }
 
+  resetBattle = () => {
+    this.drawPile = this.drawPile.concat(this.hand, this.discardPile, this.banishPile, this.playedCards);
+    this.drawPile.shuffle();
+    this.drawPileBefore = [];
+    this.hand = [];
+    this.handBefore = [];
+    this.discardPile = [];
+    this.discardPileBefore = [];
+    this.banishPile = [];
+    this.banishPileBefore = [];
+    this.playedCards = [];
+  }
+
   drawCards = (handsize) => {
 
     let cards = [];

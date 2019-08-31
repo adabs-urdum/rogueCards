@@ -28,16 +28,22 @@ class Animation {
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {
-      const shieldRotation = 0.0005;
-      this.heroShield.addRotation(0, shieldRotation, 0);
-      this.hero.addRotation(0, Math.PI / -5000, 0);
-      this.monsterShield.addRotation(0,shieldRotation,0);
-      this.monster.addRotation(0, Math.PI / 5000, 0);
+      if(this.hero && this.monster && this.heroShield && this.monsterShield){
+        const shieldRotation = 0.0005;
+        this.heroShield.addRotation(0, shieldRotation, 0);
+        this.hero.addRotation(0, Math.PI / -5000, 0);
+        this.monsterShield.addRotation(0,shieldRotation,0);
+        this.monster.addRotation(0, Math.PI / 5000, 0);
+      }
       scene.render();
     });
 
     this.handleEvents();
 
+  }
+
+  destroy = () => {
+    this.scene.dispose();
   }
 
   createScene = () => {

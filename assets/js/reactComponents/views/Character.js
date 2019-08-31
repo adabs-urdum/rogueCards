@@ -24,12 +24,24 @@ class Character extends Component{
       hero = new Hero();
       props.setHero(hero);
     }
+    else{
+      hero.xpBefore = hero.xp;
+      hero.goldBefore = hero.gold;
+    }
+
+    let showBattleLog = false;
+    if(props.location.state){
+      if(props.location.state.showBattleLog){
+        showBattleLog = true;
+      }
+    }
 
     this.state = {
       'hero': hero,
       'battleLogs': props.battleLogs,
-      'heroStatsChanged': props.heroStatsChanged,
+      'showBattleLog': showBattleLog,
       'setGold': props.setGold,
+      'setHero': props.setHero,
     }
 
   }
@@ -46,9 +58,10 @@ class Character extends Component{
     hero.goldBefore = hero.gold;
     hero.gold += gold;
 
+    this.state.setHero(hero);
+
     this.setState({
-      heroStatsChanged: !this.state.heroStatsChanged,
-      hero: hero,
+      showBattleLog: false,
     });
   }
 
@@ -57,6 +70,7 @@ class Character extends Component{
     const hero = this.state.hero;
     let counter = 0;
 
+    // list all of the character's cards
     const cardsJsx = hero.deck.deck.map(card => {
       counter += 1;
       return(
@@ -68,7 +82,7 @@ class Character extends Component{
     });
 
     let battleLogJsx = null;
-    if(this.state.heroStatsChanged){
+    if(this.state.showBattleLog){
       battleLogJsx = (
         <BattleLog
           toggleHeroStatsChanged={ this.toggleHeroStatsChanged }
@@ -76,8 +90,6 @@ class Character extends Component{
         />
       );
     }
-
-    console.log(hero);
 
     return(
       <Fragment>
@@ -121,4 +133,4 @@ class Character extends Component{
 
 }
 
-export default Character;
+export default withRouter(Character);

@@ -131,7 +131,7 @@ const cardSet = (props) => {
         />
         <Pile
           text={ discardPile.length }
-          text={ discardPileBefore }
+          old={ discardPileBefore }
           type="discard"
           title="discard"
         />

@@ -29,9 +29,13 @@ class App extends Component {
     // console.log('App componentDidUpdate');
     // console.log(this.state);
     // console.log('----------');
+
   }
 
   setHero = (hero) => {
+    hero.baBody = null;
+    hero.baShield = null;
+    hero.fleet = [];
     this.setState({
       hero: hero,
     });
@@ -109,8 +113,8 @@ class App extends Component {
 
             <Route path="/character" exact render={() =>
               <Character
+                hero={ this.state.hero }
                 setHero={ this.setHero }
-                gold={ this.state.gold }
                 setGold={ this.setGold }
                 battleLogs={ this.state.battleLogs }
                 heroStatsChanged={ this.state.heroStatsChanged }

@@ -30,6 +30,7 @@ class Battle extends Component{
     if(!hero){
       hero = new Hero();
     }
+    hero.deck.resetBattle();
 
     const timings = {
       beforeTurnStart: 2500,
@@ -75,14 +76,22 @@ class Battle extends Component{
       console.log('game over');
       console.log('you lose');
       this.flashMessage('You dead. He won.', 6000, () => {
-        this.props.history.push('/character');
+        this.state.animation.destroy();
+        this.props.history.push({
+          pathname: '/character',
+          state: { showBattleLog: true }
+        });
       });
     }
     if(this.state.monster.isDead){
       console.log('game over');
       console.log('you won');
       this.flashMessage('He dead. You won.', 6000, () => {
-        this.props.history.push('/character');
+        this.state.animation.destroy();
+        this.props.history.push({
+          pathname: '/character',
+          state: { showBattleLog: true }
+        });
       });
     }
 
@@ -100,16 +109,26 @@ class Battle extends Component{
 
     const animation = new Animation();
 
-    hero.baBody = animation.createCharacter(hero);
+    if(!hero.baBody){
+      hero.baBody = animation.createCharacter(hero);
+      animation.createFighters(hero);
+    }
     animation.hero = hero.baBody;
-    animation.createFighters(hero);
-    hero.baShield = animation.createShield(hero);
+
+    if(!hero.baShield){
+      hero.baShield = animation.createShield(hero);
+    }
     animation.heroShield = hero.baShield;
 
-    monster.baBody = animation.createCharacter(monster);
+    if(!monster.baBody){
+      monster.baBody = animation.createCharacter(monster);
+    }
     animation.monster = monster.baBody;
     animation.createFighters(monster);
-    monster.baShield = animation.createShield(monster);
+
+    if(!monster.baShield){
+      monster.baShield = animation.createShield(monster);
+    }
     animation.monsterShield = monster.baShield;
 
     this.setState({

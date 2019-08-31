@@ -36,6 +36,7 @@ class Card{
       doer.deck.hand = doer.deck.hand.concat(doer.deck.drawCards(draw));
     }
 
+    doer.apBefore = doer.ap;
     doer.ap -= this.cost;
 
     return [doer, target];

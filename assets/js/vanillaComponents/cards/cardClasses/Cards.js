@@ -11,7 +11,7 @@ class Cards extends Card{
     this.ap = 1;
     this.cost = 1;
     this.draw = 2;
-    this.description = 'Draw <span class="">2</span> cards.';
+    this.description = 'Draw <span class="">' + this.draw + '</span> cards and gain ' + this.ap + ' AP.';
   }
 
 }
