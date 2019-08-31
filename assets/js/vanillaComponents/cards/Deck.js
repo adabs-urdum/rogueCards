@@ -7,7 +7,7 @@ class Deck{
     this.deck = this.getNewDeck(decksize);
     this.drawPile = [...this.deck];
     this.drawPileBefore = [];
-    this.hand = this.drawCards(handsize);
+    this.hand = [];
     this.handBefore = [];
     this.discardPile = [];
     this.discardPileBefore = [];

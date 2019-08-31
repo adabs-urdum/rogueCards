@@ -33,7 +33,7 @@ class Battle extends Component{
 
     this.state = {
       'BS': BS,
-      'turn': 1,
+      'turn': 0,
       'hero': hero,
       'monster': monster,
       'animation':  null,
@@ -51,6 +51,7 @@ class Battle extends Component{
       'startScreen': false,
       'battleScreen': true,
       'drawnNewCards': false,
+      'battleLog': {},
     };
 
   }
@@ -249,6 +250,7 @@ class Battle extends Component{
       if(availableAP == 0){
         const plugins = [ CSSPlugin, AttrPlugin ];
 
+        // wiggle animation;
         const tl = new TimelineLite();
         const totalWiggleDuration = 0.3;
         tl.fromTo(
@@ -293,6 +295,11 @@ class Battle extends Component{
     [hero, monster] = cardObject.playCard(hero, monster);
     animation.playCard(hero, monster, cardObject);
 
+    const battleLog = this.state.battleLog;
+    battleLog[hero.name + '-' + this.state.turn] = {
+      'move': cardObject,
+    };
+
     let drawnNewCards = false;
     if(cardObject.draw){
       drawnNewCards = true;
@@ -307,7 +314,8 @@ class Battle extends Component{
     this.setState({
       hero: hero,
       monster: monster,
-      drawnNewCards: drawnNewCards
+      drawnNewCards: drawnNewCards,
+      battleLog: battleLog,
     });
   }
 
@@ -335,14 +343,14 @@ class Battle extends Component{
     hero.deck = deck;
 
     this.setState({
-      hero: hero,
+      hero: hero
     }, () => {
       this.flashMessage('Enemie\'s turn', 700);
       setTimeout(() => {
 
         window.setTimeout(() => {
           this.monsterAttack(monster, hero, monster.nextAttack);
-        }, 400);
+        }, 500);
 
         const plugins = [ CSSPlugin, AttrPlugin ];
         const tl = new TimelineLite();
@@ -369,23 +377,21 @@ class Battle extends Component{
   }
 
   startedTurn = () => {
-    this.flashMessage('Round ' + this.state.turn, 700);
+
+    const turn = this.state.turn + 1;
+    this.flashMessage('Round ' + turn, 700);
 
     const hero = this.state.hero;
     const deck = hero.deck;
     let drawnNewCards = false;
 
-    if(this.state.turn != 1){
-      deck.handBefore = deck.hand;
-      deck.drawPileBefore = deck.drawPile;
-      deck.hand = deck.drawCards(deck.handsize);
-      drawnNewCards = true;
-    }
+    deck.handBefore = deck.hand;
+    deck.drawPileBefore = deck.drawPile;
+    deck.hand = deck.drawCards(deck.handsize);
+
     hero.deck = deck;
 
     hero.fillApToMax();
-
-    const turn = this.state.turn;
 
     const animation = this.state.animation;
     const monster = this.state.monster;
@@ -393,7 +399,7 @@ class Battle extends Component{
     this.flashPile('#numberAP');
 
     this.setState({
-      turn: turn + 1,
+      turn: turn,
       endedTurn: false,
       hero: hero,
       drawnNewCards: drawnNewCards,
@@ -420,11 +426,17 @@ class Battle extends Component{
       monster.getNextAttack();
     }, 1000);
 
+    const battleLog = this.state.battleLog;
+    battleLog[monster.name + '-' + this.state.turn] = {
+      'move': currentAttack,
+    };
+
     this.setState({
       hero: hero,
       monster: monster,
-      turn: turn + 1,
+      battleLog: battleLog,
     }, () => {
+      console.log(this.state);
       window.setTimeout(()=>{
         this.startedTurn();
       }, 1000);
