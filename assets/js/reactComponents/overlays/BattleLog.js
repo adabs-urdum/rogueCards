@@ -11,6 +11,8 @@ const battleLog = (props) => {
   // filter out enemy attacks from battle log
   let playedCards = Object.keys(battleLog).map(key => {
 
+    console.log(battleLog);
+
     if(Array.isArray(battleLog[key])){
       const moves = battleLog[key].map(move => {
         if(move instanceof Card){
@@ -31,10 +33,19 @@ const battleLog = (props) => {
   }).filter(card => card != null);
 
   const playedRounds = playedCards.length;
+  const monsterHealthSum = battleLog.monster.map(loopMonster => {
+    return loopMonster.maxHealth;
+  }).reduce((total, value) => total + value);
+
   playedCards = playedCards.flat();
 
-  const lootGold = Math.floor(playedCards.length * playedRounds / Math.PI);
-  const lootXp = Math.floor(playedCards.length * playedRounds * Math.PI / 1.4);
+  const lootGold = Math.floor(
+    (playedCards.length * playedRounds / Math.PI) + monsterHealthSum / 4 * Math.random()
+  );
+
+  const lootXp = Math.floor(
+    (playedCards.length * playedRounds * Math.PI / 1.4) + monsterHealthSum  / 4  * Math.random()
+  );
 
   const battleLogJsx = (
     <Fragment>

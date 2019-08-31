@@ -31,9 +31,15 @@ class Character extends Component{
     }
 
     let showBattleLog = false;
+    let showDeathNote = false;
     if(props.location.state){
       if(props.location.state.showBattleLog){
         showBattleLog = true;
+      }
+      if(props.location.state.showDeathNote){
+        showDeathNote = true;
+        hero = new Hero();
+        props.setHero(hero);
       }
     }
 
@@ -41,6 +47,7 @@ class Character extends Component{
       'hero': hero,
       'battleLogs': props.battleLogs,
       'showBattleLog': showBattleLog,
+      'showDeathNote': showDeathNote,
       'setGold': props.setGold,
       'setHero': props.setHero,
     }
@@ -49,6 +56,14 @@ class Character extends Component{
 
   componentDidMount(){
     const animation = new CharacterAnimation();
+  }
+
+  componentDidUpdate(){
+
+    // if(this.state.showDeathNote){
+    //   window.setTimeout(()=>{}, 2000)
+    // }
+
   }
 
   toggleHeroStatsChanged = (xp, gold, card) => {
@@ -126,9 +141,21 @@ class Character extends Component{
       );
     }
 
+    let deathNote = null;
+    if(this.state.showDeathNote){
+      deathNote = (
+        <section className="viewCharacter__newRun">
+          <div>
+            <h1>You died. This is a new run.</h1>
+          </div>
+        </section>
+      );
+    }
+
     return(
       <Fragment>
         { battleLogJsx }
+        { deathNote }
         <section className="viewCharacter">
           <div className="viewCharacter__character">
             <canvas width="835" height="714" id="viewCharacterScene" className="viewCharacter__canvas" />

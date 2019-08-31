@@ -58,6 +58,7 @@ class Battle extends Component{
       'drawnNewCards': false,
       'battleLog': {},
       'returnBattleLog': props.setNewBattleLog,
+      'removeHero': props.removeHero,
       'timings': timings,
     };
 
@@ -79,7 +80,7 @@ class Battle extends Component{
         this.state.animation.destroy();
         this.props.history.push({
           pathname: '/character',
-          state: { showBattleLog: true }
+          state: { showDeathNote: true }
         });
       });
       return true;
@@ -137,6 +138,10 @@ class Battle extends Component{
 
     this.setState({
       'animation':  animation,
+      'battleLog': {
+        'monster': [monster],
+        'hero': [hero],
+      }
     }, () => {
       this.startTurn();
     });

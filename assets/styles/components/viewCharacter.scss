@@ -24,6 +24,37 @@
     overflow: hidden;
   }
 
+  &__newRun{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 101;
+    color: $White;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: 2s fade-out ease-out forwards;
+    @keyframes fade-out{
+      0%{
+        opacity: 1;
+      }
+      99.9%{
+        opacity: 0;
+        display: none;
+        height: 100%;
+        width: 100%;
+      }
+      100%{
+        height: 0;
+        width: 0;
+        overflow: hidden;
+      }
+    }
+  }
+
   &__cardOverlay{
     position: absolute;
     top: 50%;

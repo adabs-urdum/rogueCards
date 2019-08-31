@@ -37,8 +37,8 @@ class App extends Component {
     hero.baShield = null;
     hero.fleet = [];
     hero.healthBefore = hero.health;
-    hero.health = hero.maxHealth;
     hero.isDead = false;
+    hero.block = 0;
     this.setState({
       hero: hero,
     });
@@ -111,6 +111,7 @@ class App extends Component {
                 hero={this.state.hero}
                 showInfo={this.state.showInfo}
                 setNewBattleLog={this.setNewBattleLog}
+                removeHero={this.removeHero}
               />
             } />
 

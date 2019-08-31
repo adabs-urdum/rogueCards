@@ -1,12 +1,12 @@
 .arena{
   position: absolute;
   top: $BS * 128;
-  left: $BS * 880;
+  left: 50%;
   width: $BS * 800;
-  height: $BS * 277.5;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
+  transform: translateX(-50%);
 
   .card{
     transform: scale(0.615);
