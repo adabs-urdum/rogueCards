@@ -563,6 +563,7 @@ a:active {
   border: none;
   outline: none;
   background: transparent;
+  border-radius: 0.39062vw;
   color: #FFFFFF;
   border: solid #FFFFFF 1px;
   cursor: pointer;
@@ -805,7 +806,6 @@ img, canvas {
   left: 4.375vw;
   width: 32.61719vw;
   height: 15.70312vw;
-  background: #C4C4C4;
 }
 
 .viewCharacter__stats {
@@ -814,7 +814,9 @@ img, canvas {
   left: 38.24219vw;
   width: 23.51562vw;
   height: 39.80469vw;
-  background: #C4C4C4;
+  color: #FFFFFF;
+  font-size: calc(1rem + 0.03906vw * 28 - 16 * 1px);
+  line-height: 150%;
 }
 
 .viewCharacter__cards {
@@ -827,7 +829,7 @@ img, canvas {
   box-sizing: border-box;
   overflow: hidden;
   transform: rotate(5deg) translateY(-5%);
-  animation: SLIDE-IN 1s ease-out forwards;
+  animation: SLIDE-IN 0.7s ease-out forwards;
 }
 
 @keyframes SLIDE-IN {
@@ -851,6 +853,7 @@ img, canvas {
   justify-content: flex-end;
   align-items: center;
   padding-top: 13.67188vw;
+  padding-bottom: 3.90625vw;
   overflow-y: auto;
   overflow-x: visible;
 }
@@ -889,14 +892,39 @@ img, canvas {
   left: 38.24219vw;
   width: 23.51562vw;
   height: 3.90625vw;
-  background: #C4C4C4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .battleLog {
   position: absolute;
+  z-index: 101;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.battleLog__container {
+  position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 101;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 3.75vw 5vw;
+  transform: translate(-50%, -50%);
+  border-radius: 0.39062vw;
+  font-size: calc(1rem + 0.03906vw * 28 - 16 * 1px);
+  line-height: 150%;
+}
+
+.battleLog__loot_container {
+  margin: 2.5vw 0;
+}
+
+.battleLog__title {
+  margin-bottom: 0;
 }
 
 .message {

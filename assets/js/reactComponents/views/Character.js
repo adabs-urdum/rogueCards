@@ -135,7 +135,7 @@ class Character extends Component{
           </div>
           <div className="viewCharacter__tropes"></div>
           <div className="viewCharacter__stats">
-            <h1>{ hero.name }</h1>
+            <h2>{ hero.name }</h2>
             <div className="viewCharacter__xp_container">
               <p><CountUp
                 start={hero.xpBefore}
@@ -162,7 +162,8 @@ class Character extends Component{
           </div>
           <div className="viewCharacter__navigation">
             <NavLink className="button" to="/">Main</NavLink>
-            <NavLink className="button" to="/battle">engage</NavLink>
+            <button className="button">Shop</button>
+            <NavLink className="button" to="/battle">Battle</NavLink>
           </div>
         </section>
       </Fragment>

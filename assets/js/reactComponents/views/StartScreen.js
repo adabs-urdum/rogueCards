@@ -9,7 +9,7 @@ const startScreen = (props) => {
   return(
     <Fragment>
       <div className="startScreen">
-        <h1>{ 'rogueCards alpha v0.0.6' }</h1>
+        <h1>{ 'rogueCards alpha v0.0.7' }</h1>
         <p>attempt to build a rogue like/light card deck builder<br/>using react.js and babylon.js</p>
         <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://cyrill-lehmann.ch">cyrill-lehmann.ch</a>
         <a target="_blank" style={{ 'pointerEvents': 'all', 'zIndex': 100, 'position': 'relative' }} href="https://github.com/adabs-urdum/rogueCards">github.com/adabs-urdum/rogueCards</a>

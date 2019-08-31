@@ -444,6 +444,8 @@ class Battle extends Component{
 
     const animation = this.state.animation;
     const monster = this.state.monster;
+    animation.createFighters(hero);
+    animation.createFighters(monster);
 
     this.flashPile('#numberAP');
 

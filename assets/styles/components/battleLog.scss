@@ -1,6 +1,29 @@
 .battleLog{
   position: absolute;
-  top: 50%;
-  left: 50%;
   z-index: 101;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+
+  &__container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: rgba(255,255,255,0.5);
+    padding: $BS*96 $BS*128;
+    transform: translate(-50%, -50%);
+    border-radius: $BS * 10;
+    @include bs-font-size(28);
+    line-height: 150%;
+  }
+
+  &__loot_container{
+    margin: $BS*64 0;
+  }
+
+  &__title{
+    margin-bottom: 0;
+  }
 }

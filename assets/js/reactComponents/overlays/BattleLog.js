@@ -38,15 +38,17 @@ const battleLog = (props) => {
 
   const battleLogJsx = (
     <Fragment>
-      <ul>
-        <li className="battleLog__playedRounds">Rounds: { playedRounds }</li>
-        <li className="battleLog__playedCards">Cards: { playedCards.length }</li>
-      </ul>
-      <div>
-        <h2>Loot</h2>
+      <div className="battleLog__stats">
         <ul>
-          <li>{ lootXp } XP</li>
-          <li>{ lootGold } Gold</li>
+          <li className="battleLog__playedRounds">Rounds: { playedRounds }</li>
+          <li className="battleLog__playedCards">Cards: { playedCards.length }</li>
+        </ul>
+      </div>
+      <div className="battleLog__loot_container">
+        <h2 className="battleLog__title">Loot</h2>
+        <ul>
+          <li className="battleLog__loot battleLog__loot--xp">{ lootXp } XP</li>
+          <li className="battleLog__loot battleLog__loot--gold">{ lootGold } Gold</li>
         </ul>
       </div>
     </Fragment>
@@ -54,11 +56,13 @@ const battleLog = (props) => {
 
   return(
     <section className="battleLog">
-      <h1>BattleLog</h1>
-      { battleLogJsx }
-      <button className="button" onClick={ () => props.toggleHeroStatsChanged(lootXp, lootGold, null) }>
-        close
-      </button>
+      <div className="battleLog__container">
+        <h1>BattleLog</h1>
+        { battleLogJsx }
+        <button className="button" onClick={ () => props.toggleHeroStatsChanged(lootXp, lootGold, null) }>
+          close
+        </button>
+      </div>
     </section>
   )
 }

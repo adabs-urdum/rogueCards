@@ -97,6 +97,7 @@ a{
   border: none;
   outline: none;
   background: transparent;
+  border-radius: $BS * 10;
   color: $White;
   border: solid $White 1px;
   cursor: pointer;

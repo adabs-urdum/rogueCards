@@ -62,7 +62,7 @@
     left: $BS * 112;
     width: $BS * 835;
     height: $BS * 402;
-    background: $Grey;
+    // background: $Grey;
   }
 
   &__stats{
@@ -71,7 +71,9 @@
     left: $BS * 979;
     width: $BS * 602;
     height: $BS * 1019;
-    background: $Grey;
+    color: $White;
+    @include bs-font-size(28);
+    line-height: 150%;
   }
 
   &__cards{
@@ -84,7 +86,7 @@
     box-sizing: border-box;
     overflow: hidden;
     transform: rotate(5deg) translateY(-5%);
-    animation: SLIDE-IN 1s ease-out forwards;
+    animation: SLIDE-IN 0.7s ease-out forwards;
     @keyframes SLIDE-IN{
       0%{
         transform: translateY(100%) translateX(-25%) rotate(5deg);
@@ -107,6 +109,7 @@
     justify-content: flex-end;
     align-items: center;
     padding-top: $BS * 350;
+    padding-bottom: $BS * 100;
     overflow-y: auto;
     overflow-x: visible;
   }
@@ -140,7 +143,10 @@
     left: $BS * 979;
     width: $BS * 602;
     height: $BS * 100;
-    background: $Grey;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // background: $Grey;
   }
 
 }
