@@ -13,7 +13,8 @@ class RichardB extends Hero{
     this.fleetSize = 10;
     this.ap = this.maxAp;
     this.handsize = 4;
-    this.decksize = 8;
+    this.decksize = 12;
+    this.gold = 1000;
     this.mainColor = {
       r: Math.random() + 0.2,
       g: Math.random() + 0.2,

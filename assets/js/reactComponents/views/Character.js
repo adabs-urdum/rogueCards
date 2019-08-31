@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import CountUp from 'react-countup';
+import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 
 // import vanilla models
 import Hero from '../../vanillaComponents/character/characterClasses/heroes/Hero.js';
@@ -65,6 +66,32 @@ class Character extends Component{
     });
   }
 
+  removeCard = (card) => {
+    const hero = this.state.hero;
+
+    hero.deck.removeCardFromDeck(card);
+    hero.goldBefore = hero.gold;
+    hero.gold -= card.value;
+    hero.xpBefore = hero.xp;
+
+    const plugins = [ CSSPlugin, AttrPlugin ];
+    const tl = new TimelineLite({
+      onComplete: () => {
+        this.setState({
+          hero: hero
+        });
+			}
+    });
+
+    tl.fromTo(
+      '#card_' + card.id, 0.5, {
+      left: 1,
+    }, {
+      opacity: 0,
+    });
+
+  }
+
   render(){
 
     const hero = this.state.hero;
@@ -73,11 +100,19 @@ class Character extends Component{
     // list all of the character's cards
     const cardsJsx = hero.deck.deck.map(card => {
       counter += 1;
+      let removeButtonText = hero.gold < card.value ? 'too expensive' : 'remove';
+      removeButtonText = hero.deck.deck.length <= 8 ? 'min. 8 cards' : removeButtonText;
       return(
         <Card
           key={ card.id + counter}
           card={ card }
-        />
+          handleClickCard={ () => {} }
+        >
+          <div className="viewCharacter__cardOverlay">
+            <p>Removal cost: { card.value } gold</p>
+            <button disabled={ removeButtonText != 'remove' } onClick={ () => this.removeCard(card) } className="button">{ removeButtonText }</button>
+          </div>
+        </Card>
       )
     });
 
@@ -115,6 +150,9 @@ class Character extends Component{
                 end={hero.gold}
                 duration={Math.random() + 0.5}
               /> Gold</li>
+              <li>
+                Decksize: { hero.deck.deck.length }
+              </li>
             </ul>
           </div>
           <div className="viewCharacter__cards">

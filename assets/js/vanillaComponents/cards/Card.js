@@ -1,6 +1,7 @@
 class Card{
   constructor(){
     this.id = this.guidGenerator();
+    this.value = 20;
   }
 
   guidGenerator = () => {

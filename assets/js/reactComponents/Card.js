@@ -21,7 +21,8 @@ const card = ( props ) => {
   }
 
   return(
-    <div style={{ left: left }} className={ className } data-key={ card.id } onMouseLeave={ handleMouseLeaveCard } onMouseEnter={ handleMouseEnterCard } onClick={ (e) => handleClickCard(e, card.id) }>
+    <div id={ 'card_' + card.id } style={{ left: left }} className={ className } data-key={ card.id } onMouseLeave={ handleMouseLeaveCard } onMouseEnter={ handleMouseEnterCard } onClick={ (e) => handleClickCard(e, card.id) }>
+      { props.children }
       <div className="card__img_wrapper">
         <p className="card__name">{ card.name }</p>
         <div className="card__description" dangerouslySetInnerHTML={{__html: card.description}}></div>

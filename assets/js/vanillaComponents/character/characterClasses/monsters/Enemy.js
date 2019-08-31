@@ -6,7 +6,7 @@ class Xenomorph extends Monster{
     this.name = 'Enemy';
     this.description = '';
     // this.maxHealth = 20;
-    this.maxHealth = Math.floor(Math.random() * 50);
+    this.maxHealth = Math.floor( Math.random() * 80 );
     this.health = this.maxHealth;
     this.strength = 0;
     this.fleetSize = 10;

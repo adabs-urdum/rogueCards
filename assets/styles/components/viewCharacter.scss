@@ -20,6 +20,34 @@
     height: $BS * 714;
   }
 
+  .card{
+    overflow: hidden;
+  }
+
+  &__cardOverlay{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 110%;
+    height: 110%;
+    z-index: 101;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: White;
+    font-weight: 700;
+    @include bs-font-size(20);
+    opacity: 0;
+    transition: 0.3s ease-out opacity;
+    &:hover{
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
   &__canvas{
     width: $BS * 835;
     &:focus{
@@ -56,25 +84,14 @@
     box-sizing: border-box;
     overflow: hidden;
     transform: rotate(5deg) translateY(-5%);
-    &:after{
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: $BS * 12;
-      background: linear-gradient($Black, rgba(0,0,0,0));
-      z-index: 2;
-    }
-    &:before{
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: $BS * 12;
-      background: linear-gradient(rgba(0,0,0,0), $Black);
-      z-index: 2;
+    animation: SLIDE-IN 1s ease-out forwards;
+    @keyframes SLIDE-IN{
+      0%{
+        transform: translateY(100%) translateX(-25%) rotate(5deg);
+      }
+      100%{
+        transform: translateY(-5%) translateX(0%) rotate(5deg);
+      }
     }
   }
 

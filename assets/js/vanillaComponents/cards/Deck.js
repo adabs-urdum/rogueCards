@@ -16,6 +16,12 @@ class Deck{
     this.playedCards = [];
   }
 
+  removeCardFromDeck = (card) => {
+    this.deck = this.deck.filter(loopCard => {
+      return loopCard.id != card.id;
+    });
+  }
+
   resetBattle = () => {
     this.drawPile = this.drawPile.concat(this.hand, this.discardPile, this.banishPile, this.playedCards);
     this.drawPile.shuffle();
