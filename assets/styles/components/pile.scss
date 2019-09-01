@@ -7,14 +7,14 @@
   &__number{
     width: $BS * 120;
     height: $BS * 120;
-    background: $White;
-    border-radius: 50%;
+    border-radius: $BS*20;
     display: flex;
     justify-content: center;
     align-items: center;
-    @include bs-font-size(35);
+    @include bs-font-size(45);
     font-weight: 700;
-    background: radial-gradient(circle at center, $White 50%, $Grey 80%, $Anthracite 100%);
+    border-top: solid $BS*5 $BlueWhite;
+    border-bottom: solid $BS*5 $BlueWhite;
   }
 
   &__title{
@@ -23,27 +23,18 @@
     text-transform: uppercase;
     font-weight: 700;
     text-align: center;
-    background: $White;
     border-radius: $BS * 5;
     min-width: 100%;
-    padding: $BS*20 $BS*20 $BS*15;
     box-sizing: border-box;
     margin-top: $BS * -15;
-    background: linear-gradient($Grey, $White 5%, $White 50%, $Grey 90%, $Anthracite 100%)
+    color: $BlueNeon;
+    transform: translateY($BS * 40);
   }
 
   &--ap{
     .pile{
       &__number, &__title{
-        background: transparent;
         color: $YellowAp;
-      }
-      &__number{
-        background: radial-gradient(circle at center, transparent 50%, White 90%, transparent 100%)
-      }
-      &__title{
-        background: $Black;
-        box-shadow: inset 0 0 $BS*10 $BS*1 $White;
       }
     }
   }

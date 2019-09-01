@@ -15,6 +15,8 @@
       right: $BS * 10;
       transform: translateY(-50%);
       @include bs-font-size(16);
+      border-radius: 0;
+      border-color: $BlueWhite;
       .button{
         &__content{
           display: none;
@@ -35,7 +37,7 @@
           width: 100%;
           height: 100%;
           path{
-            fill: $White;
+            fill: $BlueWhite;
           }
         }
       }

@@ -3,7 +3,7 @@ html{
   font-weight: 200;
   font-size: #{$BaseRemSize}px;
   line-height: 120%;
-  color: $Black;
+  color: $BlueWhite;
   width: auto;
   height: 100%;
   padding: 0;
@@ -31,6 +31,7 @@ body{
   max-height: $BS * 1446;
   height: 100%;
   overflow: hidden;
+  background: $SpaceBlue;
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -92,29 +93,27 @@ a{
   transform-origin: center;
 }
 
-.button{
+button{
+  color: $BlueWhite;
+}
+
+.button, button{
   padding: $BS*14 $BS*42 $BS*16;
   border: none;
   outline: none;
   background: transparent;
-  border-radius: $BS * 10;
-  color: $White;
-  border: solid $White 1px;
+  border-radius: $BS * 400;
+  border: solid $BlueNeon 1px;
   cursor: pointer;
   font-weight: 700;
   @include bs-font-size(24);
   box-sizing: border-box;
   transition: border 0.3s ease-out, background 0.3s ease-out, color 0.3s ease-out, opacity 0.3s ease-out, background-position 0.3s ease-in-out;
   &:hover{
-    background: $White;
-    color: $Black;
-  }
-  &:active{
-    background: $Black;
-    color: $Grey;
+    background: $BlueNeon;
   }
   &:disabled{
-    opacity: 0.7;
+    opacity: 0.5;
     pointer-events: none;
   }
   &__content{

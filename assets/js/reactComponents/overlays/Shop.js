@@ -38,9 +38,9 @@ const shop = (props) => {
     <section className="shop">
       <div className="shop__wrapper">
         <h1>Welcome, stranger!</h1>
-        <p>New cards after every battle.</p>
+        <p>Cards refresh after each battle.</p>
         <div className="viewCharacter__xp_container">
-          <h3>You have <span><CountUp
+          <h4>You have <span><CountUp
             start={hero.goldBefore}
             end={hero.gold}
             duration={Math.random() + 0.5}
@@ -52,7 +52,7 @@ const shop = (props) => {
             start={hero.maxHealthBefore}
             end={hero.maxHealth}
             duration={Math.random() + 0.5}
-          /></span> health.</h3>
+          /></span> health.</h4>
         </div>
         <div className="shop__cardswrapper">
           { shopCardsJsx }

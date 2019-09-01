@@ -10,8 +10,6 @@
   align-items: center;
   text-align: center;
   @include bs-font-size(32);
-  background: $Anthracite;
-  color: $White;
 
   h1{
     margin-bottom: $BS * 10;

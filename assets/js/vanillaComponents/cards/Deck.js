@@ -34,8 +34,8 @@ class Deck{
   }
 
   resetBattle = () => {
-    this.drawPileBefore = this.drawPile;
-    this.drawPile = this.deck;
+    this.drawPileBefore = [...this.drawPile];
+    this.drawPile = [...this.deck];
     this.drawPile.shuffle();
     this.hand = [];
     this.handBefore = [];

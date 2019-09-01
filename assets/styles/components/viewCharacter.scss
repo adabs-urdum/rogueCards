@@ -1,5 +1,4 @@
 .viewCharacter{
-  background: $Anthracite;
   position: absolute;
   left: 0;
   top: 0;
@@ -20,10 +19,6 @@
     height: $BS * 714;
   }
 
-  .card{
-    overflow: hidden;
-  }
-
   &__newRun{
     position: absolute;
     top: 0;
@@ -31,7 +26,6 @@
     width: 100%;
     height: 100%;
     z-index: 101;
-    color: $White;
     background: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
@@ -55,15 +49,20 @@
     }
   }
 
+  &__xp_container{
+    margin: $BS*64 0;
+  }
+
   &__cardOverlay{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 110%;
-    height: 110%;
+    width: 100%;
+    height: 100%;
+    border-radius: $BS*10 $BS*10 $BS*75;
     z-index: 101;
-    background: rgba(0,0,0,0.85);
+    background: radial-gradient(ellipse at center, transparentize($Black, 0), transparent 70%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -102,7 +101,6 @@
     left: $BS * 979;
     width: $BS * 602;
     height: $BS * 1019;
-    color: $White;
     @include bs-font-size(28);
     line-height: 150%;
   }
@@ -146,7 +144,7 @@
   }
 
   .card{
-    margin-bottom: $BS * 32;
+    margin-bottom: $BS * 64;
     margin-left: $BS * 32;
     transition: transform 0.3s ease-out;
     transform: translateX(-10%);
@@ -157,6 +155,7 @@
       transform: translateY(-50%) translateX(-10%);
     }
     &:hover{
+      cursor: default;
       z-index: 3;
       transform: scale(1.1) rotate(-3deg) translateX(-10%) !important;
       &:nth-child(even){

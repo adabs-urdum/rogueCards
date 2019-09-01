@@ -17,8 +17,9 @@
 
   span{
     display: inline-block;
-    padding: $BS * 20;
-    background: $White;
+    padding: $BS * 64;
+    background: transparentize($SpaceBlue, 0.5);
+    border-radius: $BS * 400;
   }
 
   @keyframes fadeInOut{
