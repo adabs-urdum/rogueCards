@@ -14,8 +14,8 @@ const shop = (props) => {
 
     const cardInDeck = hero.deck.deck.find(loopCard => loopCard.id == card.id );
 
-    const soldButtonText = 'sold';
-    let buyButtonText = hero.gold < card.price ? 'too expensive' : 'buy';
+    const soldButtonText = 'Sold';
+    let buyButtonText = hero.gold < card.price ? 'Too expensive' : 'Buy';
     buyButtonText = cardInDeck ? soldButtonText : buyButtonText;
 
     return(
@@ -26,21 +26,26 @@ const shop = (props) => {
         handleClickCard={ () => {} }
       >
         <div className="shop__cardOverlay">
-          { buyButtonText == soldButtonText ? null : <p>Price: { card.price } gold</p> }
-          <button disabled={ buyButtonText != 'buy' } onClick={ () => props.buyCard(card) } className="button">{ buyButtonText }</button>
+          { buyButtonText == soldButtonText ? null : <p>Price: { card.price } scrap</p> }
+          <button disabled={ buyButtonText != 'Buy' } onClick={ () => props.buyCard(card) } className="button">{ buyButtonText }</button>
         </div>
       </Card>
     )
 
   });
 
+  let className = 'shop';
+  if(props.fadeOutShop){
+    className += ' shop--fadeout';
+  }
+
   return(
-    <section className="shop">
+    <section id="shop" className={ className }>
       <div className="shop__wrapper">
-        <h1>Welcome, stranger!</h1>
-        <p>Cards refresh after each battle.</p>
-        <div className="viewCharacter__xp_container">
-          <h4>You have <span><CountUp
+        <h1>Welcome, stranger.</h1>
+        <p>I will have new cards after each battle.</p>
+        <div className="viewCharacter__stats_container">
+          <h4>You currently have <span><CountUp
             start={hero.goldBefore}
             end={hero.gold}
             duration={Math.random() + 0.5}
@@ -60,7 +65,7 @@ const shop = (props) => {
         <div className="shop__controls">
           <button className="button" disabled={ hero.health >= hero.maxHealth || hero.gold < 20 } onClick={ () => props.buyHealth(5, 20) }>Heal 5 for 20 gold</button>
           <button className="button" disabled={ hero.gold < 40 } onClick={ () => props.buyMaxHealth(5, 40) }>Gain 5 max health for 40 gold</button>
-          <button className="button" onClick={ props.toggleShop }>close</button>
+          <button className="button" onClick={ props.toggleShop }>Leave</button>
         </div>
       </div>
     </section>

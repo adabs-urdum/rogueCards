@@ -49,8 +49,15 @@
     }
   }
 
-  &__xp_container{
-    margin: $BS*64 0;
+  &__stats_container{
+    margin: $BS*96 0 $BS*64;
+    h4{
+      font-weight: 400;
+    }
+    span{
+      font-weight: 700;
+      color: $White;
+    }
   }
 
   &__cardOverlay{
@@ -75,6 +82,12 @@
     &:hover{
       opacity: 1;
       pointer-events: all;
+    }
+    p{
+      margin: 0;
+      &:last-of-type{
+        margin-bottom: $BS * 20;
+      }
     }
   }
 
@@ -144,7 +157,7 @@
   }
 
   .card{
-    margin-bottom: $BS * 64;
+    margin-bottom: $BS * 96;
     margin-left: $BS * 32;
     transition: transform 0.3s ease-out;
     transform: translateX(-10%);

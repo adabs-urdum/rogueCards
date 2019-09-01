@@ -8,6 +8,9 @@ const battleLog = (props) => {
 
   const battleLog = battleLogs[battleLogs.length - 1];
 
+  const heroName = battleLog.hero[0].name;
+  const playedRounds = Object.keys(battleLog).filter(key => key.includes(heroName)).length;
+
   // filter out enemy attacks from battle log
   let playedCards = Object.keys(battleLog).map(key => {
 
@@ -30,7 +33,6 @@ const battleLog = (props) => {
 
   }).filter(card => card != null);
 
-  const playedRounds = playedCards.length;
   const monsterHealthSum = battleLog.monster.map(loopMonster => {
     return loopMonster.maxHealth;
   }).reduce((total, value) => total + value);
@@ -48,17 +50,12 @@ const battleLog = (props) => {
   const battleLogJsx = (
     <Fragment>
       <div className="battleLog__stats">
-        <ul>
-          <li className="battleLog__playedRounds">Rounds: { playedRounds }</li>
-          <li className="battleLog__playedCards">Cards: { playedCards.length }</li>
-        </ul>
+        <p>You bravely survived <span>{ playedRounds }</span> rounds playing <span>{ playedCards.length }</span> cards.</p>
       </div>
       <div className="battleLog__loot_container">
         <h2 className="battleLog__title">Loot</h2>
-        <ul>
-          <li className="battleLog__loot battleLog__loot--xp">{ lootXp } XP</li>
-          <li className="battleLog__loot battleLog__loot--gold">{ lootGold } Gold</li>
-        </ul>
+        <p>Through your great deed you gained <span>{ lootXp }</span> XP.</p>
+        <p>After the battle you searched the battlefield and found <span>{ lootGold }</span> scrap.</p>
       </div>
     </Fragment>
   );
@@ -66,7 +63,7 @@ const battleLog = (props) => {
   return(
     <section className="battleLog">
       <div className="battleLog__container">
-        <h1>BattleLog</h1>
+        <h1>Battle Log</h1>
         { battleLogJsx }
         <button className="button" onClick={ () => props.toggleHeroStatsChanged(lootXp, lootGold, null) }>
           close

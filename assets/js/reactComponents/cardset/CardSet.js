@@ -109,7 +109,7 @@ const cardSet = (props) => {
           numberId="numberAP"
           old={ apBefore }
           text={ ap }
-          textSuffix={ '/' + maxAp }
+          textSuffix={ maxAp }
           type="ap"
           title="ap"
         />

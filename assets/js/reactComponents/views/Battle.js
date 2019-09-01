@@ -34,7 +34,6 @@ class Battle extends Component{
 
     monster.maxHealth = Math.floor(hero.maxHealth + Math.random() * 20);
     monster.health = monster.maxHealth;
-    monster.health = 2;
 
     const timings = {
       beforeTurnStart: 2500,
@@ -344,7 +343,7 @@ class Battle extends Component{
     animation.playCard(hero, monster, cardObject);
 
     if(hero.deck.hand.length == 0){
-      this.flashMessage('No more cards to draw.', 1200, () => {
+      this.flashMessage('No more cards to play.', 1200, () => {
         if(!this.state.endedTurn){
           this.animateEndturnButton();
         }

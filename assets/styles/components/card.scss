@@ -1,15 +1,25 @@
 .card{
   position: relative;
   width: $BS * 300;
-  min-height: $BS * 450;
+  min-height: $BS * 410;
   border-right: none;
   box-sizing: border-box;
   z-index: 1;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  background: radial-gradient(ellipse at center, transparentize($BlueWhite, 0.96), transparent 50%);
+  background: radial-gradient(ellipse at bottom center, transparentize($BlueWhite, 0.9), transparent 50%);
+
+  &:hover{
+    .card{
+      &__svg{
+        path, polyline, circle{
+          stroke: $BlueNeon;
+          stroke-width: $BS * 7;
+        }
+      }
+    }
+  }
 
   &__svg{
     position: absolute;
@@ -21,23 +31,21 @@
       fill:none;
       stroke: $BlueWhite;
       stroke-width: $BS * 5;
+      transition: stroke 0.3s ease-out, stroke-width 0.3s ease-out;
     }
   }
 
   &__name{
     position: absolute;
-    bottom: $BS * 40;
-    left: $BS * 30;
-    transform: translate(0, 0) rotate(-90deg);
-    transform-origin: left center;
+    // bottom: $BS * 40;
+    // left: $BS * 30;
+    right: $BS * 15;
+    bottom: $BS * 32;
+    // transform: translate(0, 0) rotate(-90deg);
+    transform-origin: right bottom;
     font-weight: 700;
-    text-align: right;
-    margin-bottom: -1px;
-    max-width: $BS * 210;
     @include bs-font-size(40);
-    box-sizing: border-box;
     text-transform: uppercase;
-    z-index: 102;
     color: $BlueNeon;
   }
 
@@ -45,10 +53,24 @@
     @include bs-font-size(24);
     line-height: 150%;
     box-sizing: border-box;
-    padding-left: $BS * 64;
-    padding-bottom: $BS * 60;
+    text-align: right;
+    margin-top: $BS * 72;
+    margin-left: $BS * 100;
+    padding-right: $BS * 13;
     span{
       font-weight: 700;
+      color: $White;
+      &.redHealth{
+        color: $RedHealth;
+      }
+
+      &.blueBlock{
+        color: $BlueBlock;
+      }
+
+      &.yellowAP{
+        color: $YellowAp;
+      }
     }
   }
 
@@ -57,12 +79,12 @@
     @include bs-font-size(32);
     position: absolute;
     top: $BS * 70;
-    margin-left: 5%;
+    left: $BS * -10;
     width: 90%;
     justify-content: space-between;
-    left: 0;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
   }
 
   &__stats_bubble, &__cost{
@@ -79,16 +101,20 @@
     color: $YellowAp;
     border: solid $BS*3 $BlueWhite;
     border-radius: 50%;
+    margin-bottom: $BS * 24;
     &--health{
       color: $RedHealth
     }
     &--block{
       color: $BlueBlock;
     }
+    span{
+      transform: translateY(-5%);
+    }
   }
 
   &__stats{
-    margin-bottom: $BS * 5;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     &:last-child{

@@ -55,6 +55,7 @@ class Character extends Component{
       'setHero': props.setHero,
       'shopCards': props.shopCards,
       'setShopCards': props.setShopCards,
+      'fadeOutShop': false,
     }
 
   }
@@ -84,10 +85,26 @@ class Character extends Component{
     const hero = this.state.hero;
     hero.goldBefore = hero.gold;
     hero.xpBefore = hero.xp;
-    this.setState({
-      hero: hero,
-      showShop: !this.state.showShop
-    });
+
+    if(this.state.showShop){
+      this.setState({
+        hero: hero,
+        fadeOutShop: true,
+      },() => {
+        window.setTimeout(() => {
+          this.setState({
+            fadeOutShop: false,
+            showShop: false
+          })
+        }, 1000);
+      });
+    }
+    else{
+      this.setState({
+        hero: hero,
+        showShop: true
+      });
+    }
   }
 
   toggleHeroStatsChanged = (xp, gold, card) => {
@@ -180,8 +197,8 @@ class Character extends Component{
     // list all of the character's cards
     const cardsJsx = hero.deck.deck.map(card => {
       counter += 1;
-      let removeButtonText = hero.gold < card.value ? 'too expensive' : 'remove';
-      removeButtonText = hero.deck.deck.length <= 8 ? 'min. 8 cards' : removeButtonText;
+      let removeButtonText = hero.gold < card.value ? 'Too expensive' : 'Remove';
+      removeButtonText = hero.deck.deck.length <= 8 ? 'Min. 8 cards' : removeButtonText;
       return(
         <Card
           key={ card.id + counter}
@@ -189,8 +206,9 @@ class Character extends Component{
           handleClickCard={ () => {} }
         >
           <div className="viewCharacter__cardOverlay">
-            <p>Removal cost: { card.value } gold</p>
-            <button disabled={ removeButtonText != 'remove' } onClick={ () => this.removeCard(card) } className="button">{ removeButtonText }</button>
+            <p>Removal cost</p>
+            <p>{ card.value } scrap</p>
+            <button disabled={ removeButtonText != 'Remove' } onClick={ () => this.removeCard(card) } className="button">{ removeButtonText }</button>
           </div>
         </Card>
       )
@@ -212,7 +230,7 @@ class Character extends Component{
       deathNote = (
         <section className="viewCharacter__newRun">
           <div>
-            <h1>You died. This is a new run.</h1>
+            <h1>Too bad. Please try again.</h1>
           </div>
         </section>
       );
@@ -221,6 +239,7 @@ class Character extends Component{
     return(
       <Fragment>
         { showShop ? <Shop
+          fadeOutShop={ this.state.fadeOutShop }
           toggleShop={ this.toggleShop }
           buyCard={ this.buyCard }
           buyHealth={ this.buyHealth }
@@ -250,7 +269,7 @@ class Character extends Component{
                 start={hero.goldBefore}
                 end={hero.gold}
                 duration={Math.random() + 0.5}
-              /> Gold</li>
+              /> scrap</li>
               <li>
                 Decksize: { hero.deck.deck.length }
               </li>
@@ -263,7 +282,7 @@ class Character extends Component{
           </div>
           <div className="viewCharacter__navigation">
             <NavLink className="button" to="/">Main</NavLink>
-            <button className="button" onClick={ this.toggleShop }>Shop</button>
+            <button className="button" onClick={ this.toggleShop }>Merchant</button>
             <NavLink className="button" to="/battle">Battle</NavLink>
           </div>
         </section>

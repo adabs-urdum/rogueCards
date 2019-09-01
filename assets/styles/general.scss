@@ -1,5 +1,5 @@
 html{
-  font-family: 'Gilroy', sans-serif;
+  font-family: 'Bandeins', sans-serif;
   font-weight: 200;
   font-size: #{$BaseRemSize}px;
   line-height: 120%;
@@ -94,6 +94,7 @@ a{
 }
 
 button{
+  font-family: 'Bandeins', sans-serif;
   color: $BlueWhite;
 }
 
@@ -107,6 +108,7 @@ button{
   cursor: pointer;
   font-weight: 700;
   @include bs-font-size(24);
+  line-height: 100%;
   box-sizing: border-box;
   transition: border 0.3s ease-out, background 0.3s ease-out, color 0.3s ease-out, opacity 0.3s ease-out, background-position 0.3s ease-in-out;
   &:hover{
@@ -118,6 +120,7 @@ button{
   }
   &__content{
     display: block;
+    transform: translateY(-10%);
   }
 }
 

@@ -11,16 +11,44 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    background: rgba(255,255,255,0.5);
-    padding: $BS*96 $BS*128;
+    padding: $BS*72 $BS*128 0;
     transform: translate(-50%, -50%);
     border-radius: $BS * 10;
     @include bs-font-size(28);
     line-height: 150%;
+    &:after{
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: $BS * 100;
+      height: $BS * 300;
+      border-left: $BlueWhite $BS*5 solid;
+      border-top: $BlueWhite $BS*5 solid;
+      transform: skewY(5deg);
+    }
+    &:before{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: $BS * 100;
+      height: $BS * 300;
+      border-right: $BlueWhite $BS*5 solid;
+      border-bottom: $BlueWhite $BS*5 solid;
+      transform: skewY(5deg);
+    }
+    span{
+      color: $White;
+      font-weight: 700;
+    }
   }
 
   &__loot_container{
     margin: $BS*64 0;
+    p{
+      margin: 0;
+    }
   }
 
   &__title{

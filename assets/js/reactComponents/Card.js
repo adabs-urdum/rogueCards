@@ -30,8 +30,8 @@ const card = ( props ) => {
   return(
     <div id={ 'card_' + card.id } style={{ left: left }} className={ className } data-key={ card.id } onMouseLeave={ handleMouseLeaveCard } onMouseEnter={ handleMouseEnterCard } onClick={ (e) => handleClickCard(e, card.id) }>
       { props.children }
+      <p className="card__name">{ card.name }</p>
       <div className="card__content_wrapper">
-        <p className="card__name">{ card.name }</p>
         <div className="card__description" dangerouslySetInnerHTML={{__html: card.description}}></div>
       </div>
       <div className="card__stats_wrapper">
