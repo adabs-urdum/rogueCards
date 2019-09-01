@@ -32,11 +32,9 @@ class Battle extends Component{
 
     const monster = new Enemy();
 
-    console.log(monster.maxHealth);
-    console.log(hero.maxHealth);
-
     monster.maxHealth = Math.floor(hero.maxHealth + Math.random() * 20);
     monster.health = monster.maxHealth;
+    monster.health = 2;
 
     const timings = {
       beforeTurnStart: 2500,
@@ -446,7 +444,9 @@ class Battle extends Component{
 
     deck.handBefore = deck.hand;
     deck.drawPileBefore = deck.drawPile;
+
     deck.hand = deck.drawCards(deck.handsize);
+
     const drawnNewCards = true;
 
     hero.deck = deck;

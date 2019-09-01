@@ -34,9 +34,9 @@ class Deck{
   }
 
   resetBattle = () => {
-    this.drawPile = this.drawPile.concat(this.hand, this.discardPile, this.banishPile, this.playedCards);
+    this.drawPileBefore = this.drawPile;
+    this.drawPile = this.deck;
     this.drawPile.shuffle();
-    this.drawPileBefore = [];
     this.hand = [];
     this.handBefore = [];
     this.discardPile = [];
