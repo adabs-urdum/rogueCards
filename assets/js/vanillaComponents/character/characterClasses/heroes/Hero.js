@@ -7,6 +7,7 @@ class RichardB extends Hero{
     this.race = 'Furian';
     this.description = '"Where the hell\'s your God now?" -- Richard B. Riddick';
     this.maxHealth = 20;
+    this.maxHealthBefore = this.maxHealth;
     this.health = this.maxHealth;
     this.strength = 3;
     this.block = 0;

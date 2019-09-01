@@ -2,6 +2,7 @@ class Card{
   constructor(){
     this.id = this.guidGenerator();
     this.value = 20;
+    this.price = 50;
   }
 
   guidGenerator = () => {

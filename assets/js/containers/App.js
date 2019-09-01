@@ -20,16 +20,16 @@ class App extends Component {
       showInfo: false,
       hero: null,
       battleLogs: [],
-      heroStatsChanged: false
+      heroStatsChanged: false,
+      shopCards: [],
     }
 
   }
 
-  componentDidUpdate = () => {
-    // console.log('App componentDidUpdate');
-    // console.log(this.state);
-    // console.log('----------');
-
+  setShopCards = (cards) => {
+    this.setState({
+      shopCards: cards,
+    });
   }
 
   setHero = (hero) => {
@@ -118,6 +118,8 @@ class App extends Component {
             <Route path="/character" exact render={() =>
               <Character
                 hero={ this.state.hero }
+                setShopCards={ this.setShopCards }
+                shopCards={ this.state.shopCards }
                 setHero={ this.setHero }
                 setGold={ this.setGold }
                 battleLogs={ this.state.battleLogs }

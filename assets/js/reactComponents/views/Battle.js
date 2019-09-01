@@ -24,13 +24,19 @@ class Battle extends Component{
 
     const BS = props.BS;
 
-    const monster = new Enemy();
-
     let hero = props.hero;
     if(!hero){
       hero = new Hero();
     }
     hero.deck.resetBattle();
+
+    const monster = new Enemy();
+
+    console.log(monster.maxHealth);
+    console.log(hero.maxHealth);
+
+    monster.maxHealth = Math.floor(hero.maxHealth + Math.random() * 20);
+    monster.health = monster.maxHealth;
 
     const timings = {
       beforeTurnStart: 2500,

@@ -38,11 +38,11 @@ const battleLog = (props) => {
   playedCards = playedCards.flat();
 
   const lootGold = Math.floor(
-    (playedCards.length * playedRounds / Math.PI) + monsterHealthSum / 10 * Math.random()
+    (playedCards.length * playedRounds / Math.PI /1.4) + monsterHealthSum / 10 * Math.random()
   );
 
   const lootXp = Math.floor(
-    (playedCards.length * playedRounds * Math.PI / 1.4) + monsterHealthSum  / 10  * Math.random()
+    (playedCards.length * playedRounds * Math.PI / 1.7) + monsterHealthSum  / 10  * Math.random()
   );
 
   const battleLogJsx = (

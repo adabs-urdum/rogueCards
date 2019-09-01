@@ -4,7 +4,7 @@ class Deck{
     this.handsize = handsize;
     this.allCards = allCards;
     this.decksize = decksize;
-    this.deck = this.getNewDeck(decksize);
+    this.deck = this.getNewCards(decksize);
     this.drawPile = [...this.deck];
     this.drawPileBefore = [];
     this.hand = [];
@@ -14,6 +14,13 @@ class Deck{
     this.banishPile = [];
     this.banishPileBefore = [];
     this.playedCards = [];
+  }
+
+  addToDeck = (card) => {
+    this.deck.unshift(card);
+    this.decksize += 1;
+    this.drawPile = this.deck;
+    this.drawPileBefore = this.drawPile;
   }
 
   removeCardFromDeck = (card) => {
@@ -71,7 +78,7 @@ class Deck{
     return;
   }
 
-  getNewDeck = (decksize) => {
+  getNewCards = (decksize) => {
     const returnList = [];
     let cardCount = 0;
 

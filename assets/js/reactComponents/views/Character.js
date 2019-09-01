@@ -12,6 +12,7 @@ import CharacterAnimation from '../../babylonComponents/CharacterAnimation.js';
 // import react components
 import Card from '../Card.js';
 import BattleLog from '../overlays/BattleLog.js';
+import Shop from '../overlays/Shop.js';
 
 class Character extends Component{
 
@@ -34,6 +35,7 @@ class Character extends Component{
     let showDeathNote = false;
     if(props.location.state){
       if(props.location.state.showBattleLog){
+        props.setShopCards(hero.deck.getNewCards(3));
         showBattleLog = true;
       }
       if(props.location.state.showDeathNote){
@@ -48,14 +50,44 @@ class Character extends Component{
       'battleLogs': props.battleLogs,
       'showBattleLog': showBattleLog,
       'showDeathNote': showDeathNote,
+      'showShop': false,
       'setGold': props.setGold,
       'setHero': props.setHero,
+      'shopCards': props.shopCards,
+      'setShopCards': props.setShopCards,
     }
 
   }
 
   componentDidMount(){
     const animation = new CharacterAnimation();
+    const hero = this.state.hero;
+
+    if(!this.state.shopCards.length){
+      const shopCards = hero.deck.getNewCards(3);
+      this.state.setShopCards(shopCards);
+    }
+    this.setState({
+      hero: hero,
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.shopCards != prevProps.shopCards){
+      this.setState({
+        shopCards: prevProps.shopCards
+      });
+    }
+  }
+
+  toggleShop = () => {
+    const hero = this.state.hero;
+    hero.goldBefore = hero.gold;
+    hero.xpBefore = hero.xp;
+    this.setState({
+      hero: hero,
+      showShop: !this.state.showShop
+    });
   }
 
   toggleHeroStatsChanged = (xp, gold, card) => {
@@ -99,10 +131,51 @@ class Character extends Component{
 
   }
 
-  render(){
+  buyCard = (card) => {
+    const hero = this.state.hero;
 
+    hero.deck.addToDeck(card);
+    hero.goldBefore = hero.gold;
+    hero.gold -= card.price;
+
+    this.state.setHero(hero);
+  }
+
+  buyHealth = (amount, cost) => {
+    const hero = this.state.hero;
+
+    hero.goldBefore = hero.gold;
+    hero.gold -= cost;
+    hero.healthBefore = hero.health;
+    hero.health += amount;
+    if(hero.health > hero.maxHealth){
+      hero.health = hero.maxHealth;
+    }
+
+    this.setState({
+      hero:hero,
+    });
+  }
+
+  buyMaxHealth = (amount, cost) => {
+    const hero = this.state.hero;
+
+    hero.goldBefore = hero.gold;
+    hero.gold -= cost;
+    hero.healthBefore = hero.health;
+    hero.health += amount;
+    hero.maxHealthBefore = hero.maxHealth;
+    hero.maxHealth += amount;
+
+    this.setState({
+      hero:hero,
+    });
+  }
+
+  render(){
     const hero = this.state.hero;
     let counter = 0;
+    const showShop = this.state.showShop;
 
     // list all of the character's cards
     const cardsJsx = hero.deck.deck.map(card => {
@@ -125,6 +198,7 @@ class Character extends Component{
 
     let battleLogJsx = null;
     if(this.state.showBattleLog){
+
       battleLogJsx = (
         <BattleLog
           toggleHeroStatsChanged={ this.toggleHeroStatsChanged }
@@ -146,6 +220,14 @@ class Character extends Component{
 
     return(
       <Fragment>
+        { showShop ? <Shop
+          toggleShop={ this.toggleShop }
+          buyCard={ this.buyCard }
+          buyHealth={ this.buyHealth }
+          buyMaxHealth={ this.buyMaxHealth }
+          hero={ this.state.hero }
+          shopCards={ this.state.shopCards } />
+        : null }
         { battleLogJsx }
         { deathNote }
         <section className="viewCharacter">
@@ -181,7 +263,7 @@ class Character extends Component{
           </div>
           <div className="viewCharacter__navigation">
             <NavLink className="button" to="/">Main</NavLink>
-            <button className="button">Shop</button>
+            <button className="button" onClick={ this.toggleShop }>Shop</button>
             <NavLink className="button" to="/battle">Battle</NavLink>
           </div>
         </section>
