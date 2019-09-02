@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter, Route, Link, NavLink, Switch, Redirect, withRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Router, Link, NavLink, Switch, Redirect, withRouter } from 'react-router-dom';
 import Character from '../reactComponents/views/Character.js';
 
 // import react components
 import Header from '../reactComponents/Header.js';
-
-// import all views
+import Animation from '../reactComponents/Animation.js';
 import StartScreen from '../reactComponents/views/StartScreen.js';
 import Battle from '../reactComponents/views/Battle.js';
+import Map from '../reactComponents/views/Map.js';
 
 class App extends Component {
 
@@ -22,13 +22,25 @@ class App extends Component {
       battleLogs: [],
       heroStatsChanged: false,
       shopCards: [],
+      animation: null,
     }
 
+  }
+
+  componentDidMount(){
+    const loader = document.getElementById('loader');
+    loader.parentNode.removeChild(loader);
   }
 
   setShopCards = (cards) => {
     this.setState({
       shopCards: cards,
+    });
+  }
+
+  setAnimation = (animation) => {
+    this.setState({
+      animation: animation,
     });
   }
 
@@ -117,6 +129,7 @@ class App extends Component {
 
             <Route path="/character" exact render={() =>
               <Character
+                animation={ this.state.animation }
                 hero={ this.state.hero }
                 setShopCards={ this.setShopCards }
                 shopCards={ this.state.shopCards }
@@ -127,13 +140,23 @@ class App extends Component {
               />
             } />
 
-            <Route path="/" exact render={() =>
-              <StartScreen />
+            <Route path="/map" exact render={() =>
+              <Map
+                animation={ this.state.animation }
+              />
+            }/>
+
+            <Route path="/" render={() =>
+              <StartScreen
+                animation={ this.state.animation }
+              />
             }/>
 
           </Switch>
 
         </BrowserRouter>
+
+        <Animation setAnimation={ this.setAnimation } />
 
       </Fragment>
     );

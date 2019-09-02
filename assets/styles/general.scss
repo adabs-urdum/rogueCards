@@ -13,16 +13,18 @@ html{
 }
 
 body{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
-  height: 100%;
+  height: $BS * 1440;
   @include bs-font-size(16);
   line-height: 150%;
   overflow: hidden;
   padding: 0;
   margin: 0;
+  background: $SpaceBlue;
 }
 
 #root{
@@ -31,7 +33,6 @@ body{
   max-height: $BS * 1446;
   height: 100%;
   overflow: hidden;
-  background: $SpaceBlue;
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -138,6 +139,13 @@ button{
 
 img, canvas{
   display: block;
+}
+
+canvas{
+  &:focus{
+    border: none;
+    outline: none;
+  }
 }
 
 .desktop_only{

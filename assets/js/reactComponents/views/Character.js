@@ -6,9 +6,6 @@ import { TimelineLite, CSSPlugin, AttrPlugin }  from "gsap/all";
 // import vanilla models
 import Hero from '../../vanillaComponents/character/characterClasses/heroes/Hero.js';
 
-// import babylon components
-import CharacterAnimation from '../../babylonComponents/CharacterAnimation.js';
-
 // import react components
 import Card from '../Card.js';
 import BattleLog from '../overlays/BattleLog.js';
@@ -47,6 +44,7 @@ class Character extends Component{
 
     this.state = {
       'hero': hero,
+      'animation': props.animation ? props.animation : null,
       'battleLogs': props.battleLogs,
       'showBattleLog': showBattleLog,
       'showDeathNote': showDeathNote,
@@ -61,13 +59,18 @@ class Character extends Component{
   }
 
   componentDidMount(){
-    const animation = new CharacterAnimation();
     const hero = this.state.hero;
+    const animation = this.state.animation;
 
     if(!this.state.shopCards.length){
       const shopCards = hero.deck.getNewCards(3);
       this.state.setShopCards(shopCards);
     }
+
+    if(animation){
+      animation.setHeroPositionCharacterView();
+    }
+
     this.setState({
       hero: hero,
     });
@@ -236,6 +239,10 @@ class Character extends Component{
       );
     }
 
+    const transitionToStartScreen = () => {
+      this.props.animation.turnCameraY(-60, -1);
+    }
+
     return(
       <Fragment>
         { showShop ? <Shop
@@ -250,9 +257,6 @@ class Character extends Component{
         { battleLogJsx }
         { deathNote }
         <section className="viewCharacter">
-          <div className="viewCharacter__character">
-            <canvas width="835" height="714" id="viewCharacterScene" className="viewCharacter__canvas" />
-          </div>
           <div className="viewCharacter__tropes"></div>
           <div className="viewCharacter__stats">
             <h2>{ hero.name }</h2>
@@ -281,8 +285,9 @@ class Character extends Component{
             </div>
           </div>
           <div className="viewCharacter__navigation">
-            <NavLink className="button" to="/">Main</NavLink>
+            <button className="button" onClick={ transitionToStartScreen }>Main</button>
             <button className="button" onClick={ this.toggleShop }>Merchant</button>
+            <NavLink className="button" to="/map">Map</NavLink>
             <NavLink className="button" to="/battle">Battle</NavLink>
           </div>
         </section>
