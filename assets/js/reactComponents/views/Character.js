@@ -96,7 +96,7 @@ class Character extends Component{
   transitionToStartScreen = () => {
 
     this.props.animation.resetHeroPositionCharacterView(()=>{
-      this.props.animation.turnCameraY(-90, -5);
+      this.props.animation.turnCameraY(-90, -2);
 
       const plugins = [ CSSPlugin, AttrPlugin ];
       const tl = new TimelineLite({
@@ -317,7 +317,6 @@ class Character extends Component{
             <button className="button" onClick={ this.transitionToStartScreen }>Main</button>
             <button className="button" onClick={ this.toggleShop }>Merchant</button>
             <NavLink className="button" to="/map">Map</NavLink>
-            <NavLink className="button" to="/battle">Battle</NavLink>
           </div>
         </section>
       </Fragment>

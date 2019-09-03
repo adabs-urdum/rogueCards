@@ -11,9 +11,27 @@ class mainAnimation{
     this.scene.clearColor = new BABYLON.Color4(0,0,0,0);
     this.scene.ambientColor = new BABYLON.Color3(0, 10/255, 20/255);
 
+    this.starTypes = [
+      {
+        'type': 'heal',
+        'chance': 0.15,
+        'color': new BABYLON.Color3(1,0,0)
+      },
+      {
+        'type': 'shop',
+        'chance': 0.2,
+        'color': new BABYLON.Color3(1,0,0)
+      },
+      {
+        'type': 'enemy',
+        'chance': 0.7,
+        'color': new BABYLON.Color3(1,0,0)
+      },
+    ];
+
     this.stars = [];
-    this.createStars(250);
-    this.engine.resize();
+    this.createStars(350);
+    this.currentStar = null;
 
     const color = {
       r: 1,
@@ -35,9 +53,11 @@ class mainAnimation{
     this.fixedCamera.parent = this.pivotMain;
     this.scene.activeCamera = this.fixedCamera;
 
-    this.freeCamera = new BABYLON.ArcRotateCamera('camera', 0, 0, 7, this.pivotHero.position, this.scene);
+    this.freeCamera = new BABYLON.ArcRotateCamera('camera', Math.PI / 2, Math.PI / 4, 7, this.pivotHero.position, this.scene);
     this.freeCamera.attachControl(this.canvas, true);
     this.freeCamera.parent = this.pivotMain;
+    this.freeCamera.upperRadiusLimit = 7;
+    this.freeCamera.lowerRadiusLimit = 7;
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {
@@ -108,22 +128,22 @@ class mainAnimation{
 
   createHero = () => {
 
-    this.hero = BABYLON.MeshBuilder.CreateSphere('hero', {diameter: 1}, this.scene);
+    this.hero = BABYLON.MeshBuilder.CreateSphere('hero', {diameter: 0.01}, this.scene);
     this.hero.parent = this.pivotHero;
 
-    this.hero.actionManager = new BABYLON.ActionManager(this.scene);
-    this.hero.actionManager.registerAction(
-      new BABYLON.ExecuteCodeAction({
-        trigger: BABYLON.ActionManager.OnPickTrigger
-      }, () => {
-        console.log('hero clicked');
-      })
-    );
+    const base = BABYLON.MeshBuilder.CreateCylinder("heroPlatform", {height: 0.05, diameterTop: 1, diameterBottom: 1, tessellation: 32}, this.scene);
+    base.parent = this.hero;
+
+    const body = BABYLON.MeshBuilder.CreateSphere("heroBody", {diameter: 0.75, slice: 0.5}, this.scene);
+    body.parent = this.hero;
+    body.rotate(BABYLON.Axis.X, Math.PI, BABYLON.Space.LOCAL);
 
   }
 
   handleEvents = () => {
+
     window.addEventListener("resize", this.handleResize);
+
   }
 
   handleResize = (e) => {
@@ -156,9 +176,23 @@ class mainAnimation{
 
   }
 
-  movePivotMainTo = (destPos) => {
+  movePivotMainToRandomStar = () => {
 
-    const pivotMain = this.pivotMain;
+    this.stars.shuffle();
+
+    let nextStarKey = 0;
+    let nextStar = this.stars[nextStarKey];
+
+    this.movePivotMainTo(nextStar._absolutePosition);
+    window.dispatchEvent(new CustomEvent('setCurrentStar', {
+      detail: {
+        currentStar: nextStar,
+      }
+    }));
+
+  }
+
+  movePivotMainTo = (destPos) => {
 
     const renderLoop = this.scene.registerBeforeRender(() => {
       this.pivotMain.position = BABYLON.Vector3.Lerp(this.pivotMain._absolutePosition, destPos, 0.2);
@@ -177,7 +211,7 @@ class mainAnimation{
       const starPosition = new BABYLON.Vector3((Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500);
 
       starCount += 1;
-      const star = BABYLON.MeshBuilder.CreateSphere('star' + starCount, {diameter: 1}, this.scene);
+      const star = BABYLON.MeshBuilder.CreateSphere('star' + starCount, {diameter: 0.75}, this.scene);
 
       const aura = BABYLON.MeshBuilder.CreateSphere('aura' + starCount, {diameter: 3}, this.scene);
       aura.parent = star;
@@ -192,15 +226,26 @@ class mainAnimation{
           trigger: BABYLON.ActionManager.OnPickTrigger,
           parameter: {}
         }, () => {
-          console.log('clicked');
-          console.log(aura);
+          window.dispatchEvent(new CustomEvent('setCurrentStar', {
+            detail: {
+              currentStar: star,
+            }
+          }));
           const auroPos = this.movePivotMainTo(aura._absolutePosition);
         })
       );
 
+      star.type = null;
+      while(star.type == null){
+        const type = this.starTypes.getRandomValue();
+        if(type.chance >= Math.random()){
+          star.type = type;
+        }
+      }
+
       star.position = starPosition;
       const starMaterial = new BABYLON.StandardMaterial('starMaterial' + starCount, this.scene);
-      starMaterial.diffuseColor = new BABYLON.Color3(Math.random() + 0.3,Math.random() + 0.3,Math.random() + 0.3);
+      starMaterial.diffuseColor = new BABYLON.Color3(Math.random() + 0.3, Math.random() + 0.3, Math.random() + 0.3);
       starMaterial.ambientColor = new BABYLON.Color3(1,1,1);
       starMaterial.emissiveColor = new BABYLON.Color3(0.3,0.3,0.3);
       star.material = starMaterial;

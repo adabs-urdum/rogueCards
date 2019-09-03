@@ -9,16 +9,24 @@ import StartScreen from '../reactComponents/views/StartScreen.js';
 import Battle from '../reactComponents/views/Battle.js';
 import Map from '../reactComponents/views/Map.js';
 
+// import Vanilla components
+import Enemy from '../vanillaComponents/character/characterClasses/monsters/Enemy.js';
+
 class App extends Component {
 
   constructor(props){
     super(props);
+
+    this.monsters = [
+      Enemy,
+    ];
 
     this.state = {
       BS: 100 / 2560,
       inFullscreen: false,
       showInfo: false,
       hero: null,
+      monster: null,
       battleLogs: [],
       heroStatsChanged: false,
       shopCards: [],
@@ -41,6 +49,16 @@ class App extends Component {
   setAnimation = (animation) => {
     this.setState({
       animation: animation,
+    });
+  }
+
+  setNewMonster = (currentStar) => {
+    const Monster = this.monsters.getRandomValue();
+    const newMonster = new Monster();
+    newMonster.baId = currentStar.id;
+    newMonster.baType = currentStar.type;
+    this.setState({
+      monster: newMonster,
     });
   }
 
@@ -143,6 +161,8 @@ class App extends Component {
             <Route path="/map" exact render={() =>
               <Map
                 animation={ this.state.animation }
+                monster={ this.state.monster }
+                setNewMonster={ this.setNewMonster }
               />
             }/>
 

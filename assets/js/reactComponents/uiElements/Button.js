@@ -4,7 +4,7 @@ const button = (props) => {
 
   let classes = props.classes;
   const id = props.id;
-  const text = props.text;
+  const text = props.text ? props.text : '';
   const onclick = props.onclick;
   const disabled = props.disabled;
   const flash = props.flash;

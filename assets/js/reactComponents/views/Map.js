@@ -1,6 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { withRouter, NavLink } from 'react-router-dom';
+import Message from './../uiElements/Message.js';
+import Button from './../uiElements/Button.js';
 
 class Map extends Component{
+
+  constructor(props){
+
+    super(props);
+
+    window.addEventListener('setCurrentStar', this.setCurrentStar, false);
+
+    this.state = {
+      currentStar: null,
+    };
+
+  }
+
+  setCurrentStar = (e) => {
+    const animation = this.props.animation;
+    const currentStar = e.detail.currentStar;
+    animation.currentStar = currentStar;
+    this.setState({
+      currentStar: currentStar
+    }, () => {
+      this.props.setNewMonster(currentStar);
+    });
+  }
 
   componentDidMount(){
 
@@ -22,11 +48,51 @@ class Map extends Component{
 
   }
 
+  transitionToCharacter = () => {
+    this.props.history.push('/character');
+  }
+
   render(){
+
+    const animation = this.props.animation;
+
+    const monster = this.props.monster;
+    console.log(monster);
+
+    const currentStar = this.state.currentStar;
+    let currentStarJsx;
+    if(currentStar){
+      const type = currentStar.type.type;
+      currentStarJsx = (
+        <h1>{ type }</h1>
+      );
+    }
+
     return(
-      <h1>map</h1>
+      <section className="map">
+        <div className="map__content">
+          <Message
+            duration={ 2000 }
+            message={ 'click on any star in the sky' }
+            showMessage={ true }
+            nonClickable={ true }
+          />
+          <Button
+            text='back'
+            onclick={ this.transitionToCharacter }
+            classes=''
+          />
+          <Button
+            text='autopilot to random star'
+            onclick={ animation ? animation.movePivotMainToRandomStar : null }
+            classes=''
+          />
+          <NavLink className="button" to="/battle">Battle</NavLink>
+          { currentStarJsx }
+        </div>
+      </section>
     );
   }
 }
 
-export default Map;
+export default withRouter(Map);
