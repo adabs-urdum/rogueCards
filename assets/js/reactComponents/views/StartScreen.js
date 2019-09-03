@@ -11,7 +11,9 @@ const startScreen = (props) => {
   // set inital turn
   const animation = props.animation;
   if(animation){
-    animation.fixedCamera.rotation.y += Math.PI / 180 * -90;
+    if( animation.fixedCamera.rotation.y % Math.PI <= 0.2 ){
+      animation.fixedCamera.rotation.y += Math.PI / 180 * -90;
+    }
   }
 
   const transitionToCharacter = () => {
@@ -26,9 +28,8 @@ const startScreen = (props) => {
         props.history.push('/character');
       }
     });
-    const totalFlashDuration = 2.5;
     tl.fromTo(
-      '#startScreen', totalFlashDuration / 2, {
+      '#startScreen', 1.25, {
       left: '0%',
       opacity: 1,
     }, {

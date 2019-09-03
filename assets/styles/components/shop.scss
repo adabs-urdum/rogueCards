@@ -93,6 +93,7 @@
     @include bs-font-size(20);
     opacity: 0;
     transition: 0.3s ease-out opacity;
+    text-align: center;
     &:hover{
       opacity: 1;
       pointer-events: all;

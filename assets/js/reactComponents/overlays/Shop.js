@@ -26,7 +26,7 @@ const shop = (props) => {
         handleClickCard={ () => {} }
       >
         <div className="shop__cardOverlay">
-          { buyButtonText == soldButtonText ? null : <p>Price: { card.price } scrap</p> }
+          { buyButtonText == soldButtonText ? null : <p>Buy for:<br />{ card.price } scrap</p> }
           <button disabled={ buyButtonText != 'Buy' } onClick={ () => props.buyCard(card) } className="button">{ buyButtonText }</button>
         </div>
       </Card>

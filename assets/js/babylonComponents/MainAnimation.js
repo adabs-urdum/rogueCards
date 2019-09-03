@@ -51,31 +51,43 @@ class mainAnimation{
 
   setHeroPositionCharacterView = () => {
 
-    const heroCharacterViewPos = new BABYLON.Vector3(-1.8, 1.5, 3);
+    const heroCharacterViewPos = new BABYLON.Vector3(-2.3, 1.8, 5);
     const hero = this.hero;
 
-    const animationLoop = this.scene.registerBeforeRender(() => {
-      this.hero.position = BABYLON.Vector3.Lerp(this.hero.position, heroCharacterViewPos, 0.1);
-      if(this.hero.position == heroCharacterViewPos){
+    const animationLoop = () => {
+      const distance = BABYLON.Vector3.Distance(heroCharacterViewPos, this.hero.position);
+      if(Math.round(distance) <= 0.1){
+        this.hero.position = heroCharacterViewPos;
         this.scene.unregisterAfterRender(animationLoop);
       }
-    });
+      else{
+        this.hero.position = BABYLON.Vector3.Lerp(this.hero.position, heroCharacterViewPos, 0.1);
+      }
+    }
+    this.scene.registerAfterRender(animationLoop);
+
+    this.scene.activeCamera = this.fixedCamera;
 
   }
 
-  resetHeroPositionCharacterView = () => {
-
-    console.log('resetHeroPositionCharacterView');
+  resetHeroPositionCharacterView = (callback) => {
 
     const heroCharacterViewPos = new BABYLON.Vector3(0, 0, 0);
     const hero = this.hero;
 
-    const animationLoop = this.scene.registerBeforeRender(() => {
-      this.hero.position = BABYLON.Vector3.Lerp(this.hero.position, heroCharacterViewPos, 0.5);
-      if(this.hero.position == heroCharacterViewPos){
+    const animationLoop = () => {
+      const distance = BABYLON.Vector3.Distance(heroCharacterViewPos, this.hero.position);
+      if(distance <= 0.1){
+        this.hero.position = heroCharacterViewPos;
         this.scene.unregisterAfterRender(animationLoop);
       }
-    });
+      else{
+        this.hero.position = BABYLON.Vector3.Lerp(this.hero.position, heroCharacterViewPos, 0.1);
+      }
+    };
+    this.scene.registerAfterRender(animationLoop);
+
+    callback();
 
   }
 
@@ -121,20 +133,24 @@ class mainAnimation{
   turnCameraY = (deg, speed) => {
 
     // const rotateUntilX = this.camera.rotation.y + Math.PI / 180 * deg;
-    const rotateUntilY = this.fixedCamera.rotation.y + BABYLON.Tools.ToRadians(deg);
+    const rotateUntilY = Math.round((this.fixedCamera.rotation.y + BABYLON.Tools.ToRadians(Math.abs(deg))) * 100) / 100;
 
     const rotateCamera = (deg) => {
+
       this.fixedCamera.rotation.y += BABYLON.Tools.ToRadians(speed);
-      if(speed){
-        if(this.fixedCamera.rotation.y >= rotateUntilY){
+
+      if(speed > 0){
+        if(Math.round(this.fixedCamera.rotation.y * 100) / 100 == rotateUntilY){
           this.scene.unregisterAfterRender(rotateCamera);
         }
       }
-      else{
-        if(this.fixedCamera.rotation.y <= rotateUntilY){
+      else if(speed < 0){
+        if(Math.round(this.fixedCamera.rotation.y * 100) / 100 <= rotateUntilY % Math.PI){
           this.scene.unregisterAfterRender(rotateCamera);
         }
       }
+
+
     }
     this.scene.registerAfterRender(rotateCamera);
 
@@ -184,7 +200,7 @@ class mainAnimation{
 
       star.position = starPosition;
       const starMaterial = new BABYLON.StandardMaterial('starMaterial' + starCount, this.scene);
-      starMaterial.diffuseColor = new BABYLON.Color3(Math.random(),Math.random(),Math.random());
+      starMaterial.diffuseColor = new BABYLON.Color3(Math.random() + 0.3,Math.random() + 0.3,Math.random() + 0.3);
       starMaterial.ambientColor = new BABYLON.Color3(1,1,1);
       starMaterial.emissiveColor = new BABYLON.Color3(0.3,0.3,0.3);
       star.material = starMaterial;

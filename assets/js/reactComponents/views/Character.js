@@ -44,7 +44,6 @@ class Character extends Component{
 
     this.state = {
       'hero': hero,
-      'animation': props.animation ? props.animation : null,
       'battleLogs': props.battleLogs,
       'showBattleLog': showBattleLog,
       'showDeathNote': showDeathNote,
@@ -59,8 +58,9 @@ class Character extends Component{
   }
 
   componentDidMount(){
+
     const hero = this.state.hero;
-    const animation = this.state.animation;
+    const animation = this.props.animation;
 
     if(!this.state.shopCards.length){
       const shopCards = hero.deck.getNewCards(3);
@@ -74,14 +74,47 @@ class Character extends Component{
     this.setState({
       hero: hero,
     });
+
   }
 
   componentDidUpdate(prevProps, prevState){
+
+    const animation = this.props.animation;
+
     if(prevState.shopCards != prevProps.shopCards){
       this.setState({
         shopCards: prevProps.shopCards
       });
     }
+
+    if(animation){
+      animation.setHeroPositionCharacterView();
+    }
+
+  }
+
+  transitionToStartScreen = () => {
+
+    this.props.animation.resetHeroPositionCharacterView(()=>{
+      this.props.animation.turnCameraY(-90, -5);
+
+      const plugins = [ CSSPlugin, AttrPlugin ];
+      const tl = new TimelineLite({
+        onComplete: () => {
+          this.props.history.push('/');
+        }
+      });
+
+      tl.fromTo(
+        '#viewCharacter', 0.5, {
+        left: '0%',
+        opacity: 1,
+      }, {
+        left: '100%',
+        opacity: 0,
+      });
+    });
+
   }
 
   toggleShop = () => {
@@ -209,7 +242,7 @@ class Character extends Component{
           handleClickCard={ () => {} }
         >
           <div className="viewCharacter__cardOverlay">
-            <p>Removal cost</p>
+            <p>Removal cost:</p>
             <p>{ card.value } scrap</p>
             <button disabled={ removeButtonText != 'Remove' } onClick={ () => this.removeCard(card) } className="button">{ removeButtonText }</button>
           </div>
@@ -239,10 +272,6 @@ class Character extends Component{
       );
     }
 
-    const transitionToStartScreen = () => {
-      this.props.animation.turnCameraY(-60, -1);
-    }
-
     return(
       <Fragment>
         { showShop ? <Shop
@@ -256,7 +285,7 @@ class Character extends Component{
         : null }
         { battleLogJsx }
         { deathNote }
-        <section className="viewCharacter">
+        <section id="viewCharacter" className="viewCharacter">
           <div className="viewCharacter__tropes"></div>
           <div className="viewCharacter__stats">
             <h2>{ hero.name }</h2>
@@ -285,7 +314,7 @@ class Character extends Component{
             </div>
           </div>
           <div className="viewCharacter__navigation">
-            <button className="button" onClick={ transitionToStartScreen }>Main</button>
+            <button className="button" onClick={ this.transitionToStartScreen }>Main</button>
             <button className="button" onClick={ this.toggleShop }>Merchant</button>
             <NavLink className="button" to="/map">Map</NavLink>
             <NavLink className="button" to="/battle">Battle</NavLink>

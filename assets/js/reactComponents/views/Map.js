@@ -5,9 +5,9 @@ class Map extends Component{
   componentDidMount(){
 
     if(this.props.animation){
-      this.props.animation.scene.activeCamera = this.props.animation.freeCamera;
-      this.props.animation.resetHeroPositionCharacterView();
-      console.log(this.props.animation.scene.activeCamera);
+      this.props.animation.resetHeroPositionCharacterView(()=>{
+        this.props.animation.scene.activeCamera = this.props.animation.freeCamera;
+      });
     }
 
   }
@@ -15,8 +15,9 @@ class Map extends Component{
   componentDidUpdate(){
 
     if(this.props.animation){
-      this.props.animation.scene.activeCamera = this.props.animation.freeCamera;
-      console.log(this.props.animation.scene.activeCamera);
+      this.props.animation.resetHeroPositionCharacterView(()=>{
+        this.props.animation.scene.activeCamera = this.props.animation.freeCamera;
+      });
     }
 
   }

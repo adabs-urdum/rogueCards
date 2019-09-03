@@ -163,6 +163,31 @@ canvas{
   }
 }
 
+#loader{
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 102;
+  color: $BlueWhite;
+  z-index: 2;
+  &:after{
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: $BS * 280;
+    height: $BS * 15;
+    background: linear-gradient(-90deg, $BlueWhite, $BlueNeon);
+    z-index: 1;
+    transform: translateX(-50%) translateY(250%);
+    transform-origin: 0% 0%;
+  }
+  span{
+    display: block;
+  }
+}
+
 
 @media #{BreakpointS}{
   .mobile_only{

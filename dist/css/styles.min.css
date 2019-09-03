@@ -614,6 +614,33 @@ canvas:focus {
   font-size: calc(1rem + 0.03906vw * 25 - 16 * 1px);
 }
 
+#loader {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 102;
+  color: #c8e6ff;
+  z-index: 2;
+}
+
+#loader:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 10.9375vw;
+  height: 0.58594vw;
+  background: linear-gradient(-90deg, #c8e6ff, #23a5e1);
+  z-index: 1;
+  transform: translateX(-50%) translateY(250%);
+  transform-origin: 0% 0%;
+}
+
+#loader span {
+  display: block;
+}
+
 @media BreakpointS {
   .mobile_only {
     display: block;
@@ -709,7 +736,17 @@ canvas:focus {
   justify-content: center;
   align-items: center;
   text-align: center;
+  animation: fade-in 0.3s ease-out;
   font-size: calc(1rem + 0.03906vw * 32 - 16 * 1px);
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .startScreen h1 {
@@ -937,12 +974,13 @@ canvas:focus {
 .viewCharacter__navigation {
   position: absolute;
   top: 47.92969vw;
-  left: 38.24219vw;
-  width: 23.51562vw;
+  left: 50%;
+  width: 28.125vw;
   height: 3.90625vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transform: translateX(-50%);
 }
 
 .battleLog {
@@ -1102,6 +1140,7 @@ canvas:focus {
   font-size: calc(1rem + 0.03906vw * 20 - 16 * 1px);
   opacity: 0;
   transition: 0.3s ease-out opacity;
+  text-align: center;
 }
 
 .shop__cardOverlay:hover {

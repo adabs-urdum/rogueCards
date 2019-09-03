@@ -194,12 +194,13 @@
   &__navigation{
     position: absolute;
     top: $BS * 1227;
-    left: $BS * 979;
-    width: $BS * 602;
+    left: 50%;
+    width: $BS * 720;
     height: $BS * 100;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transform: translateX(-50%);
     // background: $Grey;
   }
 
