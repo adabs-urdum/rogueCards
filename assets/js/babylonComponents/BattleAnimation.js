@@ -151,6 +151,8 @@ class Animation {
 
     character.material = characterMaterial;
 
+    character.material.alpha = 0.3;
+
     // var multimat = new BABYLON.MultiMaterial("multi", this.scene);
     // multimat.subMaterials.push(characterMaterial);
     // multimat.subMaterials.push(characterMaterial2);

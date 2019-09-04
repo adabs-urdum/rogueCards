@@ -33,7 +33,7 @@ class mainAnimation{
 
     this.stars = [];
     this.createStars(350);
-    this.currentStar = null;
+    this.currentStar = this.stars.getRandomValue();
 
     const color = {
       r: 1,
@@ -64,11 +64,26 @@ class mainAnimation{
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {
-      this.pivotMain.position.z -= 0.01;
+      this.pivotMain.rotate(BABYLON.Axis.Y, Math.PI / 180 / -350, BABYLON.Space.LOCAL);
       this.scene.render();
     });
 
     this.handleEvents();
+
+  }
+
+  setBattleView = () => {
+    console.log('setHeroPositionBattleView');
+    console.log(this.hero.position);
+    console.log(this.currentStar);
+
+    this.scene.activeCamera = this.fixedCamera;
+
+    this.currentStar.parent = this.pivotEnemy;
+    this.currentStar.before = this.currentStar.position;
+    this.currentStar.position = new BABYLON.Vector3(0,0,0);
+
+    
 
   }
 

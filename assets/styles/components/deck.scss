@@ -6,6 +6,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  animation: slide-deck-in 1s ease-out;
 
   &__endTurn{
     position: absolute;
@@ -86,6 +87,15 @@
       }
     }
 
+  }
+
+  @keyframes slide-deck-in{
+    0%{
+      transform: translateY(120%);
+    }
+    100%{
+      transform: translateY(0%);
+    }
   }
 
   &__drawPile, &__discardPile{

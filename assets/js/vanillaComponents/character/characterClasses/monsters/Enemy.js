@@ -3,7 +3,6 @@ import Monster from '../Monster.js';
 class Xenomorph extends Monster{
   constructor(){
     super();
-    this.name = 'Enemy';
     this.description = '';
     // this.maxHealth = 2;
     this.maxHealth = Math.floor( Math.random() * 80 );
@@ -34,6 +33,14 @@ class Xenomorph extends Monster{
         block: 4,
       }
     ];
+    this.randomNames = [
+      'Xenomorphs',
+      'Borg',
+      'Sith',
+      'Cylons',
+      'Flood',
+      'Jedi',
+    ]
     this.nextAttack = this.getNewRandomAttack();
   }
 

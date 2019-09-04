@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { withRouter, NavLink } from 'react-router-dom';
 import Message from './../uiElements/Message.js';
 import Button from './../uiElements/Button.js';
+import Shop from './../overlays/Shop.js';
 
 class Map extends Component{
 
@@ -15,6 +16,7 @@ class Map extends Component{
 
     this.state = {
       currentStar: null,
+      showShop: false,
     };
 
   }
@@ -48,7 +50,9 @@ class Map extends Component{
 
     if(this.props.animation){
       this.props.animation.resetHeroPositionCharacterView(()=>{
-        this.props.animation.scene.activeCamera = this.props.animation.freeCamera;
+        if(this._isMounted){
+          this.props.animation.scene.activeCamera = this.props.animation.freeCamera;
+        }
       });
     }
 
@@ -62,24 +66,51 @@ class Map extends Component{
     this.props.history.push('/character');
   }
 
+  toggleShop = () => {
+    this.setState({
+      showShop: !this.state.showShop,
+    });
+  }
+
   render(){
 
     const animation = this.props.animation;
-
     const monster = this.props.monster;
-
     const currentStar = this.state.currentStar;
+
     let currentStarJsx;
-    if(currentStar){
+    if(currentStar && monster){
+
       const type = currentStar.type.type;
       currentStarJsx = (
-        <h1>{ type }</h1>
+        <div>
+          <h1>{ monster.name }</h1>
+          <p>{ type }</p>
+          <p>{ monster.baId }</p>
+          { type == 'enemy' ? <div><ul>
+            <li>Health: { monster.health }</li>
+            <li>{ monster.baId }</li>
+            </ul>
+            <NavLink className="button" to="/battle">Battle</NavLink></div> : null }
+          { type == 'shop' ? <div>
+            {/* <button className="button" onClick={ this.toggleShop }>Merchant</button> */}
+          </div>: null }
+        </div>
       );
     }
 
     return(
       <section className="map">
         <div className="map__content">
+          { this.state.showShop ? <Shop
+            fadeOutShop={ this.state.fadeOutShop }
+            toggleShop={ this.toggleShop }
+            buyCard={ this.buyCard }
+            buyHealth={ this.buyHealth }
+            buyMaxHealth={ this.buyMaxHealth }
+            hero={ this.state.hero }
+            shopCards={ this.state.shopCards } />
+          : null }
           <Message
             duration={ 2000 }
             message={ 'click on any star in the sky' }
@@ -96,7 +127,6 @@ class Map extends Component{
             onclick={ animation ? animation.movePivotMainToRandomStar : null }
             classes=''
           />
-          <NavLink className="button" to="/battle">Battle</NavLink>
           { currentStarJsx }
         </div>
       </section>

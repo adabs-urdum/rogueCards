@@ -55,6 +55,9 @@ class App extends Component {
   setNewMonster = (currentStar) => {
     const Monster = this.monsters.getRandomValue();
     const newMonster = new Monster();
+    if(!newMonster.name || newMonster.name.length){
+      newMonster.name = newMonster.randomNames.getRandomValue();
+    }
     newMonster.baId = currentStar.id;
     newMonster.baType = currentStar.type;
     this.setState({
@@ -131,6 +134,8 @@ class App extends Component {
           mouseLeaveInfoButton={ this.handleMouseLeaveInfoButton }
         />
 
+        <Animation setAnimation={ this.setAnimation } />
+
         <BrowserRouter>
 
           <Switch>
@@ -142,6 +147,7 @@ class App extends Component {
                 showInfo={this.state.showInfo}
                 setNewBattleLog={this.setNewBattleLog}
                 removeHero={this.removeHero}
+                animation={ this.state.animation }
               />
             } />
 
@@ -175,8 +181,6 @@ class App extends Component {
           </Switch>
 
         </BrowserRouter>
-
-        <Animation setAnimation={ this.setAnimation } />
 
       </Fragment>
     );

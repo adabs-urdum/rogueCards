@@ -30,7 +30,10 @@ class Battle extends Component{
     }
     hero.deck.resetBattle();
 
-    const monster = new Enemy();
+    let monster = props.monster;
+    if(!monster){
+      monster = new Enemy();
+    }
 
     monster.maxHealth = Math.floor(hero.maxHealth + Math.random() * 20);
     monster.health = monster.maxHealth;
@@ -44,7 +47,9 @@ class Battle extends Component{
       'turn': 0,
       'hero': hero,
       'monster': monster,
-      'animation':  null,
+      'oldAnimation':  null,
+      'animation': props.animation,
+      'initialSetBattleViewBa': false,
       'hoveredCard': null,
       'cardWidth': 300,
       'handWidth': 1600,
@@ -67,44 +72,6 @@ class Battle extends Component{
 
   }
 
-  checkIfGameOver = () => {
-
-    if(this.state.hero.isDead || this.state.monster.isDead){
-      this.state.returnBattleLog(this.state.battleLog);
-      this.setState({
-        'gameOver': true,
-      });
-    }
-
-    if(this.state.hero.isDead){
-      console.log('game over');
-      console.log('you lose');
-      this.flashMessage('You dead. He won.', 6000, () => {
-        this.state.animation.destroy();
-        this.props.history.push({
-          pathname: '/character',
-          state: { showDeathNote: true }
-        });
-      });
-      return true;
-    }
-    if(this.state.monster.isDead){
-      console.log('game over');
-      console.log('you win');
-      this.flashMessage('He dead. You won.', 6000, () => {
-        this.state.animation.destroy();
-        this.props.history.push({
-          pathname: '/character',
-          state: { showBattleLog: true }
-        });
-      });
-      return true;
-    }
-
-    return false;
-
-  }
-
   componentDidMount = () => {
 
     const hero = this.state.hero;
@@ -115,32 +82,32 @@ class Battle extends Component{
       props.history.push('/');
     }
 
-    const animation = new Animation();
+    const oldAnimation = new Animation();
 
     if(!hero.baBody){
-      hero.baBody = animation.createCharacter(hero);
-      animation.createFighters(hero);
+      hero.baBody = oldAnimation.createCharacter(hero);
+      oldAnimation.createFighters(hero);
     }
-    animation.hero = hero.baBody;
+    oldAnimation.hero = hero.baBody;
 
     if(!hero.baShield){
-      hero.baShield = animation.createShield(hero);
+      hero.baShield = oldAnimation.createShield(hero);
     }
-    animation.heroShield = hero.baShield;
+    oldAnimation.heroShield = hero.baShield;
 
     if(!monster.baBody){
-      monster.baBody = animation.createCharacter(monster);
+      monster.baBody = oldAnimation.createCharacter(monster);
     }
-    animation.monster = monster.baBody;
-    animation.createFighters(monster);
+    oldAnimation.monster = monster.baBody;
+    oldAnimation.createFighters(monster);
 
     if(!monster.baShield){
-      monster.baShield = animation.createShield(monster);
+      monster.baShield = oldAnimation.createShield(monster);
     }
-    animation.monsterShield = monster.baShield;
+    oldAnimation.monsterShield = monster.baShield;
 
     this.setState({
-      'animation':  animation,
+      'oldAnimation':  oldAnimation,
       'battleLog': {
         'monster': [monster],
         'hero': [hero],
@@ -151,7 +118,7 @@ class Battle extends Component{
 
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = (prevprops) => {
     const hero = this.state.hero;
     const monster = this.state.monster;
     const startTurn = this.state.startTurn;
@@ -211,6 +178,54 @@ class Battle extends Component{
         }, 300);
       }
     }
+
+    const animation = prevprops.animation;
+
+    if(animation && !this.state.initialSetBattleViewBa){
+      animation.setBattleView();
+      this.setState({
+        initialSetBattleViewBa: true,
+        animation: animation,
+      });
+    }
+
+  }
+
+  checkIfGameOver = () => {
+
+    if(this.state.hero.isDead || this.state.monster.isDead){
+      this.state.returnBattleLog(this.state.battleLog);
+      this.setState({
+        'gameOver': true,
+      });
+    }
+
+    if(this.state.hero.isDead){
+      console.log('game over');
+      console.log('you lose');
+      this.flashMessage('You dead. He won.', 6000, () => {
+        this.state.oldAnimation.destroy();
+        this.props.history.push({
+          pathname: '/character',
+          state: { showDeathNote: true }
+        });
+      });
+      return true;
+    }
+    if(this.state.monster.isDead){
+      console.log('game over');
+      console.log('you win');
+      this.flashMessage('He dead. You won.', 6000, () => {
+        this.state.oldAnimation.destroy();
+        this.props.history.push({
+          pathname: '/character',
+          state: { showBattleLog: true }
+        });
+      });
+      return true;
+    }
+
+    return false;
 
   }
 
@@ -306,7 +321,7 @@ class Battle extends Component{
     deck.drawPileBefore = deck.drawPile;
     const hand = deck.hand;
     const discardPile = deck.discardPile;
-    const animation = this.state.animation;
+    const oldAnimation = this.state.oldAnimation;
 
     const cardObject = hand.find(handCard => {
       return handCard.id == card.dataset.key;
@@ -340,7 +355,7 @@ class Battle extends Component{
 
     // play actual card stats
     [hero, monster] = cardObject.playCard(hero, monster);
-    animation.playCard(hero, monster, cardObject);
+    oldAnimation.playCard(hero, monster, cardObject);
 
     if(hero.deck.hand.length == 0){
       this.flashMessage('No more cards to play.', 1200, () => {
@@ -452,10 +467,10 @@ class Battle extends Component{
 
     hero.fillApToMax();
 
-    const animation = this.state.animation;
+    const oldAnimation = this.state.oldAnimation;
     const monster = this.state.monster;
-    animation.createFighters(hero);
-    animation.createFighters(monster);
+    oldAnimation.createFighters(hero);
+    oldAnimation.createFighters(monster);
 
     this.flashPile('#numberAP');
 
@@ -473,13 +488,13 @@ class Battle extends Component{
     const currentAttack = monster.nextAttack;
     let hero = this.state.hero;
     const turn = this.state.turn;
-    const animation = this.state.animation;
+    const oldAnimation = this.state.oldAnimation;
 
     hero.takeDamage(monster, currentAttack.attack);
-    animation.playCard(monster, hero, currentAttack);
+    oldAnimation.playCard(monster, hero, currentAttack);
 
     monster.gainBlock(currentAttack.block);
-    animation.animateShield(monster.block, currentAttack.block + monster.block, monster.baShield);
+    oldAnimation.animateShield(monster.block, currentAttack.block + monster.block, monster.baShield);
 
     window.setTimeout(()=>{
       monster.getNextAttack();
