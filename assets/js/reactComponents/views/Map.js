@@ -9,6 +9,8 @@ class Map extends Component{
 
     super(props);
 
+    this._isMounted = false;
+
     window.addEventListener('setCurrentStar', this.setCurrentStar, false);
 
     this.state = {
@@ -30,9 +32,13 @@ class Map extends Component{
 
   componentDidMount(){
 
+    this._isMounted = true;
+
     if(this.props.animation){
       this.props.animation.resetHeroPositionCharacterView(()=>{
-        this.props.animation.scene.activeCamera = this.props.animation.freeCamera;
+        if(this._isMounted){
+          this.props.animation.scene.activeCamera = this.props.animation.freeCamera;
+        }
       });
     }
 
@@ -46,6 +52,10 @@ class Map extends Component{
       });
     }
 
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   transitionToCharacter = () => {
