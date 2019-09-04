@@ -736,12 +736,15 @@ canvas:focus {
   justify-content: center;
   align-items: center;
   text-align: center;
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 3s ease-out;
   font-size: calc(1rem + 0.03906vw * 32 - 16 * 1px);
 }
 
 @keyframes fade-in {
   0% {
+    opacity: 0;
+  }
+  90% {
     opacity: 0;
   }
   100% {

@@ -10,6 +10,8 @@ class mainAnimation{
     this.scene = new BABYLON.Scene(this.engine);
     this.scene.clearColor = new BABYLON.Color4(0,0,0,0);
     this.scene.ambientColor = new BABYLON.Color3(0, 10/255, 20/255);
+    this.scene.gravity = new BABYLON.Vector3(0, -0.8, 0);
+    this.scene.collisionsEnabled = true;
 
     this.starTypes = [
       {
@@ -48,7 +50,8 @@ class mainAnimation{
     this.createPivots();
     this.createHero();
 
-    this.fixedCamera = new BABYLON.UniversalCamera('camera', new BABYLON.Vector3(0,3,7), this.scene);
+    const animationFixedCamera = new BABYLON.UniversalCamera('camera', new BABYLON.Vector3(0,3,7), this.scene);
+    this.fixedCamera = animationFixedCamera;
     this.fixedCamera.setTarget( new BABYLON.Vector3(0,0,0) );
     this.fixedCamera.parent = this.pivotMain;
     this.scene.activeCamera = this.fixedCamera;
@@ -150,29 +153,26 @@ class mainAnimation{
     this.engine.resize();
   }
 
-  turnCameraY = (deg, speed) => {
+  turnCameraY = (deg, endFrame) => {
 
-    // const rotateUntilX = this.camera.rotation.y + Math.PI / 180 * deg;
-    const rotateUntilY = Math.round((this.fixedCamera.rotation.y + BABYLON.Tools.ToRadians(Math.abs(deg))) * 100) / 100;
-
-    const rotateCamera = (deg) => {
-
-      this.fixedCamera.rotation.y += BABYLON.Tools.ToRadians(speed);
-
-      if(speed > 0){
-        if(Math.round(this.fixedCamera.rotation.y * 100) / 100 == rotateUntilY){
-          this.scene.unregisterAfterRender(rotateCamera);
-        }
+    const animationBox2 = new BABYLON.Animation("animationBox2", "rotation.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    const keys2 = [
+      {
+        frame: 0,
+        value: this.fixedCamera.rotation.y
+      },
+      {
+        frame: endFrame,
+        value: this.fixedCamera.rotation.y + Math.PI / 180 * deg
       }
-      else if(speed < 0){
-        if(Math.round(this.fixedCamera.rotation.y * 100) / 100 <= rotateUntilY % Math.PI){
-          this.scene.unregisterAfterRender(rotateCamera);
-        }
-      }
+    ];
 
+    animationBox2.setKeys(keys2);
 
-    }
-    this.scene.registerAfterRender(rotateCamera);
+    this.fixedCamera.animations = [];
+    this.fixedCamera.animations.push(animationBox2);
+
+    this.scene.beginAnimation(this.fixedCamera, 0, endFrame, true);
 
   }
 

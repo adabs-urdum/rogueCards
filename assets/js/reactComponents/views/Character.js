@@ -96,7 +96,7 @@ class Character extends Component{
   transitionToStartScreen = () => {
 
     this.props.animation.resetHeroPositionCharacterView(()=>{
-      this.props.animation.turnCameraY(-90, -2);
+      this.props.animation.turnCameraY(-90, 40);
 
       const plugins = [ CSSPlugin, AttrPlugin ];
       const tl = new TimelineLite({

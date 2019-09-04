@@ -19,7 +19,7 @@ const startScreen = (props) => {
   const transitionToCharacter = () => {
 
     // animate turn camera right
-    animation.turnCameraY(90, 1);
+    animation.turnCameraY(90, 40);
 
     // animate html view to left and fadeout
     const plugins = [ CSSPlugin, AttrPlugin ];

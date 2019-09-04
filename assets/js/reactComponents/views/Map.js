@@ -57,7 +57,6 @@ class Map extends Component{
     const animation = this.props.animation;
 
     const monster = this.props.monster;
-    console.log(monster);
 
     const currentStar = this.state.currentStar;
     let currentStarJsx;

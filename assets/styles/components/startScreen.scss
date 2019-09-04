@@ -9,11 +9,14 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 3s ease-out;
   @include bs-font-size(32);
 
   @keyframes fade-in{
     0%{
+      opacity: 0;
+    }
+    90%{
       opacity: 0;
     }
     100%{
