@@ -30,8 +30,8 @@ body{
 #root{
   position: relative;
   width: $BS * 2560;
-  max-height: $BS * 1446;
-  height: 100%;
+  max-height: 100vh;
+  height: $BS * 1446;
   overflow: hidden;
 }
 

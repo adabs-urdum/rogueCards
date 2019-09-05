@@ -4,6 +4,7 @@
   left: 0;
   height: $BS * 64;
   width: 100%;
+  z-index: 500;
 
   .button{
     &--fullscreen{
