@@ -86,7 +86,7 @@ class Battle extends Component{
 
     if(!hero.baBody){
       hero.baBody = oldAnimation.createCharacter(hero);
-      oldAnimation.createFighters(hero);
+      // oldAnimation.createFighters(hero);
     }
     oldAnimation.hero = hero.baBody;
 
@@ -105,6 +105,12 @@ class Battle extends Component{
       monster.baShield = oldAnimation.createShield(monster);
     }
     oldAnimation.monsterShield = monster.baShield;
+
+    const animation = this.state.animation;
+    if(animation){
+      console.log(this.state);
+      animation.createFighters(hero, animation.heroSource, animation.heroFleet);
+    }
 
     this.setState({
       'oldAnimation':  oldAnimation,
@@ -183,6 +189,7 @@ class Battle extends Component{
 
     if(animation && !this.state.initialSetBattleViewBa){
       animation.setBattleView();
+      animation.createFighters(hero, animation.heroSource, animation.heroFleet);
       this.setState({
         initialSetBattleViewBa: true,
         animation: animation,
@@ -471,6 +478,8 @@ class Battle extends Component{
     const monster = this.state.monster;
     oldAnimation.createFighters(hero);
     oldAnimation.createFighters(monster);
+
+    const animation = this.state.animation;
 
     this.flashPile('#numberAP');
 

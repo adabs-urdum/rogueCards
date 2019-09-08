@@ -68,7 +68,7 @@ class mainAnimation{
     this.freeCamera.attachControl(this.canvas, true);
     this.freeCamera.parent = this.pivotMain;
     this.freeCamera.upperRadiusLimit = 7;
-    // this.freeCamera.lowerRadiusLimit = 7;
+    this.freeCamera.lowerRadiusLimit = 1;
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {
@@ -78,20 +78,19 @@ class mainAnimation{
 
     this.handleEvents();
 
+    this.heroFleet = [];
+
   }
 
   setBattleView = () => {
-    console.log('setHeroPositionBattleView');
-    console.log(this.hero.position);
-    console.log(this.currentStar);
 
     this.scene.activeCamera = this.fixedCamera;
 
     this.currentStar.parent = this.pivotEnemy;
     this.currentStar.before = this.currentStar.position;
-    this.currentStar.position = new BABYLON.Vector3(0,0,0);
+    this.currentStar.position = new BABYLON.Vector3(0.27,0.5,0);
 
-    
+    this.hero.position = new BABYLON.Vector3(-0.27,0.25,0);
 
   }
 
@@ -209,7 +208,7 @@ class mainAnimation{
     this.hero = BABYLON.MeshBuilder.CreateSphere('hero', {diameter: 0.01}, this.scene);
     this.hero.parent = this.pivotHero;
 
-    const base = BABYLON.MeshBuilder.CreateCylinder("heroPlatform", {height: 0.05, diameterTop: 0.85, diameterBottom: 0.75, tessellation: 32}, this.scene);
+    const base = BABYLON.MeshBuilder.CreateCylinder("heroPlatform", {height: 0.03, diameterTop: 0.95, diameterBottom: 1, tessellation: 32}, this.scene);
     base.parent = this.hero;
     const baseMaterial = new BABYLON.StandardMaterial("baseMaterial", this.scene);
     const baseTexture = 'body.jpg';
@@ -225,9 +224,9 @@ class mainAnimation{
     base.material = baseMaterial;
 
     const bob = BABYLON.MeshBuilder.CreateSphere('stem', {
-      diameter: 0.12,
+      diameter: 0.4,
     }, this.scene);
-    bob.position = new BABYLON.Vector3(0,0.4,0);
+    bob.position = new BABYLON.Vector3(0,0.7,0);
     bob.parent = base;
     const bobMaterial = new BABYLON.StandardMaterial("bobMaterial", this.scene);
     const materialTexture = 'branches1.jpg';
@@ -240,6 +239,7 @@ class mainAnimation{
     const materialBumpMap = 'branches1_bmpmp.jpg';
     bobMaterial.bumpTexture = new BABYLON.Texture("/dist/textures/" + materialBumpMap, this.scene);
     bob.material = bobMaterial;
+    this.heroSource = bob;
 
     const stem = BABYLON.MeshBuilder.CreateSphere('stem', {
       diameter: 0.01,
@@ -274,7 +274,7 @@ class mainAnimation{
     // const arch12 = this.createNewBranch(12, 4, arch6[1]);
     // const arch13 = this.createNewBranch(13, 4, arch6[2]);
 
-    const depth = 9;
+    // const depth = 9;
     // this.createBranches(depth, 1, stem, 1, bobMaterial);
 
     // const junction1 = new BABYLON.TransformNode("junction1");
@@ -329,8 +329,9 @@ class mainAnimation{
     // branch4.rotation = new BABYLON.Vector3(Math.PI/180*60, 0, 0);
     // branch4.locallyTranslate(new BABYLON.Vector3(0, branch4.getBoundingInfo().boundingBox.extendSize.y, 0));
 
-    const body = BABYLON.MeshBuilder.CreateSphere("heroBody", {diameter: 0.75, slice: 0.5}, this.scene);
+    const body = BABYLON.MeshBuilder.CreateSphere("heroBody", {diameter: 1, slice: 0.5}, this.scene);
     body.parent = this.hero;
+    body.position.y = base.getBoundingInfo().boundingBox.extendSize.y * -1;
     body.rotate(BABYLON.Axis.X, Math.PI, BABYLON.Space.LOCAL);
     const bodyMaterial = new BABYLON.StandardMaterial("bobMaterial", this.scene);
     const bodyTexture = 'branches.jpg';
@@ -342,6 +343,56 @@ class mainAnimation{
     const bodyBumpMap = 'branches_bmpmp.jpg';
     bodyMaterial.bumpTexture = new BABYLON.Texture("/dist/textures/" + bodyBumpMap, this.scene);
     body.material = bodyMaterial;
+
+  }
+
+  createFighters = (character, mainPivot, fleet) => {
+    let counter = 0;
+
+    console.log(character);
+    console.log(mainPivot);
+    console.log(fleet);
+
+    while(counter < character.ap){
+
+      // const fighter = BABYLON.Mesh.CreateBox("fighter", 0.03, this.scene);
+      const fighterSize = 0.015;
+      const fighter = BABYLON.Mesh.CreateTorus("fighter" + counter, fighterSize, fighterSize, 28, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
+      const pivot = new BABYLON.TransformNode("fighterPivot_" + counter);
+
+      const fighterMaterial = new BABYLON.StandardMaterial("fighterMaterial_" + counter, this.scene);
+
+      fighterMaterial.diffuseColor = new BABYLON.Color3(1,1,1);
+      fighterMaterial.specularColor = new BABYLON.Color3(1,1,1);
+      fighterMaterial.emissiveColor = new BABYLON.Color3(0,0,0);
+      fighter.material = fighterMaterial;
+
+      pivot.rotation = new BABYLON.Vector3(Math.PI * Math.random(),Math.PI * (Math.random() - 0.5),0);
+      pivot.parent = mainPivot;
+      fighter.parent = pivot;
+      fighter.position = new BABYLON.Vector3(0.5, 0, 0);
+
+      // const angle = Math.random() * -0.1;
+      const angle = -0.05;
+      // const angle = (Math.floor(Math.random() * (max - min + 1) + min)) * -0.1;
+      // const angle = (Math.floor(Math.random() * (0.5 - 0.01 + 1) + 0.01)) * -1;
+      const axis = new BABYLON.Vector3(0,6,0);
+      const rotateFactor = 1;
+      const rotateAnimation = () => {
+        pivot.rotate(axis, angle, BABYLON.Space.WORLD);
+        fighter.rotation.x += rotateFactor * 0.005;
+        fighter.rotation.y += rotateFactor * 0.005;
+        fighter.rotation.z += rotateFactor * 0.005;
+      }
+      this.scene.registerAfterRender(rotateAnimation);
+      fleet.push({
+        fighter: fighter,
+        animation: rotateAnimation,
+        pivot: pivot,
+      });
+
+      counter++;
+    }
 
   }
 

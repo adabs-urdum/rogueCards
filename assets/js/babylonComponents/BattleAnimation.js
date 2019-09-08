@@ -137,21 +137,21 @@ class Animation {
     character.position = new BABYLON.Vector3(object.baMainPosition[0],object.baMainPosition[1],object.baMainPosition[2]);
 
     const characterMaterial = new BABYLON.StandardMaterial(object.name + "Material", this.scene);
-    const materialTexture = this.materials.getRandomValue();
-    characterMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture, this.scene);
+    // const materialTexture = this.materials.getRandomValue();
+    // characterMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture, this.scene);
     characterMaterial.diffuseColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
     characterMaterial.ambientColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
     characterMaterial.roughness = 0;
+    characterMaterial.alpha = 0;
 
     var characterMaterial2 = new BABYLON.StandardMaterial("mat1", this.scene);
-    const materialTexture2 = this.materials.getRandomValue();
-    characterMaterial2.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture2, this.scene);
+    // const materialTexture2 = this.materials.getRandomValue();
+    // characterMaterial2.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture2, this.scene);
     characterMaterial2.diffuseColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
     characterMaterial2.ambientColor = new BABYLON.Color3(object.mainColor.r, object.mainColor.g, object.mainColor.b);
+    characterMaterial2.alpha = 0;
 
     character.material = characterMaterial;
-
-    character.material.alpha = 0.3;
 
     // var multimat = new BABYLON.MultiMaterial("multi", this.scene);
     // multimat.subMaterials.push(characterMaterial);
@@ -241,6 +241,7 @@ class Animation {
       fighterMaterial.diffuseColor = new BABYLON.Color3(character.mainColor.r, character.mainColor.g, character.mainColor.b);
       // fighterMaterial.specularColor = new BABYLON.Color3(character.mainColor.r, character.mainColor.g, character.mainColor.b);
       // fighterMaterial.emissiveColor = new BABYLON.Color3(1,1,1);
+      fighterMaterial.alpha = 0.1;
       fighter.material = fighterMaterial;
 
       pivot.position = character.baBody.position;
