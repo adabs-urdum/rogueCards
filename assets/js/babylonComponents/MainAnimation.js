@@ -13,6 +13,14 @@ class mainAnimation{
     this.scene.gravity = new BABYLON.Vector3(0, -0.8, 0);
     this.scene.collisionsEnabled = true;
 
+    this.materials = [
+      'drops.jpg',
+      'water.jpg',
+      'rocky.jpg',
+      'forest.png',
+      'marmor.jpg',
+    ];
+
     this.starTypes = [
       {
         'type': 'heal',
@@ -43,8 +51,8 @@ class mainAnimation{
     const darken = 0.2;
 
     const light2 = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(0, 10, 0), this.scene);
-  	light2.diffuse = new BABYLON.Color3(1, 1, 1);
-  	light2.specular = new BABYLON.Color3(0.9, 0.9, 1);
+  	light2.diffuse = new BABYLON.Color3(0.5, 0.5, 0.5);
+  	light2.specular = new BABYLON.Color3(0.4, 0.4, 0.4);
   	light2.groundColor = new BABYLON.Color3(0, 0, 0);
 
     this.createPivots();
@@ -60,7 +68,7 @@ class mainAnimation{
     this.freeCamera.attachControl(this.canvas, true);
     this.freeCamera.parent = this.pivotMain;
     this.freeCamera.upperRadiusLimit = 7;
-    this.freeCamera.lowerRadiusLimit = 7;
+    // this.freeCamera.lowerRadiusLimit = 7;
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(() => {
@@ -144,17 +152,196 @@ class mainAnimation{
 
   }
 
+  createNewBranch = (id, level, parent, branchMaterial) => {
+    const junction = new BABYLON.TransformNode('junction_' + id);
+    junction.parent = parent;
+    junction.position = new BABYLON.Vector3(0,parent.getBoundingInfo().boundingBox.extendSize.y,0);
+    console.log(branchMaterial);
+
+    const factor = 0.93;
+    const height = 0.15 / level * factor;
+    const diameterTop = 0.01  / level * factor;
+    const diameterBottom = 0.03 / level * factor;
+
+    const branch1 = BABYLON.MeshBuilder.CreateCylinder('branch1_' + id, {
+      height: height,
+      diameterTop: diameterTop,
+      diameterBottom: diameterBottom,
+      tessellation: 6,
+    }, this.scene);
+    branch1.parent = junction;
+    branch1.rotation = new BABYLON.Vector3(Math.PI/180*-60, 0, Math.PI/180*60);
+    branch1.locallyTranslate(new BABYLON.Vector3(0, branch1.getBoundingInfo().boundingBox.extendSize.y, 0));
+    branch1.material = branchMaterial;
+
+    const branch2 = BABYLON.MeshBuilder.CreateCylinder('branch2_' + id, {
+      height: height,
+      diameterTop: diameterTop,
+      diameterBottom: diameterBottom,
+      tessellation: 6,
+    }, this.scene);
+    branch2.parent = junction;
+    branch2.rotation = new BABYLON.Vector3(Math.PI/180*Math.random() * 60, 0, Math.PI/180*-60);
+    branch2.locallyTranslate(new BABYLON.Vector3(0, branch2.getBoundingInfo().boundingBox.extendSize.y, 0));
+    branch2.material = branchMaterial;
+
+    const renderLoop = this.scene.registerAfterRender(() => {
+      junction.rotation.y += Math.PI / 180 *  Math.random() * 0.05;
+      // junction.rotation.x += Math.PI / 180 * 0.05;
+    });
+
+    return [junction, branch1, branch2];
+  }
+
+  createBranches = (depth, count, parent, level, branchMaterial) => {
+    if(level < depth){
+      count += 1;
+      level += 1;
+      let arch = this.createNewBranch(count, level, parent, branchMaterial)
+      this.createBranches(depth, count, arch[1], level, branchMaterial);
+      count += 1;
+      this.createBranches(depth, count, arch[2], level, branchMaterial);
+    }
+  }
+
   createHero = () => {
 
     this.hero = BABYLON.MeshBuilder.CreateSphere('hero', {diameter: 0.01}, this.scene);
     this.hero.parent = this.pivotHero;
 
-    const base = BABYLON.MeshBuilder.CreateCylinder("heroPlatform", {height: 0.05, diameterTop: 1, diameterBottom: 1, tessellation: 32}, this.scene);
+    const base = BABYLON.MeshBuilder.CreateCylinder("heroPlatform", {height: 0.05, diameterTop: 0.85, diameterBottom: 0.75, tessellation: 32}, this.scene);
     base.parent = this.hero;
+    const baseMaterial = new BABYLON.StandardMaterial("baseMaterial", this.scene);
+    const baseTexture = 'body.jpg';
+    baseMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + baseTexture, this.scene);
+    baseMaterial.diffuseColor = new BABYLON.Color3(0.1,0.1,0.1);
+    baseMaterial.ambientColor = new BABYLON.Color3(0,0,0);
+    baseMaterial.emissiveColor = new BABYLON.Color3(0,0,0);
+    baseMaterial.specularColor = new BABYLON.Color3(0,0,0);
+    const baseBumpMap = 'body_bmpmp.jpg';
+    baseMaterial.bumpTexture = new BABYLON.Texture("/dist/textures/" + baseBumpMap, this.scene);
+    baseMaterial.invertNormalMapX = true;
+    baseMaterial.invertNormalMapY = true
+    base.material = baseMaterial;
+
+    const bob = BABYLON.MeshBuilder.CreateSphere('stem', {
+      diameter: 0.12,
+    }, this.scene);
+    bob.position = new BABYLON.Vector3(0,0.4,0);
+    bob.parent = base;
+    const bobMaterial = new BABYLON.StandardMaterial("bobMaterial", this.scene);
+    const materialTexture = 'branches1.jpg';
+    bobMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture, this.scene);
+    bobMaterial.diffuseColor = new BABYLON.Color3(1,1,1);
+    bobMaterial.ambientColor = new BABYLON.Color3(1,1,1);
+    bobMaterial.emissiveColor = new BABYLON.Color3(1,1,1);
+    bobMaterial.specularColor = new BABYLON.Color3(0,0,0);
+    bobMaterial.roughness = 1;
+    const materialBumpMap = 'branches1_bmpmp.jpg';
+    bobMaterial.bumpTexture = new BABYLON.Texture("/dist/textures/" + materialBumpMap, this.scene);
+    bob.material = bobMaterial;
+
+    const stem = BABYLON.MeshBuilder.CreateSphere('stem', {
+      diameter: 0.01,
+    }, this.scene);
+    stem.position = new BABYLON.Vector3(0,0,0);
+    stem.parent = bob;
+
+    const heroLight = new BABYLON.PointLight("heroLight", new BABYLON.Vector3(0, 0, 0), this.scene);
+  	heroLight.diffuse = new BABYLON.Color3(1, 1, 1);
+  	heroLight.specular = new BABYLON.Color3(1, 1, 1);
+    heroLight.groundColor = new BABYLON.Color3(1, 1, 1);
+    heroLight.intensity = 8;
+    heroLight.parent = stem;
+
+    // const arch1 = this.createNewBranch(1, 1, stem);
+
+    // const arch2 = this.createNewBranch(2, 2, arch1[1]);
+    // const arch3 = this.createNewBranch(3, 2, arch1[2]);
+
+    // const arch4 = this.createNewBranch(4, 3, arch2[1]);
+    // const arch5 = this.createNewBranch(5, 3, arch2[2]);
+
+    // const arch6 = this.createNewBranch(6, 3, arch3[1]);
+    // const arch7 = this.createNewBranch(7, 3, arch3[2]);
+
+    // const arch8 = this.createNewBranch(8, 4, arch4[1]);
+    // const arch9 = this.createNewBranch(9, 4, arch4[2]);
+
+    // const arch10 = this.createNewBranch(10, 4, arch5[1]);
+    // const arch11 = this.createNewBranch(11, 4, arch5[2]);
+
+    // const arch12 = this.createNewBranch(12, 4, arch6[1]);
+    // const arch13 = this.createNewBranch(13, 4, arch6[2]);
+
+    const depth = 9;
+    // this.createBranches(depth, 1, stem, 1, bobMaterial);
+
+    // const junction1 = new BABYLON.TransformNode("junction1");
+    // junction1.parent = stem;
+    // junction1.position = new BABYLON.Vector3(0,stem.getBoundingInfo().boundingBox.extendSize.y,0);
+
+    // const branch1 = BABYLON.MeshBuilder.CreateCylinder('branch1', {
+    //   height: 0.15,
+    //   diameterTop: 0.03,
+    //   diameterBottom: 0.04,
+    //   tessellation: 6,
+    // }, this.scene);
+    // branch1.parent = junction1;
+    // branch1.rotation = new BABYLON.Vector3(0, 0, Math.PI/180*60);
+    // branch1.locallyTranslate(new BABYLON.Vector3(0, branch1.getBoundingInfo().boundingBox.extendSize.y, 0));
+
+    // const junction2 = new BABYLON.TransformNode("junction2");
+    // junction2.parent = stem;
+    // junction2.position = new BABYLON.Vector3(0,stem.getBoundingInfo().boundingBox.extendSize.y,0);
+
+    // const branch2 = BABYLON.MeshBuilder.CreateCylinder('branch2', {
+    //   height: 0.15,
+    //   diameterTop: 0.03,
+    //   diameterBottom: 0.04,
+    //   tessellation: 6,
+    // }, this.scene);
+    // branch2.parent = junction2;
+    // branch2.rotation = new BABYLON.Vector3(0, 0, Math.PI/180*-60);
+    // branch2.locallyTranslate(new BABYLON.Vector3(0, branch2.getBoundingInfo().boundingBox.extendSize.y, 0));
+
+    // const junction3 = new BABYLON.TransformNode("junction3");
+    // junction3.parent = branch2;
+    // junction3.position = new BABYLON.Vector3(0,branch2.getBoundingInfo().boundingBox.extendSize.y,0);
+
+    // const branch3 = BABYLON.MeshBuilder.CreateCylinder('branch3', {
+    //   height: 0.12,
+    //   diameterTop: 0.02,
+    //   diameterBottom: 0.03,
+    //   tessellation: 6,
+    // }, this.scene);
+    // branch3.parent = junction3;
+    // branch3.rotation = new BABYLON.Vector3(Math.PI/180*-60, 0, 0);
+    // branch3.locallyTranslate(new BABYLON.Vector3(0, branch3.getBoundingInfo().boundingBox.extendSize.y, 0));
+
+    // const branch4 = BABYLON.MeshBuilder.CreateCylinder('branch4', {
+    //   height: 0.12,
+    //   diameterTop: 0.02,
+    //   diameterBottom: 0.03,
+    //   tessellation: 6,
+    // }, this.scene);
+    // branch4.parent = junction3;
+    // branch4.rotation = new BABYLON.Vector3(Math.PI/180*60, 0, 0);
+    // branch4.locallyTranslate(new BABYLON.Vector3(0, branch4.getBoundingInfo().boundingBox.extendSize.y, 0));
 
     const body = BABYLON.MeshBuilder.CreateSphere("heroBody", {diameter: 0.75, slice: 0.5}, this.scene);
     body.parent = this.hero;
     body.rotate(BABYLON.Axis.X, Math.PI, BABYLON.Space.LOCAL);
+    const bodyMaterial = new BABYLON.StandardMaterial("bobMaterial", this.scene);
+    const bodyTexture = 'branches.jpg';
+    bodyMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + bodyTexture, this.scene);
+    bodyMaterial.diffuseColor = new BABYLON.Color3(0.7,0.7,0.7);
+    bodyMaterial.ambientColor = new BABYLON.Color3(0,0,0);
+    bodyMaterial.emissiveColor = new BABYLON.Color3(0.4,0.4,0.4);
+    bodyMaterial.specularColor = new BABYLON.Color3(0,0,0);
+    const bodyBumpMap = 'branches_bmpmp.jpg';
+    bodyMaterial.bumpTexture = new BABYLON.Texture("/dist/textures/" + bodyBumpMap, this.scene);
+    body.material = bodyMaterial;
 
   }
 
@@ -209,7 +396,7 @@ class mainAnimation{
 
   movePivotMainTo = (destPos) => {
 
-    const renderLoop = this.scene.registerBeforeRender(() => {
+    const renderLoop = this.scene.registerAfterRender(() => {
       this.pivotMain.position = BABYLON.Vector3.Lerp(this.pivotMain._absolutePosition, destPos, 0.2);
     });
 
