@@ -106,12 +106,6 @@ class Battle extends Component{
     }
     oldAnimation.monsterShield = monster.baShield;
 
-    const animation = this.state.animation;
-    if(animation){
-      console.log(this.state);
-      animation.createFighters(hero, animation.heroSource, animation.heroFleet);
-    }
-
     this.setState({
       'oldAnimation':  oldAnimation,
       'battleLog': {
@@ -189,7 +183,7 @@ class Battle extends Component{
 
     if(animation && !this.state.initialSetBattleViewBa){
       animation.setBattleView();
-      animation.createFighters(hero, animation.heroSource, animation.heroFleet);
+      animation.hero.createFighters(hero, animation.hero.fighterSource, animation.heroFleet, animation.scene);
       this.setState({
         initialSetBattleViewBa: true,
         animation: animation,

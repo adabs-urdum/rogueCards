@@ -51,6 +51,7 @@
     "react-countup": "latest",
     "gsap": "latest",
     "babylonjs": "latest",
+    "babylonjs-materials": "latest",
     "react-router": "latest",
     "react-router-dom": "latest"
   }
