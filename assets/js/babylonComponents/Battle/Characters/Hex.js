@@ -10,8 +10,11 @@ class Hex extends Character{
     createMainBody = (mainPivot, scene, currentStar) => {
 
         const monsterMaterial = new BABYLON.StandardMaterial("monsterMaterial", scene);
-        const materialTexture = 'flesh.jpg';
+        const materialTexture = 'brain.jpg';
+        const materialBump = 'brain_bmpmp.jpg';
         monsterMaterial.diffuseTexture = new BABYLON.Texture("/dist/textures/" + materialTexture, scene);
+        monsterMaterial.diffuseTexture.hasAlpha = true;
+        monsterMaterial.bumpTexture = new BABYLON.Texture("/dist/textures/" + materialBump, scene);
         monsterMaterial.diffuseColor = new BABYLON.Color3(1,1,1);
         monsterMaterial.ambientColor = new BABYLON.Color3(1,1,1);
         monsterMaterial.emissiveColor = new BABYLON.Color3(0,0,0);
@@ -21,10 +24,7 @@ class Hex extends Character{
         currentStar.material.alpha = 0;
 
         //Create lathe
-        const monsterBody = BABYLON.MeshBuilder.CreatePolyhedron("monsterBody", {
-            type: 4,
-            size: 0.15,
-        }, scene);
+        const monsterBody = BABYLON.MeshBuilder.CreateSphere('monsterBody', {diameter: 0.3}, scene);
         monsterBody.material = monsterMaterial;
         monsterBody.parent = currentStar;
         monsterBody.position.y = 0.42;
@@ -34,8 +34,9 @@ class Hex extends Character{
         // });
         // scene.unregisterAfterRender(renderLoop);
 
-        const depth = 8;
+        const depth = 9;
         this.createBranches(depth, 1, currentStar, 1, monsterMaterial, scene);
+        // this.createBranches(depth, 1, currentStar, 1, monsterMaterial, scene);
 
         const endFrame = 30;
         let key = 1;

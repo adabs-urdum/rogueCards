@@ -71,7 +71,7 @@ class mainAnimation{
     this.freeCamera = new BABYLON.ArcRotateCamera('camera', Math.PI / 2, Math.PI / 4, 7, this.pivotHero.position, this.scene);
     this.freeCamera.attachControl(this.canvas, true);
     this.freeCamera.parent = this.pivotMain;
-    this.freeCamera.upperRadiusLimit = 7;
+    this.freeCamera.upperRadiusLimit = 10;
     this.freeCamera.lowerRadiusLimit = 1;
 
     // Register a render loop to repeatedly render the scene

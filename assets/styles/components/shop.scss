@@ -13,10 +13,10 @@
   transform: translate(-50%, -50%);
   @include bs-font-size(28);
   overflow: hidden;
-  animation: appear 0.6s ease-out forwards;
+  animation: appear 0.8s ease-in forwards;
 
   &--fadeout{
-    animation: disappear 0.6s ease-in forwards;
+    animation: disappear 0.8s ease-out forwards;
     height: 0%;
     width: 0%;
   }
